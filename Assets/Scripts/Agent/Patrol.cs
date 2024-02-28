@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace burglar
 {
-    public class Waypoints : MonoBehaviour
+    public class Patrol : MonoBehaviour
     {
         [SerializeField] private List<GameObject> _waypoints = new List<GameObject>();
         private int _currentWaypointIndex = 0;
@@ -66,6 +66,18 @@ namespace burglar
 
         private IEnumerator WaitBeforeNextWaypoint()
         {
+            // Rotate player to match the rotation of the waypoint
+            var waypointRotation = _waypoints[_currentWaypointIndex].transform.rotation;
+            var playerStartRotation = transform.rotation;
+
+            float elapsedTime = 0.0f;
+            while (elapsedTime < 1.0f)
+            {
+                transform.rotation = Quaternion.Slerp(playerStartRotation, waypointRotation, elapsedTime);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
             yield return new WaitForSeconds(_waitTimeBetweenPoints);
 
             GoToNextWaypoint();

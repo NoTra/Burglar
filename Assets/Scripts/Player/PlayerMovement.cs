@@ -4,15 +4,29 @@ namespace burglar.player
 {
     public class PlayerMovement : PlayerSystem
     {
-        [SerializeField] private float _speed = 2f;
+        [SerializeField] private float _speed = 3f;
+        [SerializeField] private float _walkSpeed = 3f;
+        [SerializeField] private float _runSpeed = 6f;
+        private float _lastSoundTime = 0f;
+        private float _soundTriggerDelay = 0.2f;
+        [SerializeField] private float _stepStrength = 0.2f;
+        private bool _wasRunning = false;
+
+        private Color _startColor;
 
         protected override void Awake()
         {
             base.Awake();
+            _startColor = _player.GetComponent<MeshRenderer>().material.color;
         }
 
         private void Update()
         {
+            // Si le joueur appuie sur la touche "Run" (holding shift)
+            _speed = (_player._playerInput.actions["Run"].ReadValue<float>() > 0) ? _runSpeed : _walkSpeed;
+
+            _player.GetComponent<MeshRenderer>().material.color = (_speed == _runSpeed) ? Color.red : _startColor;
+
             // On récupère l'input du joueur
             // Vector2 moveDirection = _player._playerInput.actions["Movement"].ReadValue<Vector2>();
 
@@ -22,10 +36,9 @@ namespace burglar.player
 
         private void FixedUpdate()
         {
-            // On récupère l'input du joueur
             Vector2 moveDirection = _player._playerInput.actions["Movement"].ReadValue<Vector2>();
 
-            // Rotation du joueur en fonction de la direction du movement
+            // Rotate player to the direction of the movement
             if (moveDirection != Vector2.zero)
             {
                 float angle = Mathf.Atan2(moveDirection.x, moveDirection.y) * Mathf.Rad2Deg;
@@ -33,8 +46,36 @@ namespace burglar.player
             }
 
             var position = _player._rigidbody.transform.position;
-            // On déplace le joueur
+
+            // Moving player
             _player._rigidbody.transform.position = position + new Vector3(moveDirection.x, 0, moveDirection.y) * _speed * Time.fixedDeltaTime;
+
+            if (moveDirection != Vector2.zero)
+            {
+                // If the player is running, we generate a sound
+                if (_speed > _walkSpeed && (Time.time - _lastSoundTime > _soundTriggerDelay))
+                {
+                    EventManager.OnSoundHeard(position, _stepStrength);
+                    _lastSoundTime = Time.time;
+                    _wasRunning = true;
+
+                    Debug.Log("Sound made !");
+                }
+                else
+                {
+                    if (_wasRunning)
+                    {
+                        if (Time.time - _lastSoundTime > 1f)
+                        {
+                            EventManager.OnSoundHeard(position, _stepStrength);
+                            Debug.Log("Sound made ! (stop running");
+                        }
+
+                        // We generate a sound when the player stops running
+                        _wasRunning = false;
+                    }
+                }
+            }
         }
     }
 }

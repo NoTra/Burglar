@@ -10,67 +10,93 @@ namespace burglar
     {
         [SerializeField] private List<GameObject> _waypoints = new List<GameObject>();
         private int _currentWaypointIndex = 0;
-        private NavMeshAgent _agent;
-        [SerializeField] private float _waitTimeBetweenPoints;
-        private Coroutine _waitCoroutine;
+        private Agent _agent;
+        private NavMeshAgent _navMeshAgent;
+        [SerializeField] private float _searchTimeBetweenPoints;
+        private Coroutine _searchCoroutine;
 
-        private Vector3 _surprisePoint;
+        private Vector3 _suspiciousPoint;
+        [SerializeField] private GameObject _suspiciousIcon;
 
         private void Awake()
         {
-            _agent = GetComponent<NavMeshAgent>();
+            _navMeshAgent = GetComponent<NavMeshAgent>();
+            _agent = GetComponent<Agent>();
         }
 
         private void Start()
         {
             var destinationGO = _waypoints[_currentWaypointIndex];
             var destinationPosition = new Vector3(destinationGO.transform.position.x, destinationGO.transform.position.y, destinationGO.transform.position.z);
-            _agent.SetDestination(destinationPosition);
+            _navMeshAgent.SetDestination(destinationPosition);
         }
 
         private void OnEnable()
         {
-            EventManager.SuspectedPoint += (point) => OnSuspiciousPoint(point);
+            EventManager.SoundHeard += (point, strength) => CheckSuspiciousPoint(point);
         }
 
         private void OnDisable()
         {
-            EventManager.SuspectedPoint -= (point) => OnSuspiciousPoint(point);
+            EventManager.SoundHeard -= (point, strength) => CheckSuspiciousPoint(point);
         }
 
-        private void OnSuspiciousPoint(Vector3 point)
+        private void CheckSuspiciousPoint(Vector3 point)
         {
-            _surprisePoint = point;
-            _agent.SetDestination(point);
+            Debug.Log("Check distance : " + Vector3.Distance(transform.position, point));
+            Debug.Log("Earing distance : " + _agent._earingDistance);
+            // Check if the point is in range of agent's earing radius
+            if (Vector3.Distance(transform.position, point) > _agent._earingDistance)
+            {
+                Debug.Log("Sound is too far, no movement");
+                return;
+            }
+
+            _suspiciousPoint = point;
+
+            var direction = (point - transform.position).normalized * 1.5f;
+            var pointToGo = point - direction;
+
+            _navMeshAgent.SetDestination(pointToGo);
         }
 
         private void Update()
         {
             // We have a suspicious point to go to ?
-            if (_surprisePoint != Vector3.zero)
+            if (_suspiciousPoint != Vector3.zero)
             {
-                if (_agent.remainingDistance < 0.5f)
+                // We stop the searching coroutine if it's running
+                if (_searchCoroutine != null)
                 {
-                    _surprisePoint = Vector3.zero;
+                    StopCoroutine(_searchCoroutine);
+                    _searchCoroutine = null;
+                }
 
-                    _waitCoroutine = StartCoroutine(WaitBeforeContinueWaypoint());
+                // Display suspicious icon
+                _suspiciousIcon.SetActive(true);
+
+                if (_navMeshAgent.remainingDistance < _navMeshAgent.stoppingDistance)
+                {
+                    _suspiciousPoint = Vector3.zero;
+
+                    _searchCoroutine = StartCoroutine(SearchBeforeContinueWaypoint());
                 }
                 return;
             }
 
-            if (_agent.remainingDistance < 0.5f && _waitCoroutine == null)
+            if (_navMeshAgent.remainingDistance < _navMeshAgent.stoppingDistance && _searchCoroutine == null)
             {
-                _waitCoroutine = StartCoroutine(WaitBeforeNextWaypoint());
+                _searchCoroutine = StartCoroutine(SearchBeforeNextWaypoint());
             }
         }
 
-        private IEnumerator WaitBeforeNextWaypoint()
+        private IEnumerator SearchBeforeNextWaypoint()
         {
             // Rotate player to match the rotation of the waypoint
             var waypointRotation = _waypoints[_currentWaypointIndex].transform.rotation;
             var playerStartRotation = transform.rotation;
 
-            float elapsedTime = 0.0f;
+            float elapsedTime = 0f;
             while (elapsedTime < 1.0f)
             {
                 transform.rotation = Quaternion.Slerp(playerStartRotation, waypointRotation, elapsedTime);
@@ -78,18 +104,53 @@ namespace burglar
                 yield return null;
             }
 
-            yield return new WaitForSeconds(_waitTimeBetweenPoints);
+            transform.rotation = waypointRotation;
+
+            yield return TurnLeftAndRight();
 
             GoToNextWaypoint();
-
-            yield return null;
         }
 
-        private IEnumerator WaitBeforeContinueWaypoint()
+        private IEnumerator TurnLeftAndRight()
         {
-            yield return new WaitForSeconds(_waitTimeBetweenPoints);
+            // Turn left then right during _searchTimeBetweenPoints seconds
+            var playerStartRotation = transform.rotation;
+            var playerLeftRotation = Quaternion.Euler(0, -45, 0);
+            var playerRightRotation = Quaternion.Euler(0, 45, 0);
+
+            var halfTime = _searchTimeBetweenPoints / 2;
+
+            float elapsedTime = 0.0f;
+            while (elapsedTime < halfTime)
+            {
+                float t = elapsedTime / (halfTime);
+                transform.rotation = Quaternion.Slerp(playerStartRotation, playerLeftRotation, t);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            transform.rotation = playerLeftRotation;
+
+            playerStartRotation = transform.rotation;
+
+            elapsedTime = 0.0f;
+            while (elapsedTime < halfTime)
+            {
+                float t = elapsedTime / (halfTime);
+                transform.rotation = Quaternion.Slerp(playerStartRotation, playerRightRotation, t);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            transform.rotation = playerRightRotation;
+        }
+
+        private IEnumerator SearchBeforeContinueWaypoint()
+        {
+            yield return TurnLeftAndRight();
 
             ResumePatrol();
+
+            // Hide suspicious icon
+            _suspiciousIcon.SetActive(false);
 
             yield return null;
         }
@@ -105,16 +166,16 @@ namespace burglar
 
             var newDestinationGO = _waypoints[_currentWaypointIndex];
             var newDestinationPosition = new Vector3(newDestinationGO.transform.position.x, newDestinationGO.transform.position.y, newDestinationGO.transform.position.z);
-            _agent.SetDestination(newDestinationPosition);
+            _navMeshAgent.SetDestination(newDestinationPosition);
 
-            _waitCoroutine = null;
+            _searchCoroutine = null;
         }
 
         private void ResumePatrol()
         {
-            _agent.SetDestination(_waypoints[_currentWaypointIndex].transform.position);
+            _navMeshAgent.SetDestination(_waypoints[_currentWaypointIndex].transform.position);
 
-            _waitCoroutine = null;
+            _searchCoroutine = null;
         }
     }
 }

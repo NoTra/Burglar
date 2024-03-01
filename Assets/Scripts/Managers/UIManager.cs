@@ -22,6 +22,18 @@ namespace burglar
         private void OnPlayerCaught(GameObject player)
         {
             UIGameOverPanel.SetActive(true);
+
+            StartCoroutine(WaitBeforeRestart());
+        }
+
+        private IEnumerator WaitBeforeRestart()
+        {
+            yield return new WaitForSeconds(3.0f);
+
+            // Stop All Coroutines
+            StopAllCoroutines();
+
+            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         }
     }
 }

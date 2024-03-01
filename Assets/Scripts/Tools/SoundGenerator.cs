@@ -7,7 +7,7 @@ using static burglar.EventManager;
 
 namespace burglar
 {
-    public class TestSuspiciousPoint : MonoBehaviour
+    public class SoundGenerator : MonoBehaviour
     {
         private void Start()
         {
@@ -19,14 +19,18 @@ namespace burglar
             // On left click, get coordinates and send event
             if (Input.GetMouseButtonDown(0))
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit))
-                {
-                    Debug.Log("Hit: " + hit.point);
+                GenerateSound();
+            }
+        }
 
-                    // Trigger OnSuspiciousPoint event from EventManager instance
-                    EventManager.OnSuspectedPoint(hit.point);
-                }
+        private void GenerateSound()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                Debug.Log("Hit: " + hit.point);
+
+                EventManager.OnSoundHeard(hit.point, 0.1f);
             }
         }
     }

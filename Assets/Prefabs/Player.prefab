@@ -32,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 4739289992949261991}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.47528177, y: 1, z: -15.300327}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -184,6 +184,7 @@ MonoBehaviour:
   ID: {fileID: 11400000, guid: a5b6d54cafc17ca40bfc661102b34b32, type: 2}
   _playerInput: {fileID: 0}
   _rigidbody: {fileID: 0}
+  _useIcon: {fileID: 0}
 --- !u!114 &6489181548979642518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,3 +198,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 2
+  _walkSpeed: 3
+  _runSpeed: 6
+  _stepStrength: 0.2

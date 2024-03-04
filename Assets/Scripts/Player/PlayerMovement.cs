@@ -48,7 +48,7 @@ namespace burglar.player
             var position = _player._rigidbody.transform.position;
 
             // Moving player
-            _player._rigidbody.transform.position = position + new Vector3(moveDirection.x, 0, moveDirection.y) * _speed * Time.fixedDeltaTime;
+            _player._rigidbody.transform.position = position + _speed * Time.fixedDeltaTime * new Vector3(moveDirection.x, 0, moveDirection.y);
 
             if (moveDirection != Vector2.zero)
             {

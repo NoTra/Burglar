@@ -32,7 +32,7 @@ namespace burglar
 
             // Stop All Coroutines
             StopAllCoroutines();
-
+            
             UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         }
     }

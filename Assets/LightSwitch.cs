@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace burglar
 {
-    public class Switch : MonoBehaviour
+    public class LightSwitch : MonoBehaviour
     {
         private MeshRenderer _meshRenderer;
         private Color _materialColor;
         [SerializeField] private AnimationCurve _colorChangeCurve;
         private Coroutine _blinkCoroutine;
-        [SerializeField] Light _light;
+        public Light _light;
         private PlayerInput _playerInput;
 
         private void Awake()
@@ -37,9 +38,28 @@ namespace burglar
             // if player use Activate button, we toggle the light
             if (_playerInput != null && _playerInput.actions["Activate"].triggered)
             {
-                Debug.Log("E pressed!");
-                _light.enabled = !_light.enabled;
+                ToggleLightSwitch();
+
+                if (!_light.enabled)
+                {
+                    EventManager.OnLightChange(gameObject);
+                }
             }
+        }
+
+        public void ToggleLightSwitch()
+        {
+            _light.enabled = !_light.enabled;
+        }
+
+        public void TurnOffLight()
+        {
+            _light.enabled = false;
+        }
+
+        public void TurnOnLight()
+        {
+            _light.enabled = true;
         }
 
         private IEnumerator BlinkColor()

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace burglar
 {
@@ -11,6 +12,8 @@ namespace burglar
         private static GameManager instance = null;
 
         public static GameManager Instance => instance;
+
+        public PlayerInput playerInput;
 
         private void Awake()
         {

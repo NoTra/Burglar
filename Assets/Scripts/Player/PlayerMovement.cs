@@ -58,17 +58,15 @@ namespace burglar.player
                     EventManager.OnSoundHeard(position, _stepStrength);
                     _lastSoundTime = Time.time;
                     _wasRunning = true;
-
-                    Debug.Log("Sound made !");
                 }
                 else
                 {
+                    // Sound at the end of the run (if > 1s
                     if (_wasRunning)
                     {
                         if (Time.time - _lastSoundTime > 1f)
                         {
                             EventManager.OnSoundHeard(position, _stepStrength);
-                            Debug.Log("Sound made ! (stop running");
                         }
 
                         // We generate a sound when the player stops running

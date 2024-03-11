@@ -1,21 +1,16 @@
-using burglar.player;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace burglar
 {
-    public class LightSwitch : MonoBehaviour
+    public class LightSwitch : Interactible
     {
         private MeshRenderer _meshRenderer;
         private Color _materialColor;
         [SerializeField] private AnimationCurve _colorChangeCurve;
         private Coroutine _blinkCoroutine;
         public Light _light;
-        private PlayerInput _playerInput;
 
         private void Awake()
         {
@@ -23,28 +18,28 @@ namespace burglar
             _materialColor = _meshRenderer.material.color;
         }
 
-        private void OnTriggerStay(Collider other)
+        protected override void Interact()
         {
-            if (_blinkCoroutine == null)
-            {
-                _blinkCoroutine = StartCoroutine(BlinkColor());
-            }
-
-            if (_playerInput == null)
-            {
-                _playerInput = other.GetComponent<PlayerInput>();
-            }
-
             // if player use Activate button, we toggle the light
-            if (_playerInput != null && _playerInput.actions["Activate"].triggered)
-            {
-                ToggleLightSwitch();
+            ToggleLightSwitch();
 
-                if (!_light.enabled)
-                {
-                    EventManager.OnLightChange(gameObject);
-                }
+            if (!_light.enabled)
+            {
+                EventManager.OnLightChange(gameObject);
             }
+        }
+
+        protected override void OnTriggerExit(Collider other)
+        {
+            base.OnTriggerExit(other);
+
+            if (_blinkCoroutine != null)
+            {
+                StopCoroutine(_blinkCoroutine);
+                _blinkCoroutine = null;
+            }
+
+            _meshRenderer.material = new Material(_meshRenderer.material) { color = _materialColor };
         }
 
         public void ToggleLightSwitch()
@@ -89,17 +84,6 @@ namespace burglar
             _meshRenderer.material = new Material(_meshRenderer.material) { color = _materialColor };
             yield return null;
             _blinkCoroutine = null;
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (_blinkCoroutine != null)
-            {
-                StopCoroutine(_blinkCoroutine);
-                _blinkCoroutine = null;
-            }
-
-            _meshRenderer.material = new Material(_meshRenderer.material) { color = _materialColor };
         }
     }
 }

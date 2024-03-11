@@ -21,8 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SelectedOutline
-  m_Shader: {fileID: -6465566751694194690, guid: 7c87440e132dee24a82127f41d14646a,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: 4e76d4023d7e0411297c670f878973e2, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -56,11 +55,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _Float: -23.64
+    - _OutlineWidth: 2
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Radius: 0.4
     - _Thickness: 0.002
+    - _ZTest: 0
     - _offset: 0.6
     m_Colors:
     - _Color: {r: 0.4366074, g: 1, b: 0.3726415, a: 0.5686275}
+    - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

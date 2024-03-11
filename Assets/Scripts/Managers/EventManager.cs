@@ -18,5 +18,14 @@ namespace burglar
 
         public static event UnityAction<int> CreditCollected;
         public static void OnCreditCollected(int amount) => CreditCollected?.Invoke(amount);
+
+        public static event UnityAction<Safe> OpenSafe;
+        public static void OnOpenSafe(Safe safe) => OpenSafe?.Invoke(safe);
+
+        public static event UnityAction<Safe> SuccessSafeCrack;
+        public static void OnSuccessSafeCrack(Safe safe) => SuccessSafeCrack?.Invoke(safe);
+
+        public static event UnityAction FailSafeCrack;
+        public static void OnFailSafeCrack() => FailSafeCrack?.Invoke();
     }
 }

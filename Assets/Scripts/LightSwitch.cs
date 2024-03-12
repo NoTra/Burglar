@@ -9,7 +9,6 @@ namespace burglar
         private MeshRenderer _meshRenderer;
         private Color _materialColor;
         [SerializeField] private AnimationCurve _colorChangeCurve;
-        private Coroutine _blinkCoroutine;
         public Light _light;
 
         private void Awake()
@@ -33,12 +32,6 @@ namespace burglar
         {
             base.OnTriggerExit(other);
 
-            if (_blinkCoroutine != null)
-            {
-                StopCoroutine(_blinkCoroutine);
-                _blinkCoroutine = null;
-            }
-
             _meshRenderer.material = new Material(_meshRenderer.material) { color = _materialColor };
         }
 
@@ -55,35 +48,6 @@ namespace burglar
         public void TurnOnLight()
         {
             _light.enabled = true;
-        }
-
-        private IEnumerator BlinkColor()
-        {
-            // From current color to green
-            float elapsedTime = 0;
-            float cycleDuration = 1f;
-
-            while (elapsedTime < cycleDuration)
-            {
-                elapsedTime += Time.deltaTime;
-                Color color = Color.Lerp(_materialColor, Color.green, _colorChangeCurve.Evaluate(elapsedTime / cycleDuration));
-                _meshRenderer.material = new Material(_meshRenderer.material) { color = color };
-                yield return null;
-            }
-            _meshRenderer.material = new Material(_meshRenderer.material) { color = Color.green };
-
-            // From green to current color
-            elapsedTime = 0;
-            while (elapsedTime < 1)
-            {
-                elapsedTime += Time.deltaTime;
-                Color color = Color.Lerp(Color.green, _materialColor, _colorChangeCurve.Evaluate(elapsedTime / cycleDuration));
-                _meshRenderer.material = new Material(_meshRenderer.material) { color = color };
-                yield return null;
-            }
-            _meshRenderer.material = new Material(_meshRenderer.material) { color = _materialColor };
-            yield return null;
-            _blinkCoroutine = null;
         }
     }
 }

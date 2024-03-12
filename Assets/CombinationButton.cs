@@ -39,14 +39,10 @@ namespace burglar
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log("Clicked on " + _coordinates);
             if (_isClickable)
             {
                 _isSelected = !_isSelected;
                 _safe.AddToCombination(_coordinates);
-
-                Debug.Log("CombinationLength : " + _safe.GetCombinationLength());
-                Debug.Log("Try length : " + _safe.GetSelectedCombinationLength());
 
                 // The length is the same as the combination length ? 
                 if (_safe.GetSelectedCombinationLength() == _safe.GetCombinationLength())
@@ -62,10 +58,13 @@ namespace burglar
                     }
 
                 }
+            } else
+            {
+                Debug.Log("Pouet");
             }
         }
 
-        /*public void OnPointerEnter(PointerEventData eventData)
+        public void OnPointerEnter(PointerEventData eventData)
         {
             _previousColor = _background.color;
             _background.color = UIManager.Instance._hoverColor;
@@ -74,6 +73,6 @@ namespace burglar
         public void OnPointerExit(PointerEventData eventData)
         {
             _background.color = _previousColor;
-        }*/
+        }
     }
 }

@@ -16,10 +16,11 @@ namespace burglar
 
             if (_outline == null)
             {
-                _outline = gameObject.AddComponent<Outline>();
+                gameObject.AddComponent<Outline>();
+                _outline = GetComponent<Outline>();
                 _outline.enabled = false;
 
-                _outline.OutlineMode = Outline.Mode.OutlineAll;
+                _outline.OutlineMode = Outline.Mode.OutlineVisible;
                 _outline.OutlineColor = UIManager.Instance.OutlineColor;
                 _outline.OutlineWidth = UIManager.Instance.OutlineWidth;
                 
@@ -28,15 +29,18 @@ namespace burglar
 
         protected virtual void OnTriggerEnter(Collider other)
         {
-            if (_outline != null)
+            if (other.CompareTag("Player"))
             {
-                // Outline the object
-                _outline.enabled = true;
-            }
+                if (_outline != null)
+                {
+                    // Outline the object
+                    _outline.enabled = true;
+                }
 
-            if (_playerInput == null)
-            {
-                _playerInput = other.GetComponent<PlayerInput>();
+                if (_playerInput == null)
+                {
+                    _playerInput = other.GetComponent<PlayerInput>();
+                }
             }
         }
 
@@ -63,9 +67,6 @@ namespace burglar
             {
                 // Remove the outline
                 _outline.enabled = false;
-            } else
-            {
-                Debug.Log("Pas d'outline");
             }
 
             _playerInput = null;

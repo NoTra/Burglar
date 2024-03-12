@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -17,7 +18,6 @@ namespace burglar
         // Credit HUD 💰
         [Header("CreditHUD")]
         [SerializeField] private TextMeshProUGUI UICreditTMP;
-        private int _currentAmount = 0; // TODO : Move to GameManager
 
         // Safe UI 🔓
         [Header("SafeUI")]
@@ -85,12 +85,12 @@ namespace burglar
         {
             UIGameOverPanel.SetActive(true);
 
-            StartCoroutine(WaitBeforeRestart());
+            StartCoroutine(BeforeRestartWaitFor(3f));
         }
 
-        private IEnumerator WaitBeforeRestart()
+        private IEnumerator BeforeRestartWaitFor(float durationInSeconds)
         {
-            yield return new WaitForSeconds(3.0f);
+            yield return new WaitForSeconds(durationInSeconds);
 
             // Stop All Coroutines
             StopAllCoroutines();
@@ -109,15 +109,15 @@ namespace burglar
 
         private IEnumerator UpdateCreditUI(int amount)
         {
-            for (int i = _currentAmount; i <= _currentAmount + amount; i++)
+            for (int i = GameManager.Instance.credit; i <= GameManager.Instance.credit + amount; i++)
             {
                 UICreditTMP.text = i.ToString();
                 yield return null;
             }
 
-            _currentAmount += amount;
+            GameManager.Instance.credit += amount;
 
-            UICreditTMP.text = _currentAmount.ToString();
+            UICreditTMP.text = GameManager.Instance.credit.ToString();
         }
 
         #endregion
@@ -126,17 +126,14 @@ namespace burglar
 
         private void OpenSafeUI(Safe safe)
         {
+            ClearSafe();
             UISafePanel.SetActive(true);
+
+            Time.timeScale = 0;
 
             _combinationText.text = "Combination : " + safe.GetStringCombination();
 
             var nbButtonsByRow = safe.GetLevel() + 1;
-
-            // Clear all _gridContainer children
-            foreach (Transform child in _gridContainer.transform)
-            {
-                Destroy(child.gameObject);
-            }
 
             // Set up Grid Layout Group to display nbButtonsByRow buttons per row
             _gridContainer.constraintCount = nbButtonsByRow;
@@ -157,10 +154,19 @@ namespace burglar
             }
         }
 
-        public void UpdateGrid(Safe safe, Vector2 lastClickedCoordinates)
+        private void ClearSafe()
         {
-            Debug.Log("UpdateGrid");
+            // Clear all _gridContainer children
+            foreach (Transform child in _gridContainer.transform)
+            {
+                Destroy(child.gameObject);
+            }
 
+            _buttons.Clear();
+        }
+
+        public void UpdateSafeGrid(Safe safe, Vector2 lastClickedCoordinates)
+        {
             if (safe.GetSelectedCombinationLength() > 0)
             {
                 // Disable all buttons
@@ -213,6 +219,9 @@ namespace burglar
 
         private void OnSuccessSafeCrack(Safe safe)
         {
+            // Timescale 1
+            Time.timeScale = 1;
+
             UISafePanel.SetActive(false);
         }
 

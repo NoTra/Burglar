@@ -55,7 +55,7 @@ namespace burglar.player
                 // If the player is running, we generate a sound
                 if (_speed > _walkSpeed && (Time.time - _lastSoundTime > _soundTriggerDelay))
                 {
-                    EventManager.OnSoundHeard(position, _stepStrength);
+                    EventManager.OnSoundGenerated(position, _stepStrength, true);
                     _lastSoundTime = Time.time;
                     _wasRunning = true;
                 }
@@ -66,7 +66,7 @@ namespace burglar.player
                     {
                         if (Time.time - _lastSoundTime > 1f)
                         {
-                            EventManager.OnSoundHeard(position, _stepStrength);
+                            EventManager.OnSoundGenerated(position, _stepStrength, true);
                         }
 
                         // We generate a sound when the player stops running

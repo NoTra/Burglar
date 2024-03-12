@@ -7,8 +7,8 @@ namespace burglar
 {
     public static class EventManager
     {
-        public static event UnityAction<Vector3, float> SoundHeard;
-        public static void OnSoundHeard(Vector3 point, float strength) => SoundHeard?.Invoke(point, strength);
+        public static event UnityAction<Vector3, float, bool> SoundGenerated;
+        public static void OnSoundGenerated(Vector3 point, float strength, bool checkDistance) => SoundGenerated?.Invoke(point, strength, checkDistance);
 
         public static event UnityAction<GameObject> PlayerCaught;
         public static void OnPlayerCaught(GameObject player) => PlayerCaught?.Invoke(player);
@@ -27,5 +27,11 @@ namespace burglar
 
         public static event UnityAction FailSafeCrack;
         public static void OnFailSafeCrack() => FailSafeCrack?.Invoke();
+
+        public static event UnityAction<GameManager.GameState> ChangeGameState;
+        public static void OnChangeGameState(GameManager.GameState gameState) => ChangeGameState?.Invoke(gameState);
+
+        public static event UnityAction EndOfAlertState;
+        public static void OnEndOfAlertState() => EndOfAlertState?.Invoke();
     }
 }

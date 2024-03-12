@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 namespace burglar
 {
@@ -25,19 +26,26 @@ namespace burglar
 
         private void OnEnable()
         {
-            EventManager.SoundHeard += (point, strength) => IncreaseAlertLevel(point, strength);
+            EventManager.SoundGenerated += (point, strength, checkDistance) => IncreaseAlertLevel(point, strength, checkDistance);
+            EventManager.EndOfAlertState += () => ResetAlertLevel();
         }
 
         private void OnDisable()
         {
-            EventManager.SoundHeard -= (point, strength) => IncreaseAlertLevel(point, strength);
+            EventManager.SoundGenerated -= (point, strength, checkDistance) => IncreaseAlertLevel(point, strength, checkDistance);
+            EventManager.EndOfAlertState -= () => ResetAlertLevel();
         }
 
-        private void IncreaseAlertLevel(Vector3 point, float strength)
+        private void ResetAlertLevel()
         {
-            if (Vector3.Distance(transform.position, point) > _agent._earingDistance)
+            _alertLevel = 0;
+            UpdateAlertLevel();
+        }
+
+        private void IncreaseAlertLevel(Vector3 point, float strength, bool checkDistance = true)
+        {
+            if (checkDistance && Vector3.Distance(transform.position, point) > _agent._earingDistance)
             {
-                Debug.Log("Sound is too far, no alert");
                 return;
             }
 
@@ -47,18 +55,26 @@ namespace burglar
         private void UpdateAlertLevel()
         {
             _alertSlider.value = _alertLevel;
-            if (_alertLevel >= _maxAlertLevel)
-            {
-                Debug.Log("Alarm triggered !");
-                // On déclenche l'alarme
-                // EventManager.AlarmTriggered?.Invoke();
-            }
         }
 
         private void Update()
         {
-            if (_alertLevel > 0 )
+            if (GameManager.Instance.gameState == GameManager.GameState.Alert)
             {
+                return;
+            }
+
+            if (_alertLevel > 0)
+            {
+                if (_alertLevel >= _maxAlertLevel)
+                {
+                    Debug.Log("Alarm triggered !");
+                    // On déclenche l'alarme
+                    EventManager.OnChangeGameState(GameManager.GameState.Alert);
+
+                    return;
+                }
+
                 if (_waitTimeBeforeDecrease < _elapsedTime)
                 {
                     _elapsedTime += Time.deltaTime;

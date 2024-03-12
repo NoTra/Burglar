@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
-using static burglar.EventManager;
 
 namespace burglar
 {
@@ -28,9 +27,7 @@ namespace burglar
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                Debug.Log("Hit: " + hit.point);
-
-                EventManager.OnSoundHeard(hit.point, 0.1f);
+                EventManager.OnSoundGenerated(hit.point, 0.1f, true);
             }
         }
     }

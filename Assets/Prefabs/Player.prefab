@@ -16,9 +16,9 @@ GameObject:
   - component: {fileID: 2439981602311628704}
   - component: {fileID: 8632412685805792402}
   - component: {fileID: 6489181548979642518}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -184,7 +184,6 @@ MonoBehaviour:
   ID: {fileID: 11400000, guid: a5b6d54cafc17ca40bfc661102b34b32, type: 2}
   _playerInput: {fileID: 0}
   _rigidbody: {fileID: 0}
-  _useIcon: {fileID: 0}
 --- !u!114 &6489181548979642518
 MonoBehaviour:
   m_ObjectHideFlags: 0

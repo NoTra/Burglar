@@ -27,23 +27,10 @@ namespace burglar
             EventManager.FailSafeCrack += () => OnFailSafeCrack();
         }
 
-        private void OnSuccessSafeCrack(Safe safe)
-        {
-            safe._isCracked = true;
-            EventManager.OnCreditCollected(safe._value);
-        }
-
         private void OnDisable()
         {
             EventManager.SuccessSafeCrack -= (safe) => OnSuccessSafeCrack(safe);
             EventManager.FailSafeCrack -= () => OnFailSafeCrack();
-        }
-
-        private void OnFailSafeCrack()
-        {
-            _selectedCombination.Clear();
-
-            Debug.Log("Combination failed");
         }
 
         void Start()
@@ -66,20 +53,6 @@ namespace burglar
                 for (int j = 0; j < nbCol; j++)
                 {
                     _matrix[i, j] = random.Next(0, 10);
-                }
-            }
-
-            // Debug
-            for (int i = 0; i < nbCol; i++)
-            {
-                for (int j = 0; j < nbRow; j++)
-                {
-                    Debug.Log("[" + i + "," + j + "] " + _matrix[i, j]);
-
-                    if (i % _level + 1 == 0)
-                    {
-                        Debug.Log(" ");
-                    }
                 }
             }
         }
@@ -154,12 +127,6 @@ namespace burglar
 
                 usedPositions.Add(new int2(row, col));
             }
-
-            // Show Combination found
-            for (int j = 0; j < _combinationLength; j++)
-            {
-                Debug.Log("Combination : " + _combination[j]);
-            }
         }
 
         protected override void Interact()
@@ -167,9 +134,6 @@ namespace burglar
             if (!_isCracked)
             {
                 EventManager.OnOpenSafe(this);
-            } else
-            {
-                Debug.Log("The safe is already cracked");
             }
         }
 
@@ -217,7 +181,7 @@ namespace burglar
         {
             _selectedCombination.Add(coordinates);
 
-            UIManager.Instance.UpdateGrid(this, coordinates);
+            UIManager.Instance.UpdateSafeGrid(this, coordinates);
         }
 
         public bool CheckCombination()
@@ -231,6 +195,19 @@ namespace burglar
             }
 
             return true;
+        }
+
+        private void OnSuccessSafeCrack(Safe safe)
+        {
+            safe._isCracked = true;
+            safe.GetComponent<Interactible>().enabled = false;
+
+            EventManager.OnCreditCollected(safe._value);
+        }
+
+        private void OnFailSafeCrack()
+        {
+            _selectedCombination.Clear();
         }
     }
 }

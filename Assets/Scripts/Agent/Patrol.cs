@@ -15,7 +15,7 @@ namespace burglar
 
         private Agent _agent;
         private NavMeshAgent _navMeshAgent;
-        [SerializeField] private float _searchTimeBetweenPoints;
+        public float _searchTimeBetweenPoints;
         private Coroutine _searchCoroutine;
 
         private Vector3 _suspiciousPoint;
@@ -35,18 +35,18 @@ namespace burglar
 
         private void OnEnable()
         {
-            EventManager.SoundHeard += (point, strength) => CheckSuspiciousPoint(point);
+            EventManager.SoundGenerated += (point, strength, checkDistance) => CheckSuspiciousPoint(point, checkDistance);
         }
 
         private void OnDisable()
         {
-            EventManager.SoundHeard -= (point, strength) => CheckSuspiciousPoint(point);
+            EventManager.SoundGenerated -= (point, strength, checkDistance) => CheckSuspiciousPoint(point, checkDistance);
         }
 
-        private void CheckSuspiciousPoint(Vector3 point)
+        private void CheckSuspiciousPoint(Vector3 point, bool checkDistance = true)
         {
             // Check if the point is in range of agent's earing radius
-            if (Vector3.Distance(transform.position, point) > _agent._earingDistance)
+            if (checkDistance && Vector3.Distance(transform.position, point) > _agent._earingDistance)
             {
                 return;
             }

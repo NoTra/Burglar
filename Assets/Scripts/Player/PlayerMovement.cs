@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace burglar.player
@@ -7,31 +8,51 @@ namespace burglar.player
         [SerializeField] private float _speed = 3f;
         [SerializeField] private float _walkSpeed = 3f;
         [SerializeField] private float _runSpeed = 6f;
+        [SerializeField] private float _crawlSpeed = 1.5f;
+
         private float _lastSoundTime = 0f;
         private float _soundTriggerDelay = 0.2f;
         [SerializeField] private float _stepStrength = 0.2f;
         private bool _wasRunning = false;
 
+        private MeshRenderer _meshRenderer;
         private Color _startColor;
 
         protected override void Awake()
         {
             base.Awake();
             _startColor = _player.GetComponent<MeshRenderer>().material.color;
+            _meshRenderer = _player.GetComponent<MeshRenderer>();
         }
 
         private void Update()
         {
             // Si le joueur appuie sur la touche "Run" (holding shift)
-            _speed = (_player._playerInput.actions["Run"].ReadValue<float>() > 0) ? _runSpeed : _walkSpeed;
+            UpdateSpeed();
 
-            _player.GetComponent<MeshRenderer>().material.color = (_speed == _runSpeed) ? Color.red : _startColor;
+            _meshRenderer.material.color = (_speed == _runSpeed) ? new Color(255f, 0, 0, _meshRenderer.material.color.a) : _startColor;
 
             // On récupère l'input du joueur
             // Vector2 moveDirection = _player._playerInput.actions["Movement"].ReadValue<Vector2>();
 
             // On passe à l'animator que la variable velocity = Player.GetRigidbody().velocity.magnitude
             // _player.GetAnimator().SetBool("isRunning", (moveDirection != Vector2.zero));
+        }
+
+        private void UpdateSpeed()
+        {
+            if (_player._playerInput.actions["Crawl"].ReadValue<float>() > 0)
+            {
+                _speed = _crawlSpeed;
+            }
+            else if (_player._playerInput.actions["Run"].ReadValue<float>() > 0)
+            {
+                _speed = _runSpeed;
+            }
+            else
+            {
+                _speed = _walkSpeed;
+            }
         }
 
         private void FixedUpdate()
@@ -42,7 +63,8 @@ namespace burglar.player
             if (moveDirection != Vector2.zero)
             {
                 float angle = Mathf.Atan2(moveDirection.x, moveDirection.y) * Mathf.Rad2Deg;
-                _player._rigidbody.transform.rotation = Quaternion.Euler(0f, angle, 0f);
+                var xRotation = _player._rigidbody.transform.rotation.eulerAngles.x;
+                _player._rigidbody.transform.rotation = Quaternion.Euler(xRotation, angle, 0f);
             }
 
             var position = _player._rigidbody.transform.position;

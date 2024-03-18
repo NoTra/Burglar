@@ -135,6 +135,11 @@ namespace burglar
 
             var nbButtonsByRow = safe.GetLevel() + 1;
 
+            if (GameManager.Instance.GetSelectedItemSlug() == "unlocker")
+            {
+                nbButtonsByRow--;
+            }
+
             // Set up Grid Layout Group to display nbButtonsByRow buttons per row
             _gridContainer.constraintCount = nbButtonsByRow;
 
@@ -227,7 +232,14 @@ namespace burglar
 
         private void OnFailSafeCrack()
         {
+            CloseSafeUI();
+        }
+
+        public void CloseSafeUI()
+        {
             UISafePanel.SetActive(false);
+
+            Time.timeScale = 1;
         }
 
 

@@ -19,13 +19,7 @@ namespace burglar
 
         protected override void Interact()
         {
-            // if player use Activate button, we toggle the light
             ToggleLightSwitch();
-
-            if (!_light.enabled)
-            {
-                EventManager.OnLightChange(gameObject);
-            }
         }
 
         protected override void OnTriggerExit(Collider other)
@@ -38,6 +32,8 @@ namespace burglar
         public void ToggleLightSwitch()
         {
             _light.enabled = !_light.enabled;
+
+            EventManager.OnLightChange(gameObject);
         }
 
         public void TurnOffLight()

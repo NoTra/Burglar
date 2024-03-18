@@ -53,6 +53,33 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Crawl"",
+                    ""type"": ""Button"",
+                    ""id"": ""795cbc5e-6e56-42a4-a276-57c3428ac0d3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeItem"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""6df996a4-4fe5-47c4-ace6-67700e8b3126"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ActivateItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""fafb5085-6fcd-4d93-8108-0f456988cc42"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -187,6 +214,39 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Activate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3850b57d-95b8-4e97-9219-c153c91155ae"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crawl"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bf5a2870-c0a2-4745-8ce1-a30e57daacdd"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8f7118a4-149c-4089-a428-e8ab7b8d95cc"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ActivateItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -198,6 +258,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
         m_Player_Activate = m_Player.FindAction("Activate", throwIfNotFound: true);
+        m_Player_Crawl = m_Player.FindAction("Crawl", throwIfNotFound: true);
+        m_Player_ChangeItem = m_Player.FindAction("ChangeItem", throwIfNotFound: true);
+        m_Player_ActivateItem = m_Player.FindAction("ActivateItem", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -262,6 +325,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Run;
     private readonly InputAction m_Player_Activate;
+    private readonly InputAction m_Player_Crawl;
+    private readonly InputAction m_Player_ChangeItem;
+    private readonly InputAction m_Player_ActivateItem;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -269,6 +335,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Run => m_Wrapper.m_Player_Run;
         public InputAction @Activate => m_Wrapper.m_Player_Activate;
+        public InputAction @Crawl => m_Wrapper.m_Player_Crawl;
+        public InputAction @ChangeItem => m_Wrapper.m_Player_ChangeItem;
+        public InputAction @ActivateItem => m_Wrapper.m_Player_ActivateItem;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -287,6 +356,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Activate.started += instance.OnActivate;
             @Activate.performed += instance.OnActivate;
             @Activate.canceled += instance.OnActivate;
+            @Crawl.started += instance.OnCrawl;
+            @Crawl.performed += instance.OnCrawl;
+            @Crawl.canceled += instance.OnCrawl;
+            @ChangeItem.started += instance.OnChangeItem;
+            @ChangeItem.performed += instance.OnChangeItem;
+            @ChangeItem.canceled += instance.OnChangeItem;
+            @ActivateItem.started += instance.OnActivateItem;
+            @ActivateItem.performed += instance.OnActivateItem;
+            @ActivateItem.canceled += instance.OnActivateItem;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -300,6 +378,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Activate.started -= instance.OnActivate;
             @Activate.performed -= instance.OnActivate;
             @Activate.canceled -= instance.OnActivate;
+            @Crawl.started -= instance.OnCrawl;
+            @Crawl.performed -= instance.OnCrawl;
+            @Crawl.canceled -= instance.OnCrawl;
+            @ChangeItem.started -= instance.OnChangeItem;
+            @ChangeItem.performed -= instance.OnChangeItem;
+            @ChangeItem.canceled -= instance.OnChangeItem;
+            @ActivateItem.started -= instance.OnActivateItem;
+            @ActivateItem.performed -= instance.OnActivateItem;
+            @ActivateItem.canceled -= instance.OnActivateItem;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -322,5 +409,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnActivate(InputAction.CallbackContext context);
+        void OnCrawl(InputAction.CallbackContext context);
+        void OnChangeItem(InputAction.CallbackContext context);
+        void OnActivateItem(InputAction.CallbackContext context);
     }
 }

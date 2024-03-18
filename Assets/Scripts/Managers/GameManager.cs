@@ -16,6 +16,8 @@ namespace burglar
 
         public PlayerInput playerInput;
 
+        public AudioManager audioManager;
+
         public enum GameState
         {
             Playing,
@@ -27,6 +29,12 @@ namespace burglar
         public GameState gameState = GameState.Playing;
 
         public int credit = 0;
+
+        public List<Item> items = new List<Item>();
+
+        public Item selectedItem;
+
+        public LightSwitch _lightSwitchSelectedByRemote;
 
         private void Awake()
         {
@@ -88,6 +96,11 @@ namespace burglar
             EventManager.OnEndOfAlertState();
 
             EventManager.OnChangeGameState(gameState);
+        }
+
+        public string GetSelectedItemSlug()
+        {
+            return selectedItem?.slug;
         }
     }
 }

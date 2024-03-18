@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e319022aedb72444a695212b373677b, type: 3}
+  m_Name: Remote
+  m_EditorClassIdentifier: 
+  title: Light remote
+  slug: remote
+  icon: {fileID: 21300000, guid: 3661aa71c9ef5c549a2b62642c24c108, type: 3}
+  description: Bind it to a light switch and trigger it at distance to create a diversion.

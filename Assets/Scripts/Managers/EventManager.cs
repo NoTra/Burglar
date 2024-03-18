@@ -33,5 +33,14 @@ namespace burglar
 
         public static event UnityAction EndOfAlertState;
         public static void OnEndOfAlertState() => EndOfAlertState?.Invoke();
+
+        public static event UnityAction<Item> SelectItem;
+        public static void OnSelectItem(Item item) => SelectItem?.Invoke(item);
+
+        public static event UnityAction IsInvisible;
+        public static void OnIsInvisible() => IsInvisible?.Invoke();
+
+        public static event UnityAction IsVisible;
+        public static void OnIsVisible() => IsVisible?.Invoke();
     }
 }

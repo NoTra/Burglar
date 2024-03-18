@@ -40,6 +40,11 @@ namespace burglar
             GenerateCombination();
         }
 
+        public void SetLevel(int newLevel)
+        {
+            _level = newLevel;
+        }
+
         private void GenerateMatrix()
         {
             var nbRow = _level + 1;
@@ -64,8 +69,8 @@ namespace burglar
             // knowing that you can't use the same position twice and
             // that the combination can be done be going north, south, east or west
             var random = new System.Random();
-            var row = random.Next(0, _level + 1);
-            var col = random.Next(0, _level + 1);
+            var row = random.Next(0, _level);
+            var col = random.Next(0, _level);
 
             // Keep used positions
             var usedPositions = new List<int2>();

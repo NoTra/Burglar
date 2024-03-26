@@ -3217,6 +3217,8 @@ MonoBehaviour:
   _hoverColor: {r: 0.4321378, g: 0.7830189, b: 0.4321378, a: 1}
   _selectedColor: {r: 0.17777678, g: 0.8018868, b: 0.17777678, a: 1}
   _disabledColor: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 1}
+  StartScreen: {fileID: 1599370157}
+  HUD: {fileID: 1302874364}
   OutlineColor: {r: 1, g: 0.6034084, b: 0.015686274, a: 1}
   OutlineWidth: 3
 --- !u!4 &1876504382

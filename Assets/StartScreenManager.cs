@@ -25,7 +25,11 @@ namespace burglar
 
         public void LoadGameButton()
         {
-            Debug.Log("Load game !");
+            var lastSaveName = SaveLoadSystem.Instance.GetLastSaveName();
+            Debug.Log("Loading game: " + lastSaveName);
+
+            SaveLoadSystem.Instance.LoadGame(lastSaveName);
+            Debug.Log("Game loaded !");
         }
 
         public void OptionsButton()

@@ -35,6 +35,11 @@ namespace burglar
         {
             // @TODO : create scene transition
 
+            // Deactivate UI Start Menu if opened
+            UIManager.Instance.StartScreen.SetActive(false);
+            // Activate the game HUD
+            UIManager.Instance.HUD.SetActive(true);
+
             // Load the scene in Single mode
             SceneManager.LoadScene(sceneName);
         }

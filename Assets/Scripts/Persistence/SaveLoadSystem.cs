@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -61,7 +62,9 @@ namespace burglar.persistence
             GameManager.Instance.items = gameData.Items;
             GameManager.Instance.credit = gameData.Credit;
 
-            SceneManager.LoadScene(gameData.CurrentLevelId);
+            var buildIndex = LevelManager.Instance.levels[gameData.CurrentLevelId];
+
+            LevelManager.Instance.LoadScene(buildIndex);
         }
 
         public void DeleteGame(string gameName) => dataService.Delete(gameName);
@@ -70,8 +73,24 @@ namespace burglar.persistence
 
         public bool SaveExists() {
             var name = String.IsNullOrEmpty(gameData.Name) ? "My save" : gameData.Name;
-            Debug.Log("SaveExists : " + name);
             return dataService.SaveExists(name);
+        }
+
+        public string GetLastSaveName()
+        {
+            // Get list of all save names
+            var saveNames = dataService.ListSaves().ToList();
+
+            // If there are no saves, return false
+            if (saveNames.Count == 0)
+            {
+                return null;
+            }
+
+            // Get the last save name
+            var lastSaveName = saveNames.Last();
+
+            return lastSaveName;
         }
 
         private void OnEnable()

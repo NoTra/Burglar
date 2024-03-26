@@ -32,11 +32,11 @@ namespace burglar
 
         public void SaveAndContinueButton()
         {
-            // Trigger save event
-            EventManager.OnSave();
-
             // Load next level
             LevelManager.Instance.LoadNextLevel();
+
+            // Trigger save event
+            EventManager.OnSave();
         }
     }
 }

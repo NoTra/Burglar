@@ -15,13 +15,18 @@ namespace burglar
         [SerializeField] private GameObject canvas;
         [SerializeField] private GameObject eventSystem;
 
+        // StartScreen 🚪
+        [Header("StartScreen")]
+        public GameObject StartScreen;
+
+        // HUD 💰
+        [Header("HUD")]
+        public GameObject HUD;
+        [SerializeField] private TextMeshProUGUI UICreditTMP;
+
         // GameOver 💀
         [Header("GameOver")]
         [SerializeField] private GameObject UIGameOverPanel;
-
-        // Credit HUD 💰
-        [Header("CreditHUD")]
-        [SerializeField] private TextMeshProUGUI UICreditTMP;
 
         // Safe UI 🔓
         [Header("SafeUI")]

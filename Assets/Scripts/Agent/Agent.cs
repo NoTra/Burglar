@@ -33,19 +33,34 @@ namespace burglar
         private void Awake()
         {
             _navMeshAgent = GetComponent<NavMeshAgent>();
+            Debug.Log("[AGENT] NavMeshAgent: " + _navMeshAgent + " (" + gameObject.name + ")");
             _patrol = GetComponent<Patrol>();
+            Debug.Log("[AGENT] Patrol: " + _patrol + " (" + gameObject.name + ")");
+        }
+
+        private void OnDestroy()
+        {
+            Debug.Log("[AGENT] OnDestroy (" + gameObject.name + ")");
         }
 
         private void Start()
         {
             ChangeState(State.Patrol);
 
-            EventManager.ChangeGameState += (state) => OnChangeGameState(state);
-
             // Setup the decal projector size based on the earing distance of the agent * 2
             _decalProjector.size = new Vector3(_earingDistance * 2, _earingDistance * 2, 10f);
 
             Debug.Log("Earing size changed to : " + _decalProjector.size);
+        }
+
+        private void OnEnable()
+        {
+            EventManager.ChangeGameState += (state) => OnChangeGameState(state);
+        }
+
+        private void OnDisable()
+        {
+            EventManager.ChangeGameState -= (state) => OnChangeGameState(state);
         }
 
         private void OnChangeGameState(GameManager.GameState state)

@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace burglar
@@ -29,10 +26,16 @@ namespace burglar
             switch (state)
             {
                 case GameManager.GameState.Alert:
-                    _blinkAnimator.SetBool("Alert", true);
+                    if (_blinkAnimator != null)
+                    {
+                        _blinkAnimator.SetBool("Alert", true);
+                    }
                     break;
                 case GameManager.GameState.Playing:
-                    _blinkAnimator.SetBool("Alert", false);
+                    if (_blinkAnimator != null)
+                    {
+                        _blinkAnimator.SetBool("Alert", false);
+                    }
                     break;
                 default:
                     break;

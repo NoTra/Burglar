@@ -23,13 +23,16 @@ namespace burglar
         private void Awake()
         {
             _navMeshAgent = GetComponent<NavMeshAgent>();
+            Debug.Log("[PATROL] NavMeshAgent: " + _navMeshAgent + " (" + gameObject.name + ")");
             _agent = GetComponent<Agent>();
+            Debug.Log("[PATROL] Agent: " + _agent + " (" + gameObject.name + ")");
         }
 
         private void Start()
         {
             var destinationGO = _waypoints[_currentWaypointIndex];
             var destinationPosition = new Vector3(destinationGO.transform.position.x, destinationGO.transform.position.y, destinationGO.transform.position.z);
+            Debug.Log("NavMesh Agent Speed : " + _navMeshAgent.speed);
             _navMeshAgent.SetDestination(destinationPosition);
         }
 
@@ -52,11 +55,18 @@ namespace burglar
             }
 
             _suspiciousPoint = point;
-
+            Debug.Log("Suspicious point: " + point);
             var direction = (point - transform.position).normalized * 1.5f;
+            Debug.Log("Direction: " + direction);
             var pointToGo = point - direction;
+            Debug.Log("Point to go: " + pointToGo);
 
             _navMeshAgent.SetDestination(pointToGo);
+        }
+
+        private void OnDestroy()
+        {
+            Debug.Log("[PATROL] OnDestroy (" + gameObject.name + ")");
         }
 
         private void Update()

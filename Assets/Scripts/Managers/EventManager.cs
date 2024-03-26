@@ -42,5 +42,11 @@ namespace burglar
 
         public static event UnityAction IsVisible;
         public static void OnIsVisible() => IsVisible?.Invoke();
+
+        public static event UnityAction CreditChanged;
+        public static void OnCreditChanged() => CreditChanged?.Invoke();
+
+        public static event UnityAction Save;
+        public static void OnSave() => Save?.Invoke();
     }
 }

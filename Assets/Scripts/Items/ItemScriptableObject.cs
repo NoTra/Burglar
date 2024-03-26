@@ -10,5 +10,8 @@ namespace burglar
         public Sprite icon;
         [TextArea(15, 20)]
         public string description;
+        public int price;
+        public bool isPurchasable = true;
+
     }
 }

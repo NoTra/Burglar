@@ -18,13 +18,24 @@ namespace burglar
                 EventManager.OnChangeGameState(GameManager.GameState.Alert);
 
                 // On génère un son
-                EventManager.OnSoundGenerated(transform.position, 10f, false);
+                // EventManager.OnSoundGenerated(transform.position, 10f, false);
             }
+        }
+
+        private void OnDestroy()
+        {
+            Debug.Log("[LASER] OnDestroy (" + gameObject.name + ")");
+        }
+
+        private void Awake()
+        {
+            Debug.Log("[LASER] Awake (" + gameObject.name + ")");
+            _meshRenderer = GetComponent<MeshRenderer>();
         }
 
         private void Start()
         {
-            _meshRenderer = GetComponent<MeshRenderer>();
+            Debug.Log("[LASER] Start (" + gameObject.name + ")");
             UpdateLaserDisplay();
         }
 
@@ -33,8 +44,14 @@ namespace burglar
             EventManager.LightChange += (switchGO) => OnLightChange(switchGO);
         }
 
+        private void OnDisable()
+        {
+            EventManager.LightChange -= (switchGO) => OnLightChange(switchGO);
+        }
+
         private void OnLightChange(GameObject switchGO)
         {
+            Debug.Log("Laser.cs OnLightChange...");
             UpdateLaserDisplay();
         }
 

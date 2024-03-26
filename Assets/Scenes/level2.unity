@@ -170,7 +170,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 8f4c4dcbecfee944fb834408f0ce342c, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: ae7dc8df2e705454d964d69f8532e729, type: 2}
   m_BuildHeightMesh: 0
 --- !u!4 &3857400
 Transform:
@@ -1379,7 +1379,7 @@ Transform:
   m_GameObject: {fileID: 526596263}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7, y: 0, z: -8}
+  m_LocalPosition: {x: 3, y: 0, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2199,7 +2199,7 @@ Transform:
   m_GameObject: {fileID: 1211565854}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.9887, y: 2.9887, z: 2.9887}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4137,7 +4137,7 @@ PrefabInstance:
     - target: {fileID: 753725494939254747, guid: d4732719e8f1f4142a5d42d689cbc2fa,
         type: 3}
       propertyPath: m_Name
-      value: Agent01_lvl1
+      value: Agent01_lvl2
       objectReference: {fileID: 0}
     - target: {fileID: 753725494939254747, guid: d4732719e8f1f4142a5d42d689cbc2fa,
         type: 3}
@@ -4243,11 +4243,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8942011997935977344, guid: d4732719e8f1f4142a5d42d689cbc2fa,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

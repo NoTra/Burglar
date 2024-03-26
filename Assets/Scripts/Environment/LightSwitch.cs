@@ -33,6 +33,7 @@ namespace burglar
         {
             _light.enabled = !_light.enabled;
 
+            // Trigger light change event
             EventManager.OnLightChange(gameObject);
         }
 

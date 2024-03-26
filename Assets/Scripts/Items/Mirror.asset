@@ -17,3 +17,5 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 908af29a4a3027542aabd57ca38a0595, type: 3}
   description: This is a mirror, with it you can pass through lasers without being
     detected.
+  price: 75
+  isPurchasable: 1

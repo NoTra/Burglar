@@ -17,3 +17,5 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 84567672d89c84c41968f1b0c5a36915, type: 3}
   description: This key set, make it easier to open doors (reduces the difficulty
     by 1).
+  price: 50
+  isPurchasable: 1

@@ -41,6 +41,7 @@ namespace burglar
         {
             if (_isClickable)
             {
+                Debug.Log("Click");
                 _isSelected = !_isSelected;
                 _safe.AddToCombination(_coordinates);
 

@@ -11,6 +11,10 @@ namespace burglar
 
     public class UIManager : MonoBehaviour
     {
+        [Header("UIManager")]
+        [SerializeField] private GameObject canvas;
+        [SerializeField] private GameObject eventSystem;
+
         // GameOver 💀
         [Header("GameOver")]
         [SerializeField] private GameObject UIGameOverPanel;
@@ -52,6 +56,10 @@ namespace burglar
                 instance = this;
             }
             DontDestroyOnLoad(gameObject);
+
+            // Add canvas to DontDestroyOnLoad
+            DontDestroyOnLoad(canvas);
+            DontDestroyOnLoad(eventSystem);
         }
 
         private void OnEnable()
@@ -84,6 +92,7 @@ namespace burglar
         private void OnPlayerCaught(GameObject player)
         {
             UIGameOverPanel.SetActive(true);
+            GameManager.Instance.gameState = GameManager.GameState.GameOver;
 
             StartCoroutine(BeforeRestartWaitFor(3f));
         }
@@ -95,6 +104,10 @@ namespace burglar
             // Stop All Coroutines
             StopAllCoroutines();
             
+            // Unload current scene
+            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+
+            // reload current scene
             UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         }
 

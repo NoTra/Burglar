@@ -16,3 +16,5 @@ MonoBehaviour:
   slug: remote
   icon: {fileID: 21300000, guid: 3661aa71c9ef5c549a2b62642c24c108, type: 3}
   description: Bind it to a light switch and trigger it at distance to create a diversion.
+  price: 25
+  isPurchasable: 1

@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEditor;
 
 
-namespace burglar
+namespace burglar.editor
 {
     [CustomEditor(typeof(FieldOfView))]
     public class FieldOfViewEditor : Editor

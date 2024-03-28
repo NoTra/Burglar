@@ -1700,7 +1700,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a23de86ca2c39b44db16a8218e80ffcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _agents: []
+  _agents:
+  - {fileID: 0}
 --- !u!4 &923449235
 Transform:
   m_ObjectHideFlags: 0
@@ -4119,7 +4120,7 @@ PrefabInstance:
     - target: {fileID: 509825673422126650, guid: d4732719e8f1f4142a5d42d689cbc2fa,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 753725494939254747, guid: d4732719e8f1f4142a5d42d689cbc2fa,
         type: 3}
@@ -4129,7 +4130,7 @@ PrefabInstance:
     - target: {fileID: 753725494939254747, guid: d4732719e8f1f4142a5d42d689cbc2fa,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1211948502493853780, guid: d4732719e8f1f4142a5d42d689cbc2fa,
         type: 3}

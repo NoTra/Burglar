@@ -24,14 +24,6 @@ namespace burglar.player
         {
             // Si le joueur appuie sur la touche "Run" (holding shift)
             UpdateSpeed();
-
-            // _meshRenderer.material.color = (_speed == _runSpeed) ? new Color(255f, 0, 0, _meshRenderer.material.color.a) : _startColor;
-
-            // On récupère l'input du joueur
-            // Vector2 moveDirection = _player._playerInput.actions["Movement"].ReadValue<Vector2>();
-
-            // On passe à l'animator que la variable velocity = Player.GetRigidbody().velocity.magnitude
-            // _player.GetAnimator().SetBool("isRunning", (moveDirection != Vector2.zero));
         }
 
         private void UpdateSpeed()
@@ -87,12 +79,9 @@ namespace burglar.player
                 }
                 else
                 {
-                    Debug.Log("Crawling");
                     _player.PlayerAnimator.SetBool("isCrawling", true);
                     _player.PlayerAnimator.SetBool("isWalking", false);
                     _player.PlayerAnimator.SetBool("isRunning", false);
-
-                    _player.PlayerAnimator.SetBool("Crouch", false);
                 }
 
                 // If the player is running, we generate a sound

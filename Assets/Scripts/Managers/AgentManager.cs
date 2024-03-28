@@ -20,7 +20,6 @@ namespace burglar
 
         private void SendClosestAgentToSwitch(GameObject switchGO)
         {
-            Debug.Log("AgentManager.cs SendClosestAgentToSwitch...");
             // Parse all agents and the closest one to the switch will check it
             Agent closestAgent = null;
             float closestDistance = float.MaxValue;

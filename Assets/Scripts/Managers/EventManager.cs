@@ -48,5 +48,8 @@ namespace burglar
 
         public static event UnityAction Save;
         public static void OnSave() => Save?.Invoke();
+
+        public static event UnityAction Interact;
+        public static void OnInteract() => Interact?.Invoke();
     }
 }

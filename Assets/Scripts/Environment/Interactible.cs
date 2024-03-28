@@ -52,6 +52,7 @@ namespace burglar
                 {
                     try
                     {
+                        EventManager.OnInteract();
                         Interact();
                     } catch (System.NotImplementedException e)
                     {

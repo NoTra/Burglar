@@ -30,6 +30,8 @@ namespace burglar.player
             EventManager.PlayerCaught += (player) => OnPlayerCaught(player);
             EventManager.ChangeGameState += (state) => OnChangeGameState(state);
             EventManager.EndOfAlertState += () => OnEndOfAlertState();
+
+            EventManager.Interact += () => OnInteract();
         }
 
         private void OnDisable()
@@ -40,10 +42,19 @@ namespace burglar.player
             EventManager.PlayerCaught -= (player) => OnPlayerCaught(player);
             EventManager.ChangeGameState -= (state) => OnChangeGameState(state);
             EventManager.EndOfAlertState -= () => OnEndOfAlertState();
+
+            EventManager.Interact -= () => OnInteract();
+        }
+
+        private void OnInteract()
+        {
+            Debug.Log("Launch interact animation");
+            PlayerAnimator.SetTrigger("Interact");
         }
 
         private void OnPlayerCaught(GameObject player)
         {
+            Debug.Log("Player caught animation");
             PlayerAnimator.SetTrigger("Caught");
         }
 
@@ -57,6 +68,7 @@ namespace burglar.player
             switch (state)
             {
                 case GameManager.GameState.GameOver:
+                    Debug.Log("Launch caught animation");
                     PlayerAnimator.SetTrigger("Caught");
                     break;
                 case GameManager.GameState.Alert:

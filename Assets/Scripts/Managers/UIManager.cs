@@ -96,6 +96,7 @@ namespace burglar
         #region PlayerCaught
         private void OnPlayerCaught(GameObject player)
         {
+            Debug.Log("Player caught from UIManager");
             UIGameOverPanel.SetActive(true);
             GameManager.Instance.gameState = GameManager.GameState.GameOver;
 

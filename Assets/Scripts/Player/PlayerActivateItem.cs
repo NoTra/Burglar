@@ -57,7 +57,6 @@ namespace burglar
         {
             if (other.CompareTag("LightSwitch"))
             {
-                Debug.Log("LightSwitch enter");
                 _lightSwitch = other.GetComponent<LightSwitch>();
             }
         }
@@ -66,7 +65,6 @@ namespace burglar
         {
             if (other.CompareTag("LightSwitch"))
             {
-                Debug.Log("LightSwitch exit");
                 _lightSwitch = null;
             }
         }

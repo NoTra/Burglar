@@ -18,24 +18,17 @@ namespace burglar
                 EventManager.OnChangeGameState(GameManager.GameState.Alert);
 
                 // On génère un son
-                // EventManager.OnSoundGenerated(transform.position, 10f, false);
+                EventManager.OnSoundGenerated(transform.position, 10f, false);
             }
-        }
-
-        private void OnDestroy()
-        {
-            Debug.Log("[LASER] OnDestroy (" + gameObject.name + ")");
         }
 
         private void Awake()
         {
-            Debug.Log("[LASER] Awake (" + gameObject.name + ")");
             _meshRenderer = GetComponent<MeshRenderer>();
         }
 
         private void Start()
         {
-            Debug.Log("[LASER] Start (" + gameObject.name + ")");
             UpdateLaserDisplay();
         }
 
@@ -51,7 +44,6 @@ namespace burglar
 
         private void OnLightChange(GameObject switchGO)
         {
-            Debug.Log("Laser.cs OnLightChange...");
             UpdateLaserDisplay();
         }
 
@@ -60,16 +52,8 @@ namespace burglar
             // Vérifie si l'objet est éclairé par une lumière de type SpotLight
             bool isLit = IsObjectLitBySpotlight();
 
-            if (isLit)
-            {
-                _meshRenderer.enabled = false;
-                Debug.Log("Laser est éclairé");
-            }
-            else
-            {
-                _meshRenderer.enabled = true;
-                Debug.Log("Laser est dans la pénombre");
-            }
+            // Display laser if not lit
+            _meshRenderer.enabled = !isLit;
         }
 
         private bool IsObjectLitBySpotlight()

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +11,7 @@ namespace burglar.player
         [HideInInspector] public PlayerInput _playerInput;
         [HideInInspector] public Rigidbody _rigidbody;
         MeshRenderer _meshRenderer;
+        [HideInInspector] public Animator PlayerAnimator;
 
         public bool _isInvisible = false;
 
@@ -24,12 +26,44 @@ namespace burglar.player
         {
             EventManager.IsInvisible += () => OnIsInvisible();
             EventManager.IsVisible += () => OnIsVisible();
+
+            EventManager.PlayerCaught += (player) => OnPlayerCaught(player);
+            EventManager.ChangeGameState += (state) => OnChangeGameState(state);
+            EventManager.EndOfAlertState += () => OnEndOfAlertState();
         }
 
         private void OnDisable()
         {
             EventManager.IsInvisible -= () => OnIsInvisible();
             EventManager.IsVisible -= () => OnIsVisible();
+
+            EventManager.PlayerCaught -= (player) => OnPlayerCaught(player);
+            EventManager.ChangeGameState -= (state) => OnChangeGameState(state);
+            EventManager.EndOfAlertState -= () => OnEndOfAlertState();
+        }
+
+        private void OnPlayerCaught(GameObject player)
+        {
+            PlayerAnimator.SetTrigger("Caught");
+        }
+
+        private void OnEndOfAlertState()
+        {
+            PlayerAnimator.SetTrigger("Relieved");
+        }
+
+        private void OnChangeGameState(GameManager.GameState state)
+        {
+            switch (state)
+            {
+                case GameManager.GameState.GameOver:
+                    PlayerAnimator.SetTrigger("Caught");
+                    break;
+                case GameManager.GameState.Alert:
+                    Debug.Log("Launch surprised animation");
+                    PlayerAnimator.SetTrigger("Surprised");
+                    break;
+            }
         }
 
         private void OnIsInvisible()

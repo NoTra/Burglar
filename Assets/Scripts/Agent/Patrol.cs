@@ -20,6 +20,8 @@ namespace burglar
 
         private Vector3 _suspiciousPoint;
 
+        [SerializeField] private Animator _agentAnimator;
+
         private void Awake()
         {
             _navMeshAgent = GetComponent<NavMeshAgent>();
@@ -133,6 +135,7 @@ namespace burglar
 
         private IEnumerator TurnLeftAndRight()
         {
+            _agentAnimator.SetTrigger("Search");
             // Turn left then right during _searchTimeBetweenPoints seconds
             var playerStartRotation = transform.rotation;
             var playerLeftRotation = Quaternion.Euler(0, -45, 0) * playerStartRotation;
@@ -165,7 +168,11 @@ namespace burglar
 
         private IEnumerator SearchBeforeContinueWaypoint()
         {
+            _agentAnimator.SetBool("isWalking", false);
+
             yield return TurnLeftAndRight();
+
+            _agentAnimator.SetBool("isWalking", true);
 
             ResumePatrol();
 

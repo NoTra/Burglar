@@ -25,6 +25,7 @@ namespace burglar
         [SerializeField] private GameObject _suspiciousIcon;
 
         private NavMeshAgent _navMeshAgent;
+        [SerializeField] private Animator _animator;
         [SerializeField] private float _speed = 3.5f;
         [SerializeField] private float _chaseSpeed = 7f;
 
@@ -88,6 +89,9 @@ namespace burglar
                     _suspiciousIcon.SetActive(false);
                     _navMeshAgent.speed = _speed;
                     _patrol._searchTimeBetweenPoints = 2f;
+
+                    _animator.SetBool("isWalking", true);
+                    _animator.SetBool("isRunning", false);
                     break;
                 case State.Suspicious:
                     _suspiciousIcon.SetActive(true);
@@ -100,6 +104,10 @@ namespace burglar
                     // Increase m_Speed of _navMeshAgent
                     _navMeshAgent.speed = _chaseSpeed;
                     _patrol._searchTimeBetweenPoints = 1f;
+
+
+                    _animator.SetBool("isRunning", true);
+                    _animator.SetBool("isWalking", false);
                     break;
                 default:
                     break;

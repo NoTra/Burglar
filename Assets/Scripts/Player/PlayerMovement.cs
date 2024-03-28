@@ -15,14 +15,9 @@ namespace burglar.player
         [SerializeField] private float _stepStrength = 0.2f;
         private bool _wasRunning = false;
 
-        private MeshRenderer _meshRenderer;
-        private Color _startColor;
-
         protected override void Awake()
         {
             base.Awake();
-            _startColor = _player.GetComponent<MeshRenderer>().material.color;
-            _meshRenderer = _player.GetComponent<MeshRenderer>();
         }
 
         private void Update()
@@ -30,7 +25,7 @@ namespace burglar.player
             // Si le joueur appuie sur la touche "Run" (holding shift)
             UpdateSpeed();
 
-            _meshRenderer.material.color = (_speed == _runSpeed) ? new Color(255f, 0, 0, _meshRenderer.material.color.a) : _startColor;
+            // _meshRenderer.material.color = (_speed == _runSpeed) ? new Color(255f, 0, 0, _meshRenderer.material.color.a) : _startColor;
 
             // On récupère l'input du joueur
             // Vector2 moveDirection = _player._playerInput.actions["Movement"].ReadValue<Vector2>();
@@ -74,6 +69,32 @@ namespace burglar.player
 
             if (moveDirection != Vector2.zero)
             {
+                if (_speed == _walkSpeed)
+                {
+                    _player.PlayerAnimator.SetBool("isWalking", true);
+                    _player.PlayerAnimator.SetBool("isRunning", false);
+                    _player.PlayerAnimator.SetBool("isCrawling", false);
+
+                    _player.PlayerAnimator.SetBool("Crouch", false);
+                }
+                else if (_speed == _runSpeed)
+                {
+                    _player.PlayerAnimator.SetBool("isRunning", true);
+                    _player.PlayerAnimator.SetBool("isWalking", false);
+                    _player.PlayerAnimator.SetBool("isCrawling", false);
+
+                    _player.PlayerAnimator.SetBool("Crouch", false);
+                }
+                else
+                {
+                    Debug.Log("Crawling");
+                    _player.PlayerAnimator.SetBool("isCrawling", true);
+                    _player.PlayerAnimator.SetBool("isWalking", false);
+                    _player.PlayerAnimator.SetBool("isRunning", false);
+
+                    _player.PlayerAnimator.SetBool("Crouch", false);
+                }
+
                 // If the player is running, we generate a sound
                 if (_speed > _walkSpeed && (Time.time - _lastSoundTime > _soundTriggerDelay))
                 {
@@ -95,6 +116,11 @@ namespace burglar.player
                         _wasRunning = false;
                     }
                 }
+            } else
+            {
+                _player.PlayerAnimator.SetBool("isRunning", false);
+                _player.PlayerAnimator.SetBool("isWalking", false);
+                _player.PlayerAnimator.SetBool("isCrawling", false);
             }
         }
     }

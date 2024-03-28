@@ -339,10 +339,10 @@ RectTransform:
   - {fileID: 581840354}
   m_Father: {fileID: 6360792}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 106.04565, y: -250}
+  m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &98459494
 MonoBehaviour:
@@ -1715,7 +1715,7 @@ MonoBehaviour:
   playerInput: {fileID: 0}
   audioManager: {fileID: 1874585130}
   gameState: 0
-  credit: 100
+  credit: 0
   items:
   - {fileID: 11400000, guid: 32691ab93560f4d419907a3997af1dcd, type: 2}
   selectedItem: {fileID: 11400000, guid: 32691ab93560f4d419907a3997af1dcd, type: 2}
@@ -2040,10 +2040,10 @@ RectTransform:
   - {fileID: 215624574}
   m_Father: {fileID: 6360792}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 106.04565, y: -150}
+  m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1329641110
 MonoBehaviour:
@@ -2210,10 +2210,10 @@ RectTransform:
   - {fileID: 1503707188}
   m_Father: {fileID: 6360792}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 106.04565, y: -50}
+  m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1435615014
 MonoBehaviour:
@@ -2792,7 +2792,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1599370158
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3206,8 +3206,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 1701105107}
   eventSystem: {fileID: 460998641}
-  UIGameOverPanel: {fileID: 1666367543}
+  StartScreen: {fileID: 1599370157}
+  HUD: {fileID: 1302874364}
   UICreditTMP: {fileID: 106368204}
+  UIGameOverPanel: {fileID: 1666367543}
   UISafePanel: {fileID: 183163678}
   _combinationText: {fileID: 758950195}
   _gridContainer: {fileID: 2022327002}
@@ -3217,8 +3219,6 @@ MonoBehaviour:
   _hoverColor: {r: 0.4321378, g: 0.7830189, b: 0.4321378, a: 1}
   _selectedColor: {r: 0.17777678, g: 0.8018868, b: 0.17777678, a: 1}
   _disabledColor: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 1}
-  StartScreen: {fileID: 1599370157}
-  HUD: {fileID: 1302874364}
   OutlineColor: {r: 1, g: 0.6034084, b: 0.015686274, a: 1}
   OutlineWidth: 3
 --- !u!4 &1876504382

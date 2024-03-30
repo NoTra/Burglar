@@ -37,7 +37,7 @@ namespace burglar
             _item = item;
             _title.text = item.name;
             _description.text = item.description;
-            _price.text = item.price.ToString() + "¢";
+            _price.text = item.price.ToString();
             _icon.sprite = item.icon;
         }
 

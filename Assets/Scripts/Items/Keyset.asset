@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: Key set
   slug: keyset
-  icon: {fileID: 21300000, guid: 84567672d89c84c41968f1b0c5a36915, type: 3}
+  icon: {fileID: 21300000, guid: 38292b8c066af3a45a5e26c0c3913f91, type: 3}
   description: This key set, make it easier to open doors (reduces the difficulty
     by 1).
   price: 50

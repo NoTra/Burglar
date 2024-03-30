@@ -1,6 +1,7 @@
 using burglar.persistence;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace burglar
@@ -10,10 +11,17 @@ namespace burglar
         [SerializeField] private GameObject _hudCanvas;
         [SerializeField] private GameObject _startScreenCanvas;
         [SerializeField] private GameObject _continueButton;
+        [SerializeField] private GameObject _newGameButton;
 
         private void Start()
         {
-            _continueButton.SetActive(SaveLoadSystem.Instance.SaveExists());
+            if(SaveLoadSystem.Instance.SaveExists())
+            {
+                _continueButton.SetActive(true);
+                var newGameText = _newGameButton.GetComponentInChildren<TextMeshProUGUI>();
+                // Change size of newGameText
+                newGameText.fontSize = 32;
+            }
         }
 
         public void NewGameButton()

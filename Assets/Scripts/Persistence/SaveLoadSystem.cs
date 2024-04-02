@@ -38,7 +38,7 @@ namespace burglar.persistence
                 SavedAt = DateTime.Now
             };
 
-            SceneManager.LoadScene("level1");
+            LevelManager.Instance.LoadScene("level1");
         }
 
         public void SaveGame()

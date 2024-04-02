@@ -26,8 +26,8 @@ namespace burglar
 
         public void NewGameButton()
         {
-            _startScreenCanvas.SetActive(false);
-            _hudCanvas.SetActive(true);
+            /*_startScreenCanvas.SetActive(false);
+            _hudCanvas.SetActive(true);*/
             SaveLoadSystem.Instance.NewGame();
         }
 

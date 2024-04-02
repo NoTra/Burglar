@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using EasyTransition;
+using System.Collections;
 
 
 namespace burglar
@@ -16,6 +18,9 @@ namespace burglar
 
         // Current level index
         private int _currentLevelIndex = 0;
+
+        // [SerializeField] private EasyTransition.Transition _transition;
+        [SerializeField] private TransitionSettings transition;
 
         private void Awake()
         {
@@ -33,30 +38,33 @@ namespace burglar
 
         public void LoadScene(string sceneName)
         {
-            // @TODO : create scene transition
+            TransitionManager.Instance().Transition(sceneName, transition, 0f);
+
+            StartCoroutine(ShowHudAndHidePanelAfterTransition());
+        }
+
+        IEnumerator ShowHudAndHidePanelAfterTransition()
+        {
+            yield return new WaitForSeconds(1.3f);
 
             // Deactivate UI Start Menu if opened
             UIManager.Instance.StartScreen.SetActive(false);
+
             // Activate the game HUD
             UIManager.Instance.HUD.SetActive(true);
-
-            // Load the scene in Single mode
-            SceneManager.LoadScene(sceneName);
         }
 
         public void LoadShop()
         {
-            SceneManager.LoadScene("shop");
+            LoadScene("shop");
         }
 
         public void LoadNextLevel()
         {
-            // @TODO : create scene transition
-
             _currentLevelIndex++;
 
             // Load the next scene in Single mode
-            SceneManager.LoadScene(levels[_currentLevelIndex]);
+            LoadScene(levels[_currentLevelIndex]);
         }
     }
 }

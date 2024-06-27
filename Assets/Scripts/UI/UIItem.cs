@@ -1,10 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
+using burglar.managers;
+using burglar.items;
 
-namespace burglar
+namespace burglar.UI
 {
     public class UIItem : MonoBehaviour
     {
@@ -12,7 +11,7 @@ namespace burglar
         private List<GameObject> _elements = new List<GameObject>();
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             // Add items possessed by the player
             var i = 0;
@@ -58,12 +57,6 @@ namespace burglar
                     itemElement.Select();
                 }
             }
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
     }
 }

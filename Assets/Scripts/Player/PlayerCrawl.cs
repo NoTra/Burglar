@@ -1,9 +1,6 @@
-using burglar.player;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace burglar
+namespace burglar.player
 {
     public class PlayerCrawl : PlayerSystem
     {

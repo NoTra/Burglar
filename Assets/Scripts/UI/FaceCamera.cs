@@ -1,27 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace burglar
+namespace burglar.UI
 {
     public class FaceCamera : MonoBehaviour
     {
         private Transform _cameraTransform;
 
-        private void Awake()
+        private void Update()
         {
-            _cameraTransform = Camera.main.transform;
-        }
-
-        void Start()
-        {
-        
-        }
-
-        void Update()
-        {
-            // Face the camera
-            transform.LookAt(transform.position + _cameraTransform.forward, _cameraTransform.up);
+            if (Camera.main != null)
+            {
+                // Faire face � la cam�ra principale
+                transform.LookAt(transform.position + Camera.main.transform.forward, Camera.main.transform.up);
+            }
         }
     }
 }

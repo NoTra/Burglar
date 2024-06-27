@@ -1,15 +1,15 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using System.Collections.Generic;
+using burglar.managers;
 
-namespace burglar
+namespace burglar.environment
 {
     public class LightSwitch : Interactible
     {
         private MeshRenderer _meshRenderer;
         private Color _materialColor;
-        [SerializeField] private AnimationCurve _colorChangeCurve;
-        public Light _light;
+        [SerializeField] private AnimationCurve colorChangeCurve;
+        public List<Light> _lights;
 
         private void Awake()
         {
@@ -31,7 +31,10 @@ namespace burglar
 
         public void ToggleLightSwitch()
         {
-            _light.enabled = !_light.enabled;
+            foreach (var light in _lights)
+            {
+                light.enabled = !light.enabled;
+            }
 
             // Trigger light change event
             EventManager.OnLightChange(gameObject);
@@ -39,12 +42,18 @@ namespace burglar
 
         public void TurnOffLight()
         {
-            _light.enabled = false;
+            foreach (var light in _lights)
+            {                 
+                light.enabled = false;
+            }
         }
 
         public void TurnOnLight()
         {
-            _light.enabled = true;
+            foreach (var light in _lights)
+            {
+                light.enabled = true;
+            }
         }
     }
 }

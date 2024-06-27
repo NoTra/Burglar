@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
-namespace burglar
+
+namespace burglar.utility
 {
     public class PersistentSingleton<T> : MonoBehaviour where T : Component
     {

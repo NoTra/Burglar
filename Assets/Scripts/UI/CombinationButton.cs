@@ -1,11 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using burglar.managers;
+using burglar.environment;
 
-namespace burglar
+namespace burglar.UI
 {
     public class CombinationButton : MonoBehaviour, IPointerClickHandler// , IPointerEnterHandler, IPointerExitHandler
     {
@@ -13,8 +12,8 @@ namespace burglar
 
         [SerializeField] private Vector2 _coordinates;
         [SerializeField] private Safe _safe;
-        public bool _isSelected;
-        public bool _isClickable = true;
+        public bool isSelected;
+        public bool isClickable = true;
 
         private Color _previousColor;
 
@@ -30,38 +29,24 @@ namespace burglar
             set => _safe = value;
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            _isSelected = false;
-            _isClickable = true;
-        }
-
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (_isClickable)
-            {
-                Debug.Log("Click");
-                _isSelected = !_isSelected;
-                _safe.AddToCombination(_coordinates);
+            if (!isClickable) return;
+            
+            isSelected = !isSelected;
+            _safe.AddToCombination(_coordinates);
 
-                // The length is the same as the combination length ? 
-                if (_safe.GetSelectedCombinationLength() == _safe.GetCombinationLength())
-                {
-                    // Check if the combination is correct
-                    if (_safe.CheckCombination())
-                    {
-                        EventManager.OnSuccessSafeCrack(_safe);
-                    }
-                    else
-                    {
-                        EventManager.OnFailSafeCrack();
-                    }
-
-                }
-            } else
+            // The length is different from the combination length ?
+            if (_safe.GetSelectedCombinationLength() != _safe.GetCombinationLength()) return;
+            
+            // Check if the combination is correct
+            if (_safe.CheckCombination())
             {
-                Debug.Log("Pouet");
+                EventManager.OnSuccessSafeCrack(_safe);
+            }
+            else
+            {
+                EventManager.OnFailSafeCrack(_safe);
             }
         }
 

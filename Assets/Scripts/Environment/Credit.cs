@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using burglar.managers;
 
-namespace burglar
+namespace burglar.environment
 {
     public class Credit : Interactible
     {

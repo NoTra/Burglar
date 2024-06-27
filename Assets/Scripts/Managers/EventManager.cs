@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.Events;
-using System;
+using burglar.environment;
+using burglar.items;
 
-
-namespace burglar
+namespace burglar.managers
 {
     public static class EventManager
     {
@@ -25,8 +25,8 @@ namespace burglar
         public static event UnityAction<Safe> SuccessSafeCrack;
         public static void OnSuccessSafeCrack(Safe safe) => SuccessSafeCrack?.Invoke(safe);
 
-        public static event UnityAction FailSafeCrack;
-        public static void OnFailSafeCrack() => FailSafeCrack?.Invoke();
+        public static event UnityAction<Safe> FailSafeCrack;
+        public static void OnFailSafeCrack(Safe safe) => FailSafeCrack?.Invoke(safe);
 
         public static event UnityAction<GameManager.GameState> ChangeGameState;
         public static void OnChangeGameState(GameManager.GameState gameState) => ChangeGameState?.Invoke(gameState);
@@ -49,7 +49,7 @@ namespace burglar
         public static event UnityAction Save;
         public static void OnSave() => Save?.Invoke();
 
-        public static event UnityAction Interact;
-        public static void OnInteract() => Interact?.Invoke();
+        public static event UnityAction<Interactible> Interact;
+        public static void OnInteract(Interactible interactible) => Interact?.Invoke(interactible);
     }
 }

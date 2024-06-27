@@ -2,7 +2,7 @@
 using UnitySceneManagement = UnityEngine.SceneManagement;
 using MonoBehavior = UnityEngine.MonoBehaviour;
 
-namespace burglar
+namespace burglar.managers
 {
     public class Level : MonoBehavior
     {

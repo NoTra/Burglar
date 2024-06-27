@@ -1,11 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.AI;
+using burglar.managers;
 
-namespace burglar
+namespace burglar.agent
 {
     public class AlertLevel : MonoBehaviour
     {
@@ -69,7 +66,7 @@ namespace burglar
                 if (_alertLevel >= _maxAlertLevel)
                 {
                     Debug.Log("Alarm triggered !");
-                    // On déclenche l'alarme
+                    // On dï¿½clenche l'alarme
                     EventManager.OnChangeGameState(GameManager.GameState.Alert);
 
                     return;

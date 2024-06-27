@@ -1,12 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
+using burglar.environment;
+using burglar.items;
 
-namespace burglar
+namespace burglar.managers
 {
     public class GameManager : MonoBehaviour
     {

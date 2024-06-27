@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using burglar.managers;
+using burglar.player;
 
-namespace burglar
+namespace burglar.environment
 {
     public class Interactible : MonoBehaviour
     {
@@ -14,15 +14,13 @@ namespace burglar
         {
             _outline = GetComponent<Outline>();
 
-            if (_outline == null)
+            if (_outline != null)
             {
-                gameObject.AddComponent<Outline>();
-                _outline = GetComponent<Outline>();
                 _outline.enabled = false;
 
                 _outline.OutlineMode = Outline.Mode.OutlineVisible;
-                _outline.OutlineColor = UIManager.Instance.OutlineColor;
-                _outline.OutlineWidth = UIManager.Instance.OutlineWidth;
+                _outline.OutlineColor = UIManager.Instance ? UIManager.Instance.OutlineColor : Color.white;
+                _outline.OutlineWidth = UIManager.Instance ? UIManager.Instance.OutlineWidth : 2f;
                 
             }
         }
@@ -31,6 +29,14 @@ namespace burglar
         {
             if (other.CompareTag("Player"))
             {
+                Debug.Log("Player entered the trigger of: " + gameObject.name);
+
+                var interactIcon = other.GetComponent<PlayerToggleInteractionIcon>();
+                if (interactIcon != null)
+                {
+                    interactIcon.interactionIconGO.SetActive(true);
+                }
+
                 if (_outline != null)
                 {
                     // Outline the object
@@ -52,8 +58,15 @@ namespace burglar
                 {
                     try
                     {
-                        EventManager.OnInteract();
+                        EventManager.OnInteract(this);
                         Interact();
+
+                        var interactIcon = TutoManager.Instance._player.GetComponent<PlayerToggleInteractionIcon>();
+                        if (interactIcon != null)
+                        {
+                            interactIcon.interactionIconGO.SetActive(false);
+                        }
+
                     } catch (System.NotImplementedException e)
                     {
                         Debug.Log("Interact method not implemented : " + e.Message.ToString());
@@ -64,10 +77,16 @@ namespace burglar
 
         protected virtual void OnTriggerExit(Collider other)
         {
-            if (_outline != null)
+            /*if (_outline != null)
             {
                 // Remove the outline
                 _outline.enabled = false;
+            }*/
+
+            var interactIcon = other.GetComponent<PlayerToggleInteractionIcon>();
+            if (interactIcon != null)
+            {
+                interactIcon.interactionIconGO.SetActive(false);
             }
 
             _playerInput = null;

@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Events;
+using burglar.managers;
 
-namespace burglar
+namespace burglar.utility
 {
     public class SoundGenerator : MonoBehaviour
     {

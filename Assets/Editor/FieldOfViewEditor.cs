@@ -1,7 +1,6 @@
 using UnityEngine;
-using System.Collections;
 using UnityEditor;
-
+using burglar.agent;
 
 namespace burglar.editor
 {

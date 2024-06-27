@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using burglar.agent;
 
-namespace burglar
+namespace burglar.UI
 {
     public class DrawEaringCircle : MonoBehaviour
     {
@@ -11,7 +10,7 @@ namespace burglar
         private SpriteRenderer _spriteRenderer;
         
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             _agent = GetComponentInParent<Agent>();
             _spriteRenderer = GetComponent<SpriteRenderer>();

@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using burglar.managers;
 
 namespace burglar.player
 {
@@ -49,7 +49,7 @@ namespace burglar.player
             // Rotate player to the direction of the movement
             if (moveDirection != Vector2.zero)
             {
-                float angle = Mathf.Atan2(moveDirection.x, moveDirection.y) * Mathf.Rad2Deg;
+                var angle = Mathf.Atan2(moveDirection.x, moveDirection.y) * Mathf.Rad2Deg;
                 var xRotation = _player._rigidbody.transform.rotation.eulerAngles.x;
                 _player._rigidbody.transform.rotation = Quaternion.Euler(xRotation, angle, 0f);
             }

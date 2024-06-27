@@ -1,6 +1,4 @@
 using burglar.persistence;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace burglar.editor
@@ -10,8 +8,8 @@ namespace burglar.editor
     {
         public override void OnInspectorGUI()
         {
-            SaveLoadSystem saveLoadSystem = (SaveLoadSystem) target;
-            string gameName = saveLoadSystem.gameData.Name;
+            var saveLoadSystem = (SaveLoadSystem) target;
+            var gameName = saveLoadSystem.gameData.Name;
 
             DrawDefaultInspector();
 

@@ -1,8 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using burglar.agent;
 
-namespace burglar
+namespace burglar.managers
 {
     public class AgentManager : MonoBehaviour
     {
@@ -22,15 +22,15 @@ namespace burglar
         {
             // Parse all agents and the closest one to the switch will check it
             Agent closestAgent = null;
-            float closestDistance = float.MaxValue;
-            foreach (Agent agent in _agents)
+            var closestDistance = float.MaxValue;
+            foreach (var agent in _agents)
             {
                 if (agent == null)
                 {
                     continue;
                 }
 
-                float distance = Vector3.Distance(agent.transform.position, switchGO.transform.position);
+                var distance = Vector3.Distance(agent.transform.position, switchGO.transform.position);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -43,7 +43,7 @@ namespace burglar
                 return;
             }
 
-            Patrol closestAgentPatrol = closestAgent.GetComponent<Patrol>();
+            var closestAgentPatrol = closestAgent.GetComponent<Patrol>();
 
             closestAgent.ChangeState(Agent.State.Suspicious);
             if (closestAgentPatrol != null)

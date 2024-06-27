@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace burglar
+namespace burglar.items
 {
     [CreateAssetMenu(fileName = "New Item", menuName = "ScriptableObjects/New item")]
     public class Item : ScriptableObject

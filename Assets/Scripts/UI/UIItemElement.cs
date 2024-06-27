@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using burglar.items;
 
-namespace burglar
+namespace burglar.UI
 {
     public class UIItemElement : MonoBehaviour
     {

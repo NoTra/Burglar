@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
+using burglar.managers;
 
-namespace burglar
+namespace burglar.environment
 {
     public class Safe : Interactible
     {
@@ -24,13 +23,13 @@ namespace burglar
         private void OnEnable()
         {
             EventManager.SuccessSafeCrack += (safe) => OnSuccessSafeCrack(safe);
-            EventManager.FailSafeCrack += () => OnFailSafeCrack();
+            EventManager.FailSafeCrack += (safe) => OnFailSafeCrack(safe);
         }
 
         private void OnDisable()
         {
             EventManager.SuccessSafeCrack -= (safe) => OnSuccessSafeCrack(safe);
-            EventManager.FailSafeCrack -= () => OnFailSafeCrack();
+            EventManager.FailSafeCrack -= (safe) => OnFailSafeCrack(safe);
         }
 
         void Start()
@@ -210,7 +209,7 @@ namespace burglar
             EventManager.OnCreditCollected(safe._value);
         }
 
-        private void OnFailSafeCrack()
+        private void OnFailSafeCrack(Safe safe)
         {
             _selectedCombination.Clear();
         }

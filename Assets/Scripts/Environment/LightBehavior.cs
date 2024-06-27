@@ -1,10 +1,12 @@
 using UnityEngine;
+using burglar.managers;
 
-namespace burglar
+namespace burglar.environment
 {
     public class LightBehavior : MonoBehaviour
     {
         private Animator _blinkAnimator;
+        private static readonly int Alert = Animator.StringToHash("Alert");
 
         private void Start()
         {
@@ -13,12 +15,12 @@ namespace burglar
 
         private void OnEnable()
         {
-            EventManager.ChangeGameState += (state) => OnChangeGameState(state);
+            EventManager.ChangeGameState += OnChangeGameState;
         }
 
         private void OnDisable()
         {
-            EventManager.ChangeGameState -= (state) => OnChangeGameState(state);
+            EventManager.ChangeGameState -= OnChangeGameState;
         }
 
         private void OnChangeGameState(GameManager.GameState state)
@@ -28,23 +30,18 @@ namespace burglar
                 case GameManager.GameState.Alert:
                     if (_blinkAnimator != null)
                     {
-                        _blinkAnimator.SetBool("Alert", true);
+                        _blinkAnimator.SetBool(Alert, true);
                     }
                     break;
                 case GameManager.GameState.Playing:
                     if (_blinkAnimator != null)
                     {
-                        _blinkAnimator.SetBool("Alert", false);
+                        _blinkAnimator.SetBool(Alert, false);
                     }
                     break;
                 default:
                     break;
             }
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
         }
     }
 }

@@ -1,10 +1,11 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using burglar.managers;
+using burglar.environment;
 
-namespace burglar
+namespace burglar.agent
 {
     public class Patrol : MonoBehaviour
     {
@@ -217,8 +218,11 @@ namespace burglar
             float rotationDuration = 0.8f;
 
             var startRotation = _navMeshAgent.transform.rotation;
+
+            var firstLight = switchComponent._lights[0];
+
             // We lock the y axis to avoid the agent to look up or down
-            var lightPosition = new Vector3(switchComponent._light.transform.position.x, _navMeshAgent.transform.position.y, switchComponent._light.transform.position.z);
+            var lightPosition = new Vector3(firstLight.transform.position.x, _navMeshAgent.transform.position.y, firstLight.transform.position.z);
             var destinationRotation = Quaternion.LookRotation(lightPosition - _navMeshAgent.transform.position);
 
             while (elapsedTime < rotationDuration)

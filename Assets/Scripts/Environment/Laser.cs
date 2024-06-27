@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using burglar.managers;
 
-namespace burglar
+namespace burglar.environment
 {
     public class Laser : MonoBehaviour
     {
@@ -12,14 +9,13 @@ namespace burglar
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Player") && GameManager.Instance.GetSelectedItemSlug() != "mirror")
-            {
-                // Alarme déclenchée
-                EventManager.OnChangeGameState(GameManager.GameState.Alert);
+            if (!other.CompareTag("Player") || GameManager.Instance.GetSelectedItemSlug() == "mirror") return;
+            
+            // Trigger alarm
+            EventManager.OnChangeGameState(GameManager.GameState.Alert);
 
-                // On génère un son
-                EventManager.OnSoundGenerated(transform.position, 10f, false);
-            }
+            // Generate sound
+            EventManager.OnSoundGenerated(transform.position, 10f, false);
         }
 
         private void Awake()
@@ -34,12 +30,12 @@ namespace burglar
 
         private void OnEnable()
         {
-            EventManager.LightChange += (switchGO) => OnLightChange(switchGO);
+            EventManager.LightChange += OnLightChange;
         }
 
         private void OnDisable()
         {
-            EventManager.LightChange -= (switchGO) => OnLightChange(switchGO);
+            EventManager.LightChange -= OnLightChange;
         }
 
         private void OnLightChange(GameObject switchGO)
@@ -49,29 +45,29 @@ namespace burglar
 
         private void UpdateLaserDisplay()
         {
-            // Vérifie si l'objet est éclairé par une lumière de type SpotLight
-            bool isLit = IsObjectLitBySpotlight();
+            // Chjeck if the object is illuminated by a spotlight
+            bool isIlluminated = IsObjectIlluminated();
 
-            // Display laser if not lit
-            _meshRenderer.enabled = !isLit;
+            // Display laser if not illuminated
+            _meshRenderer.enabled = !isIlluminated;
         }
 
-        private bool IsObjectLitBySpotlight()
+        private bool IsObjectIlluminated()
         {
-            // Récupère toutes les lumières de type SpotLight
-            Light[] lights = FindObjectsOfType<Light>();
+            // Get all Light
+            var lights = FindObjectsOfType<Light>();
 
-            foreach (Light light in lights)
+            foreach (var light in lights)
             {
                 if (light.type == LightType.Spot)
                 {
-                    // Vérifie si la lumière éclaire l'objet
+                    // Check if the light is on
                     if (light.enabled && light.isActiveAndEnabled && light.gameObject.activeInHierarchy)
                     {
-                        // Vérifie si l'objet est dans le cône de la lumière
+                        // Check if the object is in the light cone 
                         Vector3 direction = transform.position - light.transform.position;
-                        float angle = Vector3.Angle(light.transform.forward, direction);
-                        float halfAngle = light.spotAngle / 2;
+                        var angle = Vector3.Angle(light.transform.forward, direction);
+                        var halfAngle = light.spotAngle / 2;
 
                         if (angle < halfAngle)
                         {

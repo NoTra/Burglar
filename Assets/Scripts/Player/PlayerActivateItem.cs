@@ -1,17 +1,15 @@
-using burglar.player;
-using System;
 using System.Collections;
-using System.Collections.Generic;
+using burglar.environment;
+using burglar.managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace burglar
+namespace burglar.player
 {
     public class PlayerActivateItem : PlayerSystem
     {
-        private PlayerControls _playerControls;
-
         private LightSwitch _lightSwitch;
+        private PlayerControls _playerControls;
 
         protected override void Awake()
         {
@@ -31,41 +29,29 @@ namespace burglar
             _playerControls.Disable();
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("LightSwitch")) _lightSwitch = other.GetComponent<LightSwitch>();
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("LightSwitch")) _lightSwitch = null;
+        }
+
         private void ActivateItem(InputAction.CallbackContext context)
         {
             switch (GameManager.Instance.GetSelectedItemSlug())
             {
                 case "remote":
                     if (GameManager.Instance._lightSwitchSelectedByRemote != null)
-                    {
                         GameManager.Instance._lightSwitchSelectedByRemote.ToggleLightSwitch();
-                    }
                     else
-                    {
                         GameManager.Instance._lightSwitchSelectedByRemote = _lightSwitch;
-                    }
                     break;
                 case "invisibility":
                     StartCoroutine(Invisibility());
                     break;
-                default:
-                    break;
-            }
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("LightSwitch"))
-            {
-                _lightSwitch = other.GetComponent<LightSwitch>();
-            }
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.CompareTag("LightSwitch"))
-            {
-                _lightSwitch = null;
             }
         }
 

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using burglar.managers;
@@ -15,6 +16,11 @@ namespace burglar.player
         [HideInInspector] public Animator PlayerAnimator;
 
         public bool _isInvisible = false;
+        
+        private static readonly int Caught = Animator.StringToHash("Caught");
+        private static readonly int Surprised = Animator.StringToHash("Surprised");
+        private static readonly int Relieved = Animator.StringToHash("Relieved");
+        private static readonly int Interact = Animator.StringToHash("Interact");
 
         private void Awake()
         {
@@ -49,17 +55,17 @@ namespace burglar.player
 
         private void OnInteract(Interactible interactible)
         {
-            PlayerAnimator.SetTrigger("Interact");
+            PlayerAnimator?.SetTrigger(Interact);
         }
 
         private void OnPlayerCaught(GameObject player)
         {
-            PlayerAnimator.SetTrigger("Caught");
+            PlayerAnimator?.SetTrigger(Caught);
         }
 
         private void OnEndOfAlertState()
         {
-            PlayerAnimator.SetTrigger("Relieved");
+            PlayerAnimator?.SetTrigger(Relieved);
         }
 
         private void OnChangeGameState(GameManager.GameState state)
@@ -67,11 +73,13 @@ namespace burglar.player
             switch (state)
             {
                 case GameManager.GameState.GameOver:
-                    PlayerAnimator.SetTrigger("Caught");
+                    PlayerAnimator.SetTrigger(Caught);
                     break;
                 case GameManager.GameState.Alert:
-                    PlayerAnimator.SetTrigger("Surprised");
+                    PlayerAnimator.SetTrigger(Surprised);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(state), state, null);
             }
         }
 

@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using burglar.managers;
-using burglar.player;
 
 namespace burglar.environment
 {
@@ -31,11 +30,7 @@ namespace burglar.environment
             {
                 Debug.Log("Player entered the trigger of: " + gameObject.name);
 
-                var interactIcon = other.GetComponent<PlayerToggleInteractionIcon>();
-                if (interactIcon != null)
-                {
-                    interactIcon.interactionIconGO.SetActive(true);
-                }
+                EventManager.OnEnterInteractibleArea(this);
 
                 if (_outline != null)
                 {
@@ -52,46 +47,29 @@ namespace burglar.environment
 
         protected virtual void Update()
         {
-            if (_playerInput != null)
+            if (!_playerInput || !_playerInput.actions["Activate"].triggered) return;
+
+            try
             {
-                if (_playerInput.actions["Activate"].triggered)
-                {
-                    try
-                    {
-                        EventManager.OnInteract(this);
-                        Interact();
+                EventManager.OnInteract(this);
+                Interact();
 
-                        var interactIcon = TutoManager.Instance._player.GetComponent<PlayerToggleInteractionIcon>();
-                        if (interactIcon != null)
-                        {
-                            interactIcon.interactionIconGO.SetActive(false);
-                        }
-
-                    } catch (System.NotImplementedException e)
-                    {
-                        Debug.Log("Interact method not implemented : " + e.Message.ToString());
-                    }
-                }
+            } catch (System.NotImplementedException e)
+            {
+                Debug.Log("Interact method not implemented : " + e.Message);
             }
         }
 
         protected virtual void OnTriggerExit(Collider other)
         {
-            /*if (_outline != null)
-            {
-                // Remove the outline
-                _outline.enabled = false;
-            }*/
-
-            var interactIcon = other.GetComponent<PlayerToggleInteractionIcon>();
-            if (interactIcon != null)
-            {
-                interactIcon.interactionIconGO.SetActive(false);
-            }
+            EventManager.OnExitInteractibleArea(this);
 
             _playerInput = null;
         }
 
-        protected virtual void Interact() {}
+        protected virtual void Interact()
+        {
+            Debug.Log("Interact");
+        }
     }
 }

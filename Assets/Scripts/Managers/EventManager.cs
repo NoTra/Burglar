@@ -51,5 +51,14 @@ namespace burglar.managers
 
         public static event UnityAction<Interactible> Interact;
         public static void OnInteract(Interactible interactible) => Interact?.Invoke(interactible);
+        
+        public static event UnityAction<Interactible> EnterInteractibleArea;
+        public static void OnEnterInteractibleArea(Interactible interactible) => EnterInteractibleArea?.Invoke(interactible);
+        
+        public static event UnityAction<Interactible> ExitInteractibleArea;
+        public static void OnExitInteractibleArea(Interactible interactible) => ExitInteractibleArea?.Invoke(interactible);
+
+        public static event UnityAction TutoSuccess;
+        public static void OnTutoSuccess() => TutoSuccess?.Invoke();
     }
 }

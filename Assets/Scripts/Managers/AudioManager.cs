@@ -1,21 +1,205 @@
 using UnityEngine;
+using System.Collections;
 
 namespace burglar.managers
 {
     public class AudioManager : MonoBehaviour
     {
+        [Header("Audio Sources")]
+        public AudioSource musicAudioSource;
+        public AudioSource musicAudioSource2;
+        public AudioSource sfxAudioSource;
+        public AudioSource sfxAudioSource2;
+        
+        // Singleton
         public static AudioManager Instance;
+
+        [Header("Audio Clips")]
+        [Header("Musics")]
+        public AudioClip musicMenu;
+        public AudioClip musicTuto;
+        public AudioClip musicLevel;
+        public AudioClip musicShop;
+        [Header("SFX")]
+        [Header("UI")]
+        public AudioClip soundHover;
+        public AudioClip soundDialogSlideIn;
+        public AudioClip soundDialogSlideOut;
+        public AudioClip soundTyping;
+        public AudioClip soundClick;
+        public AudioClip soundTransition;
+        public AudioClip soundCredit;
+        public AudioClip soundSuccess;
+        public AudioClip soundTeleport;
+        public AudioClip soundTeleportOut;
+        
+        [Header("Player")]
+        public AudioClip soundFootstep;
+        public AudioClip soundSneakyFootstep;
+        
+        [Header("Environment")]
+        public AudioClip soundLightSwitch;
+        
+        private float _musicVolume;
+        private float _musicVolume2;
 
         private void Awake()
         {
-            if (Instance == null)
+            if (Instance != null && Instance != this)
             {
-                Instance = this;
+                Destroy(gameObject);
+                return;
             }
             else
             {
-                Destroy(gameObject);
+                Instance = this;
+            }
+            DontDestroyOnLoad(gameObject);
+            
+            _musicVolume = musicAudioSource.volume;
+            _musicVolume2 = musicAudioSource2.volume;
+        }
+        
+        public void PlayMusic(AudioClip music, bool crossFade, bool doFade = true)
+        {
+            if (crossFade)
+            {
+                // if a music is already playing, make a fade out of the current music and fade in of the new one
+                if (musicAudioSource.isPlaying || musicAudioSource2.isPlaying)
+                {
+                    if (musicAudioSource.isPlaying)
+                    {
+                        musicAudioSource2.clip = music;
+                        musicAudioSource2.Play();
+                    
+                        Debug.Log("1st audio source is playing, fade out and fade in the 2nd one");
+                        StartCoroutine(CrossFade(musicAudioSource, musicAudioSource2, 1f));
+                    }
+                    else
+                    {
+                        musicAudioSource.clip = music;
+                        musicAudioSource.Play();
+                    
+                        Debug.Log("2nd audio source is playing, fade out and fade in the 1st one");
+                        StartCoroutine(CrossFade(musicAudioSource2, musicAudioSource, 1f));
+                    }
+                }
+                else
+                {
+                    musicAudioSource.clip = music;
+                    musicAudioSource.Play();
+                
+                    Debug.Log("No audio source is playing, fade in the 1st one");
+                    StartCoroutine(FadeIn(musicAudioSource, music, 1f));
+                }
+            }
+            else
+            {
+                if (doFade)
+                {
+                    StartCoroutine(FadeOutThanIn(music, 1f, 1f));                    
+                }
+                else
+                {
+                    if (musicAudioSource.isPlaying)
+                    {
+                        musicAudioSource.Stop();
+                    }
+                    else if (musicAudioSource2.isPlaying)
+                    {
+                        musicAudioSource2.Stop();
+                    }
+
+                    Debug.Log("Play music without fade");
+                    musicAudioSource.clip = music;
+                    musicAudioSource.Play();
+                }
+                
+            }
+
+        }
+
+        private IEnumerator FadeOutThanIn(AudioClip music, float fadeTimeSeconds = 1f, float waitTimeSeconds = 0f)
+        {
+            // First fade out the current music
+            if (musicAudioSource.isPlaying)
+            {
+                Debug.Log("1st audio source is playing, fade out");
+                yield return StartCoroutine(FadeOut(musicAudioSource, fadeTimeSeconds));
+            }
+            else if (musicAudioSource2.isPlaying)
+            {
+                Debug.Log("2nd audio source is playing, fade out");
+                yield return StartCoroutine(FadeOut(musicAudioSource2, fadeTimeSeconds));
+            }
+
+
+            if (waitTimeSeconds > 0f)
+            {
+                yield return new WaitForSeconds(waitTimeSeconds);
+            }
+            
+            Debug.Log("Fade In new music");
+            // Then fade in the new music
+            StartCoroutine(FadeIn(musicAudioSource, music, fadeTimeSeconds));
+        }
+
+        public void PlaySFX(AudioClip sfx)
+        {
+            var sfxAudioSourceFree = (sfxAudioSource.isPlaying) ? sfxAudioSource2 : sfxAudioSource;
+            
+            sfxAudioSourceFree.clip = sfx;
+            sfxAudioSourceFree.Play();
+        }
+
+        public void StopSFX(AudioClip audioClip)
+        {
+            // Find the audio source playing the audio clip
+            var audioSource = sfxAudioSource.clip == audioClip ? sfxAudioSource : sfxAudioSource2;
+            audioSource.Stop();
+        }
+
+        private IEnumerator CrossFade(AudioSource audioSourcePlaying, AudioSource audioSourceFree, float fadeTime)
+        {
+            // Fade out the audio source playing and fade in the free one
+            var startVolume = audioSourcePlaying.volume;
+            
+            // Fade out the audio source playing and fade in the free one for fadeTime seconds
+            while (audioSourcePlaying.volume > 0)
+            {
+                audioSourcePlaying.volume -= startVolume * Time.deltaTime / fadeTime;
+                audioSourceFree.volume += Time.deltaTime / fadeTime;
+                yield return null;
             }
         }
+        
+        private IEnumerator FadeOut(AudioSource audioSource, float fadeTime)
+        {
+            // Fade out the audio source
+            float startVolume = audioSource.volume;
+            
+            while (audioSource.volume > 0)
+            {
+                audioSource.volume -= startVolume * Time.deltaTime / fadeTime;
+                yield return null;
+            }
+        }
+        
+        private IEnumerator FadeIn(AudioSource audioSource, AudioClip music, float fadeTime)
+        {
+            var audioSourceTarget = audioSource == musicAudioSource ? _musicVolume : _musicVolume2;
+            
+            // Fade in the audio source
+            audioSource.clip = music;
+            audioSource.Play();
+            audioSource.volume = 0f;
+            
+            while (audioSource.volume < audioSourceTarget)
+            {
+                audioSource.volume += Time.deltaTime / fadeTime;
+                yield return null;
+            }
+        }
+        
     }
 }

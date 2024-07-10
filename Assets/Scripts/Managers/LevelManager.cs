@@ -37,6 +37,7 @@ namespace burglar.managers
 
         public void LoadScene(string sceneName)
         {
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.soundTransition);
             TransitionManager.Instance().Transition(sceneName, transition, 0f);
 
             StartCoroutine(ShowHudAndHidePanelAfterTransition());
@@ -55,6 +56,9 @@ namespace burglar.managers
 
         public void LoadShop()
         {
+            // Change music for shop music
+            AudioManager.Instance.PlayMusic(AudioManager.Instance.musicShop, false);
+            
             LoadScene("shop");
         }
 
@@ -62,6 +66,11 @@ namespace burglar.managers
         {
             _currentLevelIndex++;
 
+            Debug.Log("Change music to shop");
+            
+            // Change music for level music
+            AudioManager.Instance.PlayMusic(AudioManager.Instance.musicTuto, false);
+            
             // Load the next scene in Single mode
             LoadScene(levels[_currentLevelIndex]);
         }

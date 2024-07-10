@@ -33,12 +33,11 @@ namespace burglar.player
 
             index += (scrollValue > 0) ? 1 : -1;
 
-            // Si l'index est sup�rieur � la taille de la liste, on revient � 0
+            // If over max, go back to start
             if (index >= GameManager.Instance.items.Count)
             {
                 index = 0;
             }
-            // Si l'index est inf�rieur � 0, on revient � la fin de la liste
             else if (index < 0)
             {
                 index = GameManager.Instance.items.Count - 1;

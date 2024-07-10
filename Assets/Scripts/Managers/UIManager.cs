@@ -23,6 +23,7 @@ namespace burglar.managers
         [Header("HUD")]
         public GameObject HUD;
         [SerializeField] private TextMeshProUGUI UICreditTMP;
+        [SerializeField] private GameObject UIInteractIcon;
 
         // GameOver 💀
         [Header("GameOver")]
@@ -78,6 +79,12 @@ namespace burglar.managers
             EventManager.SuccessSafeCrack += (safe) => OnSuccessSafeCrack(safe);
 
             EventManager.FailSafeCrack += (safe) => OnFailSafeCrack(safe);
+            
+            EventManager.EnterInteractibleArea += (interactible) => OnEnterInteractibleArea(interactible);
+            
+            EventManager.Interact += (interactible) => OnInteract(interactible);
+            
+            EventManager.ExitInteractibleArea += (interactible) => OnExitInteractibleArea(interactible);
         }
 
         private void OnDisable()
@@ -91,6 +98,12 @@ namespace burglar.managers
             EventManager.SuccessSafeCrack -= (safe) => OnSuccessSafeCrack(safe);
 
             EventManager.FailSafeCrack -= (safe) => OnFailSafeCrack(safe);
+            
+            EventManager.EnterInteractibleArea -= (interactible) => OnEnterInteractibleArea(interactible);
+            
+            EventManager.Interact -= (interactible) => OnInteract(interactible);
+            
+            EventManager.ExitInteractibleArea -= (interactible) => OnExitInteractibleArea(interactible);
         }
 
         #region PlayerCaught
@@ -122,17 +135,27 @@ namespace burglar.managers
         #region CreditCollected
         private void OnCreditCollected(int amount)
         {
-
             StartCoroutine(UpdateCreditUI(amount));
         }
 
         private IEnumerator UpdateCreditUI(int amount)
         {
-            for (int i = GameManager.Instance.credit; i <= GameManager.Instance.credit + amount; i++)
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.soundCredit);
+            
+            var previousCredit = GameManager.Instance.credit;
+            
+            // Define how many frames we need to reach the amount in 1s
+            var frames = (int)(1 / Time.deltaTime);
+            var amountPerFrame = amount / frames;
+            
+            for (var i = 0; i < frames; i++)
             {
-                UICreditTMP.text = i.ToString();
+                UICreditTMP.text = (previousCredit + amountPerFrame).ToString();
+                previousCredit += amountPerFrame;
                 yield return null;
             }
+            
+            AudioManager.Instance.StopSFX(AudioManager.Instance.soundCredit);
 
             GameManager.Instance.credit += amount;
 
@@ -267,6 +290,23 @@ namespace burglar.managers
             return _buttons.Find(button => button.Coordinates.x == x && button.Coordinates.y == y);
         }
 
+        #endregion
+        
+        #region Interactible
+        private void OnEnterInteractibleArea(Interactible interactible)
+        {
+            UIInteractIcon.SetActive(true);
+        }
+        
+        private void OnInteract(Interactible interactible)
+        {
+            UIInteractIcon.SetActive(false);
+        }
+        
+        private void OnExitInteractibleArea(Interactible interactible)
+        {
+            UIInteractIcon.SetActive(false);
+        }
         #endregion
     }
 }

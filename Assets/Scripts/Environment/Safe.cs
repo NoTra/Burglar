@@ -32,7 +32,7 @@ namespace burglar.environment
             EventManager.FailSafeCrack -= (safe) => OnFailSafeCrack(safe);
         }
 
-        void Start()
+        private void Start()
         {
             GenerateMatrix();
             
@@ -190,7 +190,7 @@ namespace burglar.environment
 
         public bool CheckCombination()
         {
-            for (int i = 0; i < _combinationLength; i++)
+            for (var i = 0; i < _combinationLength; i++)
             {
                 if (_combination[i] != _matrix[(int)_selectedCombination[i].x, (int)_selectedCombination[i].y])
                 {
@@ -205,7 +205,7 @@ namespace burglar.environment
         {
             safe._isCracked = true;
             safe.GetComponent<Interactible>().enabled = false;
-
+            
             EventManager.OnCreditCollected(safe._value);
         }
 

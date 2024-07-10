@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using burglar.managers;
@@ -8,9 +9,14 @@ namespace burglar.tutos
     public class Tuto02 : Tuto
     {
         [SerializeField] private List<Safe> safesToCrack;
-        [SerializeField] private List<Safe> safesCracked;
+        private List<Safe> _safesCracked;
 
         [SerializeField] public TextAsset inkFileSafeFail;
+
+        private void Awake()
+        {
+            _safesCracked = new List<Safe>();
+        }
 
         private void OnEnable()
         {
@@ -29,12 +35,21 @@ namespace burglar.tutos
             Debug.Log("Safe crack success");
             if (safesToCrack.Contains(safe))
             {
-                safesToCrack.Add(safe);
+                Debug.Log("Add safe to safesCracked");
+                _safesCracked.Add(safe);
+            }
+            else
+            {
+                Debug.Log("Safe not in safesToCrack");
             }
 
-            if (safesToCrack.Count == safesCracked.Count)
+            if (safesToCrack.Count == _safesCracked.Count)
             {
                 Success();
+            }
+            else
+            {
+                Debug.Log("Not all safes cracked yet");
             }
         }
 
@@ -48,8 +63,21 @@ namespace burglar.tutos
 
         private new void Success()
         {
+            Debug.Log("Success of Tuto02");
             // Do special success from Tuto02
             base.Success();
+        }
+        
+        public new void OnEnter()
+        {
+            base.OnEnter();
+            Debug.Log("Enter Tuto02");
+        }
+        
+        public new void OnExit()
+        {
+            base.OnExit();
+            Debug.Log("Exit Tuto02");
         }
     }
 }

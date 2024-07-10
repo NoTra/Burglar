@@ -39,5 +39,17 @@ namespace burglar.tutos
             // Do special success from Tuto01
             base.Success();
         }
+        
+        public new void OnEnter()
+        {
+            base.OnEnter();
+            Debug.Log("Enter Tuto02");
+        }
+        
+        public new void OnExit()
+        {
+            base.OnExit();
+            Debug.Log("Exit Tuto02");
+        }
     }
 }

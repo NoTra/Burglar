@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Ink.Runtime;
 using TMPro;
+using UnityEngine.Rendering;
 
 namespace burglar.managers
 {
@@ -27,6 +28,7 @@ namespace burglar.managers
 
         public bool WaitingForAnswer = false;
         public bool isAnswerMode = false;
+        public bool isInDialog;
 
         private RectTransform _dialogPanelRectTransform;
         public Vector2 DialogOffScreenPosition; // Position when the dialog is off-screen
@@ -34,6 +36,11 @@ namespace burglar.managers
         [SerializeField] private AnimationCurve _animationDialogStart = new AnimationCurve();
         [SerializeField] private float _slideDuration = 0.8f;
 
+        private Coroutine _dialogTypingCoroutine;
+        private Coroutine _choicesCoroutine;
+        private Coroutine _advanceDialogueCoroutine;
+        private Coroutine _slideInCoroutine;
+        private Coroutine _advanceFromDecisionCoroutine;
 
         private void Awake()
         {
@@ -49,7 +56,7 @@ namespace burglar.managers
         }
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             ResetDialogBox();
 
@@ -78,6 +85,10 @@ namespace burglar.managers
             var elapsedTime = 0f;
             var startingPosition = DialogOffScreenPosition;
 
+            // Play sound effect
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.soundDialogSlideIn);
+            
+            // Start sliding animation
             while (elapsedTime < _slideDuration)
             {
                 _dialogPanelRectTransform.anchoredPosition = Vector2.Lerp(startingPosition, _dialogOnScreenPosition,
@@ -91,20 +102,23 @@ namespace burglar.managers
 
         public IEnumerator StartDialog()
         {
+            Debug.Log("StartDialog");
             // Move DialogPanel out of the screen
+            if (DialogPanel is null) yield break;
+            
+            isInDialog = true;
+                
+            Debug.Log("Deactivate player input");
+            TutoManager.Instance._player._playerInput.DeactivateInput();
 
-            if (DialogPanel != null)
-            {
-                TutoManager.Instance._player._playerInput.DeactivateInput();
-
-                DialogPanel.SetActive(true);
-                yield return StartCoroutine(SlideIn());
-
-                yield return StartCoroutine(AdvanceDialogue());
-
-                yield return null;
-                Debug.Log("Fin du dialogue !");
-            }
+            DialogPanel.SetActive(true);
+                
+            Debug.Log("SlideIn");
+            _slideInCoroutine = StartCoroutine(SlideIn());
+            yield return _slideInCoroutine;
+                
+            _advanceDialogueCoroutine = StartCoroutine(AdvanceDialogue());
+            yield return _advanceDialogueCoroutine;
         }
 
         public void SetStory(Story story)
@@ -114,25 +128,28 @@ namespace burglar.managers
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space) && !WaitingForAnswer)
+            if (!Input.GetKeyDown(KeyCode.Space) || WaitingForAnswer || isTalking || _story == null) return;
+            
+            // Is there more to the story? (outside answers needed)
+            if (_story.canContinue)
             {
-                // Is there more to the story? (outside answers needed)
-                if (_story.canContinue)
-                {
-                    WaitingForContinueButton.SetActive(false);
-                    nametag.text = "Andy";
-                    StartCoroutine(AdvanceDialogue());
+                Debug.Log("The story can continue");
+                WaitingForContinueButton.SetActive(false);
+                nametag.text = "Andy";
+                Debug.Log("[UPDATE] AdvanceDialogue");
+                _advanceDialogueCoroutine = StartCoroutine(AdvanceDialogue());
 
-                    // Are there any choices?
-                    if (_story.currentChoices.Count != 0)
-                    {
-                        StartCoroutine(ShowChoices());
-                    }
-                }
-                else
+                // Are there any choices?
+                if (_story.currentChoices.Count != 0)
                 {
-                    FinishDialogue();
+                    Debug.Log("ShowChoices");
+                    _choicesCoroutine = StartCoroutine(ShowChoices());
                 }
+            }
+            else
+            {
+                Debug.Log("FinishDialogue");
+                FinishDialogue();
             }
         }
 
@@ -142,46 +159,107 @@ namespace burglar.managers
             DialogPanel.SetActive(false);
             TutoManager.Instance._player._playerInput.ActivateInput();
 
-            StopAllCoroutines();
+            _story = null;
+            isInDialog = false;
+
+            StopAllDialogCoroutines();
 
             ResetDialogBox();
+        }
+
+        private void StopAllDialogCoroutines()
+        {
+            Debug.Log("StopAllDialogCoroutines");
+            // Stop all dialog coroutines
+            if (_dialogTypingCoroutine != null)
+            {
+                StopCoroutine(_dialogTypingCoroutine);
+            }
+            
+            if (_choicesCoroutine != null)
+            {
+                StopCoroutine(_choicesCoroutine);
+            }
+            
+            if (_advanceDialogueCoroutine != null)
+            {
+                StopCoroutine(_advanceDialogueCoroutine);
+            }
+            
+            if (_slideInCoroutine != null)
+            {
+                StopCoroutine(_slideInCoroutine);
+            }
+            
+            if (_advanceFromDecisionCoroutine != null)
+            {
+                StopCoroutine(_advanceFromDecisionCoroutine);
+            }
         }
 
         // Advance through the story 
         private IEnumerator AdvanceDialogue()
         {
+            if (!_story.canContinue) yield break;
+            
             var currentSentence = _story.Continue();
 
             // ParseTags();
-            // StopAllCoroutines();
+            StopAllDialogCoroutines();
 
-            yield return StartCoroutine(TypeSentence(currentSentence));
-            yield return StartCoroutine(ShowChoices());
+            // Store typeSentence coroutine in _dialogTypingCoroutine and yield return at the same time
+            _dialogTypingCoroutine = StartCoroutine(TypeSentence(currentSentence));
+            
+            yield return _dialogTypingCoroutine;
+            
+            Debug.Log("Sentence displayed");
+
+            _dialogTypingCoroutine = StartCoroutine(ShowChoices());
+            
+            yield return _dialogTypingCoroutine;
+            
+            Debug.Log("Choices displayed");
+            
+            yield return null;
         }
 
         // Type out the sentence letter by letter and make character idle if they were talking
         private IEnumerator TypeSentence(string sentence)
         {
+            isTalking = true;
             nametag.text = "Andy";
             message.text = "";
+            
+            // Play sound effect
+            AudioManager.Instance.sfxAudioSource.clip = AudioManager.Instance.soundTyping;
+            // Loop
+            AudioManager.Instance.sfxAudioSource.loop = true;
+            AudioManager.Instance.sfxAudioSource.Play();
+            
             foreach (var letter in sentence.ToCharArray())
             {
                 message.text += letter;
                 yield return null;
             }
+            
+            AudioManager.Instance.sfxAudioSource.Stop();
+            AudioManager.Instance.sfxAudioSource.loop = false;
+            
             /*CharacterScript tempSpeaker = GameObject.FindObjectOfType<CharacterScript>();
             if (tempSpeaker.isTalking)
             {
                 SetAnimation("idle");
             }*/
-
+            
+            isTalking = false;
             yield return null;
+            
         }
 
         // Create then show the choices on the screen until one got selected
         private IEnumerator ShowChoices()
         {
-            // Clear AnswerContainer's child
+            // Destroy all children in the AnswerContainer
             for (var i = AnswerContainer.transform.childCount - 1; i >= 0; i--)
             {
                 UnityEngine.Object.Destroy(AnswerContainer.transform.GetChild(i).gameObject);
@@ -191,12 +269,12 @@ namespace burglar.managers
 
             if (choices.Count > 0)
             {
-                for (var i = 0; i < choices.Count; i++)
+                foreach (var t in choices)
                 {
-                    GameObject temp = Instantiate(CustomButton, AnswerContainer.transform);
-                    temp.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = choices[i].text;
+                    var temp = Instantiate(CustomButton, AnswerContainer.transform);
+                    temp.transform.GetComponentInChildren<TextMeshProUGUI>().text = t.text;
                     temp.AddComponent<burglar.utility.Selectable>();
-                    temp.GetComponent<burglar.utility.Selectable>().element = choices[i];
+                    temp.GetComponent<burglar.utility.Selectable>().element = t;
                     temp.GetComponent<Button>().onClick.AddListener(() =>
                     {
                         temp.GetComponent<burglar.utility.Selectable>().Decide();
@@ -213,9 +291,10 @@ namespace burglar.managers
 
             AnswerContainer.SetActive(true);
 
-            yield return new WaitUntil(() => { return choiceSelected != null; });
+            yield return new WaitUntil(() => choiceSelected != null);
 
-            yield return StartCoroutine(AdvanceFromDecision());
+            _advanceFromDecisionCoroutine = StartCoroutine(AdvanceFromDecision());
+            yield return _advanceDialogueCoroutine;
         }
 
         // Tells the story which branch to go to
@@ -223,7 +302,7 @@ namespace burglar.managers
         {
             choiceSelected = (Choice)element;
             TutoManager.Instance.GetStory().ChooseChoiceIndex(choiceSelected.index);
-            DialogManager.Instance.WaitingForAnswer = false;
+            Instance.WaitingForAnswer = false;
         }
 
         // After a choice was made, turn off the panel and advance from that choice
@@ -235,10 +314,11 @@ namespace burglar.managers
                 Destroy(AnswerContainer.transform.GetChild(i).gameObject);
             }
 
-            choiceSelected =
-                null; // Forgot to reset the choiceSelected. Otherwise, it would select an option without player intervention.
+            // Forgot to reset the choiceSelected. Otherwise, it would select an option without player intervention.
+            choiceSelected = null; 
 
-            yield return StartCoroutine(AdvanceDialogue());
+            _advanceDialogueCoroutine = StartCoroutine(AdvanceDialogue());
+            yield return _advanceDialogueCoroutine;
         }
 
         /*** Tag Parser ***/
@@ -298,6 +378,8 @@ namespace burglar.managers
             message = TextBox.transform.GetChild(1).GetComponent<Text>();
             tags = new List<string>();
             choiceSelected = null;
+            
+            WaitingForContinueButton.SetActive(false);
 
             nametag.text = "";
             message.text = "";

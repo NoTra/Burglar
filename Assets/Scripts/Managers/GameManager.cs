@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -48,6 +49,11 @@ namespace burglar.managers
                 instance = this;
             }
             DontDestroyOnLoad(gameObject);
+        }
+
+        private void Start()
+        {
+            AudioManager.Instance.PlayMusic(AudioManager.Instance.musicMenu, false, false);
         }
 
         private void OnEnable()

@@ -19,6 +19,9 @@ namespace burglar.environment
 
         protected override void Interact()
         {
+            var audioManager = AudioManager.Instance;
+            audioManager.PlaySFX(audioManager.soundLightSwitch);
+            
             ToggleLightSwitch();
         }
 

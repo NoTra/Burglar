@@ -1,1 +1,1 @@
-﻿{"inkVersion":21,"root":[["^Congratulations ! You did it !","\n","^Let's continue to the next lesson...","\n","ev","str","^Continue.","/str","/ev",{"*":"0.c-0","flg":20},{"c-0":["^ ","end","\n",{"->":"0.g-0"},{"#f":5}],"g-0":["done",{"#f":5}]}],"done",{"#f":1}],"listDefs":{}}
+﻿{"inkVersion":21,"root":[["^Congratulations ! You did it !","\n","^Let's continue to the next lesson...","\n",["done",{"#f":5,"#n":"g-0"}],null],"done",{"#f":1}],"listDefs":{}}

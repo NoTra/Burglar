@@ -117,12 +117,12 @@ namespace burglar.tutos
             Debug.Log("DIALOG IS OVER");
         }
 
-        protected void OnEnter()
+        public virtual void OnEnter()
         {
             Debug.Log("Tuto started");
         }
         
-        protected void OnExit()
+        public virtual void OnExit()
         {
             Debug.Log("Tuto ended");
         }

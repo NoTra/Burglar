@@ -40,13 +40,13 @@ namespace burglar.tutos
             base.Success();
         }
         
-        public new void OnEnter()
+        public override void OnEnter()
         {
             base.OnEnter();
             Debug.Log("Enter Tuto02");
         }
         
-        public new void OnExit()
+        public override void OnExit()
         {
             base.OnExit();
             Debug.Log("Exit Tuto02");

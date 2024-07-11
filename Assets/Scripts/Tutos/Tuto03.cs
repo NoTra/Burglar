@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using burglar.agent;
 using burglar.environment;
+using burglar.managers;
 
 namespace burglar.tutos
 {
@@ -12,21 +14,48 @@ namespace burglar.tutos
 
         [SerializeField] public TextAsset inkFileSafeFail;
         [SerializeField] private Agent _agent;
+        private Vector3 _agentStartPosition;
 
-        public new void OnEnter()
+        private void OnEnable()
         {
-            _agent.gameObject.SetActive(true);
+            EventManager.PlayerCaught += OnPlayerCaught;
         }
         
-        public new void OnExit()
+        private void OnDisable()
         {
-            _agent.gameObject.SetActive(false);
+            EventManager.PlayerCaught -= OnPlayerCaught;
         }
 
+        public override void OnEnter()
+        {
+            Debug.Log("OnEnter Tuto03");
+            _agent.gameObject.SetActive(true);
+            
+            // Storing agent start position
+            _agentStartPosition = _agent.transform.position;
+        }
+        
+        public override void OnExit()
+        {
+            Debug.Log("OnExit Tuto03");
+            _agent.gameObject.SetActive(false);
+        }
+        
         private new void Success()
         {
             // Do special success from Tuto02
             base.Success();
+        }
+        
+        private void OnPlayerCaught(GameObject player)
+        {
+            Debug.Log("Player caught");
+            TutoManager.Instance.SetStory(inkFileSafeFail);
+            
+            _agent.transform.position = _agentStartPosition;
+            player.transform.position = GetSpawnPoint().transform.position;
+            
+            StartCoroutine(DialogManager.Instance.StartDialog());
         }
     }
 }

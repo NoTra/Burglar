@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 415138647982449183}
+  - component: {fileID: 1545334127241268222}
+  - component: {fileID: 4461952803990447552}
   m_Layer: 0
   m_Name: SensorLaser
   m_TagString: Untagged
@@ -34,6 +36,41 @@ Transform:
   - {fileID: 7466744804186452684}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1545334127241268222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 520134431480235841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f75987cd17269e348b3647db6614f2dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _meshRenderer: {fileID: 8557555620518770255}
+  _lights: []
+--- !u!65 &4461952803990447552
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 520134431480235841}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.9999999, y: 3.0145059, z: 18.13645}
+  m_Center: {x: 0, y: -0.15461685, z: 9.609531}
 --- !u!1 &2671876885170867314
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,7 +293,6 @@ GameObject:
   - component: {fileID: 3866359536156517940}
   - component: {fileID: 8557555620518770255}
   - component: {fileID: 5762950079120781149}
-  - component: {fileID: 2753473815602007583}
   m_Layer: 0
   m_Name: Laser
   m_TagString: Untagged
@@ -350,15 +386,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2753473815602007583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7201577080940195781}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f75987cd17269e348b3647db6614f2dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

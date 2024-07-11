@@ -70,8 +70,6 @@ namespace burglar.managers
 
         private void OnEnable()
         {
-            EventManager.PlayerCaught += (player) => OnPlayerCaught(player);
-
             EventManager.CreditCollected += (amount) => OnCreditCollected(amount);
 
             EventManager.OpenSafe += (safe) => OpenSafeUI(safe);
@@ -89,8 +87,6 @@ namespace burglar.managers
 
         private void OnDisable()
         {
-            EventManager.PlayerCaught -= (player) => OnPlayerCaught(player);
-
             EventManager.CreditCollected -= (amount) => OnCreditCollected(amount);
 
             EventManager.OpenSafe -= (safe) => OpenSafeUI(safe);
@@ -105,32 +101,6 @@ namespace burglar.managers
             
             EventManager.ExitInteractibleArea -= (interactible) => OnExitInteractibleArea(interactible);
         }
-
-        #region PlayerCaught
-        private void OnPlayerCaught(GameObject player)
-        {
-            Debug.Log("Player caught from UIManager");
-            UIGameOverPanel.SetActive(true);
-            GameManager.Instance.gameState = GameManager.GameState.GameOver;
-
-            StartCoroutine(BeforeRestartWaitFor(3f));
-        }
-
-        private IEnumerator BeforeRestartWaitFor(float durationInSeconds)
-        {
-            yield return new WaitForSeconds(durationInSeconds);
-
-            // Stop All Coroutines
-            StopAllCoroutines();
-            
-            // Unload current scene
-            UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-
-            // reload current scene
-            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-        }
-
-        #endregion
 
         #region CreditCollected
         private void OnCreditCollected(int amount)

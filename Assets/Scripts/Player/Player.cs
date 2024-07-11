@@ -78,6 +78,9 @@ namespace burglar.player
                 case GameManager.GameState.Alert:
                     PlayerAnimator.SetTrigger(Surprised);
                     break;
+                case GameManager.GameState.Playing:
+                    PlayerAnimator.SetTrigger(Relieved);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(state), state, null);
             }

@@ -37,7 +37,7 @@ namespace burglar.managers
 
         private PlayerInput _playerInput;
 
-        public static Story story;
+        public Story story;
 
         public Story GetStory() { return story; }
         
@@ -86,6 +86,8 @@ namespace burglar.managers
             }
             
             yield return StartCoroutine(DialogManager.Instance.StartDialog());
+            
+            _currentTuto.OnEnter();
         }
 
         public IEnumerator EndTuto()

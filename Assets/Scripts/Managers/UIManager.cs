@@ -15,9 +15,10 @@ namespace burglar.managers
         [SerializeField] private GameObject canvas;
         [SerializeField] private GameObject eventSystem;
 
-        // StartScreen 🚪
-        [Header("StartScreen")]
+        // Screens 🚪
+        [Header("Screens")]
         public GameObject StartScreen;
+        public GameObject PauseScreen;
 
         // HUD 💰
         [Header("HUD")]
@@ -57,15 +58,21 @@ namespace burglar.managers
                 Destroy(gameObject);
                 return;
             }
-            else
-            {
-                instance = this;
-            }
+        
+            instance = this;
+            // if gameObject already exists in DontDestroyOnLoad, we can destroy it 
             DontDestroyOnLoad(gameObject);
 
             // Add canvas to DontDestroyOnLoad
-            DontDestroyOnLoad(canvas);
-            DontDestroyOnLoad(eventSystem);
+            if (canvas != null)
+            {
+                DontDestroyOnLoad(canvas.gameObject);
+            }
+
+            if (eventSystem != null)
+            {
+                DontDestroyOnLoad(eventSystem.gameObject);
+            }
         }
 
         private void OnEnable()
@@ -83,6 +90,8 @@ namespace burglar.managers
             EventManager.Interact += (interactible) => OnInteract(interactible);
             
             EventManager.ExitInteractibleArea += (interactible) => OnExitInteractibleArea(interactible);
+            
+            EventManager.TogglePause += () => OnTogglePause();
         }
 
         private void OnDisable()
@@ -100,6 +109,8 @@ namespace burglar.managers
             EventManager.Interact -= (interactible) => OnInteract(interactible);
             
             EventManager.ExitInteractibleArea -= (interactible) => OnExitInteractibleArea(interactible);
+            
+            EventManager.TogglePause -= () => OnTogglePause();
         }
 
         #region CreditCollected
@@ -277,6 +288,15 @@ namespace burglar.managers
         {
             UIInteractIcon.SetActive(false);
         }
+        #endregion
+        
+        #region Pause
+        
+        private void OnTogglePause()
+        {
+            PauseScreen.SetActive(!PauseScreen.activeSelf);
+        }
+        
         #endregion
     }
 }

@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 
 namespace burglar.managers
 {
@@ -59,7 +61,47 @@ namespace burglar.managers
             _musicVolume = musicAudioSource.volume;
             _musicVolume2 = musicAudioSource2.volume;
         }
+
+        private void OnEnable()
+        {
+            EventManager.TogglePause += OnTogglePause;
+            EventManager.ChangeGameState += OnChangeGameState;
+        }
+
+        private void OnChangeGameState(GameManager.GameState gameState)
+        {
+            if (gameState == GameManager.GameState.Alert)
+            {
+                // Play alert music
+                
+                
+                // Pitch current music at 1.5
+                musicAudioSource.pitch = 1.5f;
+            }
+            else
+            {
+                // Pitch current music at 1.5
+                musicAudioSource.pitch = 1f;
+            }
+        }
+
+        private void OnTogglePause()
+        {
+            // Reduce the pitch of the music when the game is paused
+            if (Time.timeScale == 0)
+            {
+                musicAudioSource.pitch = 0.75f;
+                musicAudioSource2.pitch = 0.75f;
+            }
+            else
+            {
+                musicAudioSource.pitch = 1f;
+                musicAudioSource2.pitch = 1f;
+            }
+        }
         
+        
+
         public void PlayMusic(AudioClip music, bool crossFade, bool doFade = true)
         {
             if (crossFade)
@@ -200,6 +242,8 @@ namespace burglar.managers
                 yield return null;
             }
         }
+        
+        
         
     }
 }

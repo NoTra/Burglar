@@ -32,7 +32,7 @@ namespace burglar.managers
         [SerializeField] private Tuto _currentTuto;
         [HideInInspector] public Tuto _previousTuto;
         [SerializeField] private GameObject _playerPrefab;
-        public Player _player;
+        [HideInInspector] public Player _player;
         public CinemachineFreeLook _freeLook;
 
         private PlayerInput _playerInput;

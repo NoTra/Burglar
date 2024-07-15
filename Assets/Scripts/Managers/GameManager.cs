@@ -24,10 +24,11 @@ namespace burglar.managers
             Playing,
             Alert,
             Paused,
-            GameOver
+            GameOver,
+            Menu
         }
 
-        public GameState gameState = GameState.Playing;
+        public GameState gameState = GameState.Menu;
 
         public int credit = 0;
 
@@ -54,6 +55,9 @@ namespace burglar.managers
         private void Start()
         {
             AudioManager.Instance.PlayMusic(AudioManager.Instance.musicMenu, false, false);
+            playerInput = GetComponent<PlayerInput>();
+            
+            LevelManager.Instance.LoadScene("main");
         }
 
         private void OnEnable()
@@ -90,7 +94,12 @@ namespace burglar.managers
                     Debug.Log("Gamestate = Playing !");
                     gameState = GameState.Playing;
                     break;
+                case GameState.Menu:
+                    Debug.Log("Gamestate = Menu !");
+                    gameState = GameState.Menu;
+                    break;
                 default:
+                    Debug.Log("Other");
                     break;
             }
         }
@@ -107,6 +116,22 @@ namespace burglar.managers
         public string GetSelectedItemSlug()
         {
             return selectedItem?.slug;
+        }
+
+        public void TogglePause()
+        {
+            if (
+                gameState != GameState.Playing && 
+                gameState != GameState.Alert && 
+                gameState != GameState.Paused
+            ) { 
+                return;
+            }
+            
+            gameState = (gameState == GameState.Paused) ? GameState.Playing : GameState.Paused;
+            Time.timeScale = (gameState == GameState.Paused) ? 0 : 1;
+
+            EventManager.OnTogglePause();
         }
     }
 }

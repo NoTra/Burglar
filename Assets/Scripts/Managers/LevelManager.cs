@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using EasyTransition;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 
 namespace burglar.managers
@@ -11,7 +12,7 @@ namespace burglar.managers
         private static LevelManager instance = null;
 
         public static LevelManager Instance => instance;
-
+        
         // List of scenes
         public List<string> levels;
 
@@ -43,7 +44,7 @@ namespace burglar.managers
             StartCoroutine(ShowHudAndHidePanelAfterTransition());
         }
 
-        IEnumerator ShowHudAndHidePanelAfterTransition()
+        private IEnumerator ShowHudAndHidePanelAfterTransition()
         {
             yield return new WaitForSeconds(1.3f);
 

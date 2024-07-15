@@ -55,11 +55,27 @@ namespace burglar.agent
         private void OnEnable()
         {
             EventManager.ChangeGameState += (state) => OnChangeGameState(state);
+            EventManager.DialogStart += OnDialogStart;
+            EventManager.DialogEnd += OnDialogEnd;
         }
 
         private void OnDisable()
         {
             EventManager.ChangeGameState -= (state) => OnChangeGameState(state);
+            EventManager.DialogStart -= OnDialogStart;
+            EventManager.DialogEnd -= OnDialogEnd;
+        }
+
+        private void OnDialogEnd()
+        {
+            // "unpause" the agent
+            _navMeshAgent.isStopped = false;
+        }
+
+        private void OnDialogStart()
+        {
+            // "pause" the agent
+            _navMeshAgent.isStopped = true;
         }
 
         private void OnChangeGameState(GameManager.GameState state)

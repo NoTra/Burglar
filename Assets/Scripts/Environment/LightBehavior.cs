@@ -28,16 +28,11 @@ namespace burglar.environment
             switch (state)
             {
                 case GameManager.GameState.Alert:
-                    if (_blinkAnimator != null)
-                    {
-                        _blinkAnimator.SetBool(Alert, true);
-                    }
+                    // Switch on light and start blinking
+                    _blinkAnimator?.SetBool(Alert, true);
                     break;
                 case GameManager.GameState.Playing:
-                    if (_blinkAnimator != null)
-                    {
-                        _blinkAnimator.SetBool(Alert, false);
-                    }
+                        _blinkAnimator?.SetBool(Alert, false);
                     break;
                 default:
                     break;

@@ -104,7 +104,7 @@ namespace burglar.tutos
             Destroy(effect);
         }
 
-        private IEnumerator StartDialogAndWait(IEnumerator dialogCoroutine)
+        public IEnumerator StartDialogAndWait(IEnumerator dialogCoroutine)
         {
             StartCoroutine(dialogCoroutine);
 

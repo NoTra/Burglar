@@ -30,7 +30,7 @@ namespace burglar.managers
 
         public static event UnityAction<GameManager.GameState> ChangeGameState;
         public static void OnChangeGameState(GameManager.GameState gameState) => ChangeGameState?.Invoke(gameState);
-
+        
         public static event UnityAction EndOfAlertState;
         public static void OnEndOfAlertState() => EndOfAlertState?.Invoke();
 
@@ -60,5 +60,23 @@ namespace burglar.managers
 
         public static event UnityAction TutoSuccess;
         public static void OnTutoSuccess() => TutoSuccess?.Invoke();
+        
+        public static event UnityAction DialogStart;
+        public static void OnDialogStart() => DialogStart?.Invoke();
+        
+        public static event UnityAction DialogEnd;
+        public static void OnDialogEnd() => DialogEnd?.Invoke();
+        
+        public static event UnityAction<UserWaypoint> EnterUserWaypoint;
+        public static void OnEnterUserWaypoint(UserWaypoint userWaypoint) => EnterUserWaypoint?.Invoke(userWaypoint);
+        
+        public static event UnityAction<UserWaypoint> ExitUserWaypoint;
+        public static void OnExitUserWaypoint(UserWaypoint userWaypoint) => ExitUserWaypoint?.Invoke(userWaypoint);
+        
+        public static event UnityAction<Checkpoint> CheckpointReached;
+        public static void OnCheckpointReached(Checkpoint checkpoint) => CheckpointReached?.Invoke(checkpoint);
+        
+        public static event UnityAction TogglePause;
+        public static void OnTogglePause() => TogglePause?.Invoke();
     }
 }

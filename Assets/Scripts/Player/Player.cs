@@ -12,7 +12,7 @@ namespace burglar.player
 
         [HideInInspector] public PlayerInput _playerInput;
         [HideInInspector] public Rigidbody _rigidbody;
-        MeshRenderer _meshRenderer;
+        private MeshRenderer _meshRenderer;
         [HideInInspector] public Animator PlayerAnimator;
 
         public bool _isInvisible = false;
@@ -39,6 +39,9 @@ namespace burglar.player
             EventManager.EndOfAlertState += () => OnEndOfAlertState();
 
             EventManager.Interact += (interactible) => OnInteract(interactible);
+            
+            EventManager.DialogStart += OnDialogStart;
+            EventManager.DialogEnd += OnDialogEnd;
         }
 
         private void OnDisable()
@@ -51,6 +54,19 @@ namespace burglar.player
             EventManager.EndOfAlertState -= () => OnEndOfAlertState();
 
             EventManager.Interact -= (interactible) => OnInteract(interactible);
+            
+            EventManager.DialogStart -= OnDialogStart;
+            EventManager.DialogEnd -= OnDialogEnd;
+        }
+
+        private void OnDialogStart()
+        {
+            _playerInput.DeactivateInput();
+        }
+        
+        private void OnDialogEnd()
+        {
+            _playerInput.ActivateInput();
         }
 
         private void OnInteract(Interactible interactible)
@@ -73,13 +89,13 @@ namespace burglar.player
             switch (state)
             {
                 case GameManager.GameState.GameOver:
-                    PlayerAnimator.SetTrigger(Caught);
+                    PlayerAnimator?.SetTrigger(Caught);
                     break;
                 case GameManager.GameState.Alert:
-                    PlayerAnimator.SetTrigger(Surprised);
+                    PlayerAnimator?.SetTrigger(Surprised);
                     break;
                 case GameManager.GameState.Playing:
-                    PlayerAnimator.SetTrigger(Relieved);
+                    PlayerAnimator?.SetTrigger(Relieved);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(state), state, null);
@@ -88,6 +104,8 @@ namespace burglar.player
 
         private void OnIsInvisible()
         {
+            if (!_meshRenderer) return;
+            
             Debug.Log("OnIsInvisible called");
             var color = _meshRenderer.material.color;
             _meshRenderer.material.color = new Color(color.r, color.g, color.b, 0.5f);
@@ -95,6 +113,8 @@ namespace burglar.player
 
         private void OnIsVisible()
         {
+            if (!_meshRenderer) return;
+            
             var color = _meshRenderer.material.color;
             _meshRenderer.material.color = new Color (color.r, color.g, color.b, 1f);
         }
@@ -111,6 +131,16 @@ namespace burglar.player
             {
                 EventManager.OnIsVisible();
             }
+        }
+
+        public void OnPause()
+        {
+            GameManager.Instance.TogglePause();
+        }
+
+        public void OnActivate()
+        {
+            Debug.Log("Activate");
         }
     }
 }

@@ -106,10 +106,10 @@ namespace burglar.managers
             // Move DialogPanel out of the screen
             if (DialogPanel is null) yield break;
             
+            // Trigger DialogStartEvent
+            EventManager.OnDialogStart();
+            
             isInDialog = true;
-                
-            Debug.Log("Deactivate player input");
-            TutoManager.Instance._player._playerInput.DeactivateInput();
 
             DialogPanel.SetActive(true);
                 
@@ -157,7 +157,6 @@ namespace burglar.managers
         private void FinishDialogue()
         {
             DialogPanel.SetActive(false);
-            TutoManager.Instance._player._playerInput.ActivateInput();
 
             _story = null;
             isInDialog = false;
@@ -165,6 +164,9 @@ namespace burglar.managers
             StopAllDialogCoroutines();
 
             ResetDialogBox();
+            
+            // Trigger DialogEndEvent
+            EventManager.OnDialogEnd();
         }
 
         private void StopAllDialogCoroutines()

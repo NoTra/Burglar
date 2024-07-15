@@ -6,11 +6,13 @@ namespace burglar.managers
 {
     public class StartScreenManager : MonoBehaviour
     {
-        [SerializeField] private GameObject _hudCanvas;
-        [SerializeField] private GameObject _startScreenCanvas;
         [SerializeField] private GameObject _continueButton;
-        [SerializeField] private GameObject _tutorialButton;
         [SerializeField] private GameObject _newGameButton;
+        /*[SerializeField] private GameObject _hudCanvas;
+        [SerializeField] private GameObject _startScreenCanvas;
+        
+        [SerializeField] private GameObject _tutorialButton;
+        [SerializeField] private GameObject _newGameButton;*/
 
         private void Start()
         {

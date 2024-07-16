@@ -49,10 +49,10 @@ namespace burglar.managers
             yield return new WaitForSeconds(1.3f);
 
             // Deactivate UI Start Menu if opened
-            UIManager.Instance.StartScreen.SetActive(false);
+            // UIManager.Instance.StartScreen.SetActive(false);
 
             // Activate the game HUD
-            UIManager.Instance.HUD.SetActive(true);
+            // UIManager.Instance.HUD.SetActive(true);
         }
 
         public void LoadShop()

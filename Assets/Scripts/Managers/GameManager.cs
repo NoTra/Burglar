@@ -57,7 +57,7 @@ namespace burglar.managers
             AudioManager.Instance.PlayMusic(AudioManager.Instance.musicMenu, false, false);
             playerInput = GetComponent<PlayerInput>();
             
-            LevelManager.Instance.LoadScene("main");
+            // LevelManager.Instance.LoadScene("main");
         }
 
         private void OnEnable()

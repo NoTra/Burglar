@@ -13,7 +13,7 @@ namespace burglar.player
         [HideInInspector] public PlayerInput _playerInput;
         [HideInInspector] public Rigidbody _rigidbody;
         private MeshRenderer _meshRenderer;
-        [HideInInspector] public Animator PlayerAnimator;
+        public Animator PlayerAnimator;
 
         public bool _isInvisible = false;
         
@@ -71,16 +71,34 @@ namespace burglar.player
 
         private void OnInteract(Interactible interactible)
         {
+            if (!PlayerAnimator)
+            {
+                Debug.Log("Pas de PlayerAnimator");
+                return;
+            }
+            
             PlayerAnimator?.SetTrigger(Interact);
         }
 
         private void OnPlayerCaught(GameObject player)
         {
+            if (!PlayerAnimator)
+            {
+                Debug.Log("Pas de PlayerAnimator");
+                return;
+            }
+            
             PlayerAnimator?.SetTrigger(Caught);
         }
 
         private void OnEndOfAlertState()
         {
+            if (!PlayerAnimator)
+            {
+                Debug.Log("Pas de PlayerAnimator");
+                return;
+            }
+            
             PlayerAnimator?.SetTrigger(Relieved);
         }
 

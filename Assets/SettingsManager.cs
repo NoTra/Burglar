@@ -54,7 +54,6 @@ namespace burglar
 
         private void InitResolutionDropdownOptions()
         {
-            Debug.Log("InitResolutionDropdownOptions");
             _resolutionDropdown.ClearOptions();
             
             var resolutions = Screen.resolutions;

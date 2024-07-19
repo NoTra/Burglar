@@ -6,22 +6,10 @@ namespace burglar.environment
 {
     public class Interactible : MonoBehaviour
     {
-        private Outline _outline;
         private PlayerInput _playerInput;
 
         private void Start()
         {
-            _outline = GetComponent<Outline>();
-
-            if (_outline != null)
-            {
-                _outline.enabled = false;
-
-                _outline.OutlineMode = Outline.Mode.OutlineVisible;
-                _outline.OutlineColor = UIManager.Instance ? UIManager.Instance.OutlineColor : Color.white;
-                _outline.OutlineWidth = UIManager.Instance ? UIManager.Instance.OutlineWidth : 2f;
-                
-            }
         }
 
         protected virtual void OnTriggerEnter(Collider other)
@@ -29,12 +17,6 @@ namespace burglar.environment
             if (other.CompareTag("Player"))
             {
                 EventManager.OnEnterInteractibleArea(this);
-
-                if (_outline != null)
-                {
-                    // Outline the object
-                    _outline.enabled = true;
-                }
 
                 if (_playerInput == null)
                 {

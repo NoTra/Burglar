@@ -63,9 +63,9 @@ namespace burglar.persistence
             GameManager.Instance.items = gameData.Items;
             GameManager.Instance.credit = gameData.Credit;
 
-            var buildIndex = LevelManager.Instance.levels[gameData.CurrentLevelId];
-
-            LevelManager.Instance.LoadScene(buildIndex);
+            var levelSO = LevelManager.Instance.levels[gameData.CurrentLevelId];
+            
+            LevelManager.Instance.LoadScene(levelSO.sceneName);
         }
 
         public void DeleteGame(string gameName) => dataService.Delete(gameName);

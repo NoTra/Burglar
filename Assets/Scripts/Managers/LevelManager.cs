@@ -2,8 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using EasyTransition;
 using System.Collections;
-using UnityEngine.SceneManagement;
-
 
 namespace burglar.managers
 {
@@ -14,10 +12,10 @@ namespace burglar.managers
         public static LevelManager Instance => instance;
         
         // List of scenes
-        public List<string> levels;
+        public List<LevelSO> levels;
 
         // Current level index
-        private int _currentLevelIndex = 0;
+        public int _currentLevelIndex = 0;
 
         // [SerializeField] private EasyTransition.Transition _transition;
         [SerializeField] private TransitionSettings transition;
@@ -41,6 +39,13 @@ namespace burglar.managers
             AudioManager.Instance.PlaySFX(AudioManager.Instance.soundTransition);
             TransitionManager.Instance().Transition(sceneName, transition, 0f);
 
+            // Load the level SO
+            var levelSO = levels[_currentLevelIndex];
+            
+            Debug.Log("Curent level : " + levelSO.levelName + "(" + levelSO.sceneName + ")");
+            
+            UIManager.Instance.HUD.GetComponent<CreditManager>().InitCredit(levelSO.maximumCredits, levelSO.minimumCredits);
+            
             StartCoroutine(ShowHudAndHidePanelAfterTransition());
         }
 
@@ -70,8 +75,9 @@ namespace burglar.managers
             // Change music for level music
             AudioManager.Instance.PlayMusic(AudioManager.Instance.musicTuto, false);
             
+            var levelSO = levels[_currentLevelIndex];
             // Load the next scene in Single mode
-            LoadScene(levels[_currentLevelIndex]);
+            LoadScene(levelSO.sceneName);
         }
     }
 }

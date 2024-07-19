@@ -294,6 +294,12 @@ namespace burglar.managers
         
         private void OnTogglePause()
         {
+            if (PauseScreen.activeSelf && PauseScreen.GetComponent<PauseScreenManager>().GetSettingsCanvas().gameObject.activeSelf)
+            {
+                return;
+            }
+            
+            // Activate pause screen
             PauseScreen.SetActive(!PauseScreen.activeSelf);
         }
         

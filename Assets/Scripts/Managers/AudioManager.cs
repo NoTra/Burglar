@@ -1,7 +1,5 @@
-using System;
 using UnityEngine;
 using System.Collections;
-using UnityEngine.Events;
 
 namespace burglar.managers
 {
@@ -34,6 +32,9 @@ namespace burglar.managers
         public AudioClip soundSuccess;
         public AudioClip soundTeleport;
         public AudioClip soundTeleportOut;
+        public AudioClip soundSwoosh;
+        public AudioClip soundSlowDown;
+        public AudioClip soundSlowDownInvert;
         
         [Header("Player")]
         public AudioClip soundFootstep;
@@ -87,6 +88,9 @@ namespace burglar.managers
 
         private void OnTogglePause()
         {
+            // Play slowdown sound
+            PlaySFX((Time.timeScale == 0) ? soundSlowDown : soundSlowDownInvert);
+            
             // Reduce the pitch of the music when the game is paused
             if (Time.timeScale == 0)
             {

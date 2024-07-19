@@ -3,10 +3,11 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using burglar.managers;
 using burglar.environment;
+using TMPro;
 
 namespace burglar.UI
 {
-    public class CombinationButton : MonoBehaviour, IPointerClickHandler// , IPointerEnterHandler, IPointerExitHandler
+    public class CombinationButton : MonoBehaviour, IPointerClickHandler , IPointerEnterHandler, IPointerExitHandler
     {
         public Image _background;
 
@@ -16,6 +17,9 @@ namespace burglar.UI
         public bool isClickable = true;
 
         private Color _previousColor;
+        private Color _previousBGColor;
+        
+        public TextMeshProUGUI _text;
 
         public Vector2 Coordinates
         {
@@ -32,6 +36,9 @@ namespace burglar.UI
         public void OnPointerClick(PointerEventData eventData)
         {
             if (!isClickable) return;
+            
+            var audioManager = AudioManager.Instance;
+            audioManager.PlaySFX(audioManager.soundClick);
             
             isSelected = !isSelected;
             _safe.AddToCombination(_coordinates);
@@ -52,13 +59,23 @@ namespace burglar.UI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            _previousColor = _background.color;
-            _background.color = UIManager.Instance._hoverColor;
+            var audioManager = AudioManager.Instance;
+            audioManager.PlaySFX(audioManager.soundHover);
+            
+            if (!isClickable || isSelected) return;
+            
+            _previousColor = _text.color;
+            _previousBGColor = _background.color;
+            _background.color = UIManager.Instance._hoverBGColor;
+            _text.color = UIManager.Instance._hoverColor;
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            _background.color = _previousColor;
+            if (!isClickable || isSelected) return;
+            
+            _background.color = _previousBGColor;
+            _text.color = _previousColor;
         }
     }
 }

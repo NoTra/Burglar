@@ -1,15 +1,24 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using System.Collections;
+using burglar.environment;
 
 namespace burglar.managers
 {
     public class AudioManager : MonoBehaviour
     {
+        [Header("AudioMix Groups")]
+        public AudioMixerGroup masterMixerGroup;
+        public AudioMixerGroup musicMixerGroup;
+        public AudioMixerGroup sfxMixerGroup;
+        
         [Header("Audio Sources")]
         public AudioSource musicAudioSource;
         public AudioSource musicAudioSource2;
         public AudioSource sfxAudioSource;
         public AudioSource sfxAudioSource2;
+        public AudioSource sfxAudioSource3;
+        public AudioSource sfxAudioSource4;
         
         // Singleton
         public static AudioManager Instance;
@@ -30,6 +39,7 @@ namespace burglar.managers
         public AudioClip soundTransition;
         public AudioClip soundCredit;
         public AudioClip soundSuccess;
+        public AudioClip soundFail;
         public AudioClip soundTeleport;
         public AudioClip soundTeleportOut;
         public AudioClip soundSwoosh;
@@ -63,10 +73,50 @@ namespace burglar.managers
             _musicVolume2 = musicAudioSource2.volume;
         }
 
+        private void Start()
+        {
+            // Change the volume of the music mix groups according to the player's settings
+            if (PlayerPrefs.HasKey("MasterVolume"))
+            {
+                masterMixerGroup.audioMixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("MasterVolume"));
+            }
+            
+            if (PlayerPrefs.HasKey("MusicVolume"))
+            {
+                musicMixerGroup.audioMixer.SetFloat("MusicVolume", PlayerPrefs.GetFloat("MusicVolume"));
+            }
+            
+            if (PlayerPrefs.HasKey("SFXVolume"))
+            {
+                musicMixerGroup.audioMixer.SetFloat("SFXVolume", PlayerPrefs.GetFloat("SFXVolume"));
+            }
+            
+        }
+
         private void OnEnable()
         {
             EventManager.TogglePause += OnTogglePause;
             EventManager.ChangeGameState += OnChangeGameState;
+            EventManager.SuccessSafeCrack += OnSuccessSafeCrack;
+            EventManager.FailSafeCrack += OnFailSafeCrack;
+        }
+        
+        private void OnDisable()
+        {
+            EventManager.TogglePause -= OnTogglePause;
+            EventManager.ChangeGameState -= OnChangeGameState;
+            EventManager.SuccessSafeCrack -= OnSuccessSafeCrack;
+            EventManager.FailSafeCrack -= OnFailSafeCrack;
+        }
+
+        private void OnFailSafeCrack(Safe arg0)
+        {
+            PlaySFX(soundFail);
+        }
+
+        private void OnSuccessSafeCrack(Safe arg0)
+        {
+            PlaySFX(soundSuccess);
         }
 
         private void OnChangeGameState(GameManager.GameState gameState)
@@ -118,15 +168,13 @@ namespace burglar.managers
                         musicAudioSource2.clip = music;
                         musicAudioSource2.Play();
                     
-                        Debug.Log("1st audio source is playing, fade out and fade in the 2nd one");
                         StartCoroutine(CrossFade(musicAudioSource, musicAudioSource2, 1f));
                     }
                     else
                     {
                         musicAudioSource.clip = music;
                         musicAudioSource.Play();
-                    
-                        Debug.Log("2nd audio source is playing, fade out and fade in the 1st one");
+                        
                         StartCoroutine(CrossFade(musicAudioSource2, musicAudioSource, 1f));
                     }
                 }
@@ -135,7 +183,6 @@ namespace burglar.managers
                     musicAudioSource.clip = music;
                     musicAudioSource.Play();
                 
-                    Debug.Log("No audio source is playing, fade in the 1st one");
                     StartCoroutine(FadeIn(musicAudioSource, music, 1f));
                 }
             }
@@ -156,7 +203,6 @@ namespace burglar.managers
                         musicAudioSource2.Stop();
                     }
 
-                    Debug.Log("Play music without fade");
                     musicAudioSource.clip = music;
                     musicAudioSource.Play();
                 }
@@ -170,12 +216,10 @@ namespace burglar.managers
             // First fade out the current music
             if (musicAudioSource.isPlaying)
             {
-                Debug.Log("1st audio source is playing, fade out");
                 yield return StartCoroutine(FadeOut(musicAudioSource, fadeTimeSeconds));
             }
             else if (musicAudioSource2.isPlaying)
             {
-                Debug.Log("2nd audio source is playing, fade out");
                 yield return StartCoroutine(FadeOut(musicAudioSource2, fadeTimeSeconds));
             }
 
@@ -185,24 +229,23 @@ namespace burglar.managers
                 yield return new WaitForSeconds(waitTimeSeconds);
             }
             
-            Debug.Log("Fade In new music");
             // Then fade in the new music
             StartCoroutine(FadeIn(musicAudioSource, music, fadeTimeSeconds));
         }
 
-        public void PlaySFX(AudioClip sfx)
+        public AudioSource PlaySFX(AudioClip sfx)
         {
-            var sfxAudioSourceFree = (sfxAudioSource.isPlaying) ? sfxAudioSource2 : sfxAudioSource;
+            var sfxAudioSourceFree = 
+                (sfxAudioSource.isPlaying) ? (
+                    (sfxAudioSource2.isPlaying) ? (
+                        (sfxAudioSource3.isPlaying) ? sfxAudioSource4 : sfxAudioSource3
+                    ) : sfxAudioSource2
+                ) : sfxAudioSource;
             
             sfxAudioSourceFree.clip = sfx;
             sfxAudioSourceFree.Play();
-        }
-
-        public void StopSFX(AudioClip audioClip)
-        {
-            // Find the audio source playing the audio clip
-            var audioSource = sfxAudioSource.clip == audioClip ? sfxAudioSource : sfxAudioSource2;
-            audioSource.Stop();
+            
+            return sfxAudioSourceFree;
         }
 
         private IEnumerator CrossFade(AudioSource audioSourcePlaying, AudioSource audioSourceFree, float fadeTime)

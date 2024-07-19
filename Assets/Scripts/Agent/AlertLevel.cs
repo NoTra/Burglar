@@ -65,8 +65,7 @@ namespace burglar.agent
             {
                 if (_alertLevel >= _maxAlertLevel)
                 {
-                    Debug.Log("Alarm triggered !");
-                    // On d�clenche l'alarme
+                    // Trigger alarm
                     EventManager.OnChangeGameState(GameManager.GameState.Alert);
 
                     return;

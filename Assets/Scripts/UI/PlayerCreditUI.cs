@@ -36,7 +36,6 @@ namespace burglar
 
         private IEnumerator AnimateCreditCollected()
         {
-            Debug.Log("AnimateCreditCollected");
             float time = 0;
             var initialScale = creditText.transform.localScale;
             var initialPosition = creditText.transform.position;

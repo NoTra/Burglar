@@ -78,10 +78,8 @@ namespace burglar.managers
         public void LoadGameButton()
         {
             var lastSaveName = SaveLoadSystem.Instance.GetLastSaveName();
-            Debug.Log("Loading game: " + lastSaveName);
 
             SaveLoadSystem.Instance.LoadGame(lastSaveName);
-            Debug.Log("Game loaded !");
         }
 
         public void SettingsButton()
@@ -101,7 +99,6 @@ namespace burglar.managers
 
         private IEnumerator SlideInSettings(Vector2 startMenuFrom, Vector2 startMenuTo, Vector2 settingsFrom, Vector2 settingsTo, bool setActiveValue = true)
         {
-            Debug.Log("Swooosh !");
             AudioManager.Instance.PlaySFX(AudioManager.Instance.soundSwoosh);
             
             var elapsedTime = 0f;
@@ -122,7 +119,6 @@ namespace burglar.managers
 
         public void QuitButton()
         {
-            Debug.Log("Quit !");
             Application.Quit();
         }
 

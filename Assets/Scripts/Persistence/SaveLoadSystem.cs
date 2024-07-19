@@ -38,23 +38,12 @@ namespace burglar.persistence
                 Credit = 0,
                 SavedAt = DateTime.Now
             };
-            
-            Debug.Log("New game started.");
 
             LevelManager.Instance.LoadScene("level1");
         }
 
         public void SaveGame()
         {
-            List<Item> items = new List<Item>();
-
-            foreach (var item in GameManager.Instance.items)
-            {
-                // Find item by slug
-                Debug.Log(item.title);
-            }
-
-            // 
             gameData.Items = GameManager.Instance.items;
             gameData.Credit = GameManager.Instance.credit;
             gameData.SavedAt = DateTime.Now;
@@ -72,15 +61,6 @@ namespace burglar.persistence
             }
 
             GameManager.Instance.items = gameData.Items;
-
-            Debug.Log("Items loaded: " + gameData.Items.Count);
-
-            foreach (var item in gameData.Items)
-            {
-                // Find item by slug
-                Debug.Log(item);
-            }
-
             GameManager.Instance.credit = gameData.Credit;
 
             var buildIndex = LevelManager.Instance.levels[gameData.CurrentLevelId];

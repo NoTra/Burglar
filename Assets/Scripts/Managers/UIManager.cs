@@ -38,9 +38,15 @@ namespace burglar.managers
         [SerializeField] private GameObject _buttonPrefab;
         private List<CombinationButton> _buttons = new List<CombinationButton>();
         public Color _defaultColor = new(204, 255, 204, 1);
+        public Color _defaultBGColor = new(204, 255, 204, 1);
+        public Color _availableChoiceColor = new(255, 255, 255, 1);
+        public Color _availableChoiceBGColor = new(255, 255, 255, 1);
         public Color _hoverColor = new(153, 255, 153, 1);
+        public Color _hoverBGColor = new(153, 255, 153, 1);
         public Color _selectedColor = new(51, 204, 51, 1);
+        public Color _selectedBGColor = new(51, 204, 51, 1);
         public Color _disabledColor = new(242, 242, 242, 1);
+        public Color _disabledBGColor = new(242, 242, 242, 1);
 
         // Outline
         [Header("Outline")]
@@ -119,27 +125,26 @@ namespace burglar.managers
             StartCoroutine(UpdateCreditUI(amount));
         }
 
+        
         private IEnumerator UpdateCreditUI(int amount)
         {
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.soundCredit);
+            var audioSource = AudioManager.Instance.PlaySFX(AudioManager.Instance.soundCredit);
             
             var previousCredit = GameManager.Instance.credit;
             
-            // Define how many frames we need to reach the amount in 1s
-            var frames = (int)(1 / Time.deltaTime);
-            var amountPerFrame = amount / frames;
+            var elapsedTime = 0f;
+            var duration = 1f;
             
-            for (var i = 0; i < frames; i++)
+            while (elapsedTime < duration)
             {
-                UICreditTMP.text = (previousCredit + amountPerFrame).ToString();
-                previousCredit += amountPerFrame;
+                UICreditTMP.text =  Mathf.Ceil(Mathf.Lerp(previousCredit, (previousCredit + amount), elapsedTime / duration)).ToString();
+                elapsedTime += Time.deltaTime;
                 yield return null;
             }
             
-            AudioManager.Instance.StopSFX(AudioManager.Instance.soundCredit);
-
+            audioSource.Stop();
+            
             GameManager.Instance.credit += amount;
-
             UICreditTMP.text = GameManager.Instance.credit.ToString();
         }
 
@@ -150,11 +155,15 @@ namespace burglar.managers
         private void OpenSafeUI(Safe safe)
         {
             ClearSafe();
+
+            var audioManager = AudioManager.Instance;
+            audioManager.PlaySFX(audioManager.soundSwoosh);
+            
             UISafePanel.SetActive(true);
 
             Time.timeScale = 0;
 
-            _combinationText.text = "Combination : " + safe.GetStringCombination();
+            _combinationText.text = safe.GetStringCombination();
 
             var nbButtonsByRow = safe.GetLevel() + 1;
 
@@ -175,7 +184,7 @@ namespace burglar.managers
                     var combinationButton = button.GetComponent<CombinationButton>();
                     combinationButton.Coordinates = new Vector2((float) i, (float) j);
                     combinationButton.Safe = safe;
-                    button.GetComponentInChildren<TextMeshProUGUI>().text = safe.GetMatrix()[i, j].ToString();
+                    combinationButton._text.text = safe.GetMatrix()[i, j].ToString();
 
                     _buttons.Add(combinationButton);
                 }
@@ -195,13 +204,20 @@ namespace burglar.managers
 
         public void UpdateSafeGrid(Safe safe, Vector2 lastClickedCoordinates)
         {
-            if (safe.GetSelectedCombinationLength() > 0)
+            if (safe.GetSelectedCombinationLength() == 0)
             {
-                // Disable all buttons
                 foreach (var button in _buttons)
                 {
-                    button.isClickable = false;
+                    button._background.color = UIManager.Instance._defaultBGColor;
+                    button._text.color = UIManager.Instance._defaultColor;
                 }
+                return;
+            }
+            
+            // Disable all buttons
+            foreach (var button in _buttons)
+            {
+                button.isClickable = false;
             }
 
             // First define if the buttons north, south, east and west of lastClickedCoordinates are possible to click
@@ -241,7 +257,15 @@ namespace burglar.managers
             foreach (var combinationButton in _buttons)
             {
                 // Change background colors
-                combinationButton._background.color = ((combinationButton.isSelected) ? UIManager.Instance._selectedColor : ((combinationButton.isClickable) ? UIManager.Instance._defaultColor : UIManager.Instance._disabledColor));
+                
+                combinationButton._background.color = (
+                    (combinationButton.isSelected) ? UIManager.Instance._selectedBGColor : (
+                        (combinationButton.isClickable) ? UIManager.Instance._availableChoiceBGColor : UIManager.Instance._disabledBGColor)
+                    );
+                combinationButton._text.color = (
+                    (combinationButton.isSelected) ? UIManager.Instance._selectedColor : (
+                        (combinationButton.isClickable) ? UIManager.Instance._availableChoiceColor : UIManager.Instance._disabledColor)
+                    );
             }
         }
 

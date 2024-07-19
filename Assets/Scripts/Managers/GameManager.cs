@@ -81,7 +81,6 @@ namespace burglar.managers
             {
                 case GameState.Alert:
                     gameState = GameState.Alert;
-                    Debug.Log("Alert starting !");
                     StartCoroutine(ResumeToStateIn(GameState.Playing, 5f));
                     break;
                 case GameState.Paused:
@@ -91,15 +90,12 @@ namespace burglar.managers
                     gameState = GameState.GameOver;
                     break;
                 case GameState.Playing:
-                    Debug.Log("Gamestate = Playing !");
                     gameState = GameState.Playing;
                     break;
                 case GameState.Menu:
-                    Debug.Log("Gamestate = Menu !");
                     gameState = GameState.Menu;
                     break;
                 default:
-                    Debug.Log("Other");
                     break;
             }
         }
@@ -107,9 +103,8 @@ namespace burglar.managers
         IEnumerator ResumeToStateIn(GameState gameState, float durationInSeconds)
         {
             yield return new WaitForSeconds(durationInSeconds);
-            Debug.Log("Alert is over !");
+            
             EventManager.OnEndOfAlertState();
-
             EventManager.OnChangeGameState(gameState);
         }
 

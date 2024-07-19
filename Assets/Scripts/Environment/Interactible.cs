@@ -28,8 +28,6 @@ namespace burglar.environment
         {
             if (other.CompareTag("Player"))
             {
-                Debug.Log("Player entered the trigger of: " + gameObject.name);
-
                 EventManager.OnEnterInteractibleArea(this);
 
                 if (_outline != null)
@@ -69,7 +67,6 @@ namespace burglar.environment
 
         protected virtual void Interact()
         {
-            Debug.Log("Interact");
         }
     }
 }

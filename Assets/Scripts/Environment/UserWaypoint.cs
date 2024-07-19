@@ -12,7 +12,6 @@ namespace burglar
         {
             if (other.CompareTag("Player"))
             {
-                Debug.Log("Send event OnEnterUserWaypoint");
                 EventManager.OnEnterUserWaypoint(this);
             }
         }
@@ -21,7 +20,6 @@ namespace burglar
         {
             if (other.CompareTag("Player"))
             {
-                Debug.Log("Send event OnEnterUserWaypoint");
                 EventManager.OnExitUserWaypoint(this);
             }
         }

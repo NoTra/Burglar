@@ -1454,7 +1454,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teleportEffectPrefab: {fileID: 100000, guid: d43d7a81cc91ebe49b2178de4afc16e4, type: 3}
-  _currentTuto: {fileID: 303613281}
+  _currentTuto: {fileID: 169389668}
   _previousTuto: {fileID: 0}
   _playerPrefab: {fileID: 7251914844115066297, guid: d56bbfaaa96829c4fa91c2101195290f,
     type: 3}
@@ -1830,12 +1830,12 @@ PrefabInstance:
     - target: {fileID: 4896368034006731756, guid: e1cd135c9eb17e84a8c41b4e1cb5b785,
         type: 3}
       propertyPath: m_Orbits.Array.data[0].m_Height
-      value: 17.3
+      value: 12.5
       objectReference: {fileID: 0}
     - target: {fileID: 5691895114221714621, guid: e1cd135c9eb17e84a8c41b4e1cb5b785,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 17.3
+      value: 12.5
       objectReference: {fileID: 0}
     - target: {fileID: 6388766053252419581, guid: e1cd135c9eb17e84a8c41b4e1cb5b785,
         type: 3}
@@ -1845,12 +1845,12 @@ PrefabInstance:
     - target: {fileID: 7589805011112180204, guid: e1cd135c9eb17e84a8c41b4e1cb5b785,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 17.3
+      value: 12.5
       objectReference: {fileID: 0}
     - target: {fileID: 7737177038492161022, guid: e1cd135c9eb17e84a8c41b4e1cb5b785,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 17.3
+      value: 12.5
       objectReference: {fileID: 0}
     - target: {fileID: 7781544280133796381, guid: e1cd135c9eb17e84a8c41b4e1cb5b785,
         type: 3}

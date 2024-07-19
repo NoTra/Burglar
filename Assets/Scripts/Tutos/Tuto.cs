@@ -30,8 +30,6 @@ namespace burglar.tutos
 
         protected void Success()
         {
-            Debug.Log("STARTING SUCCESS SEQUENCE");
-            
             AudioManager.Instance.PlaySFX(AudioManager.Instance.soundSuccess);
             
             StartCoroutine(_successSequenceEnumerator);
@@ -39,7 +37,6 @@ namespace burglar.tutos
 
         private IEnumerator SuccessSequence()
         {
-            Debug.Log("APPEL ON EXIT DE L'ANCIENNE ZONE !!!");
             TutoManager.Instance.GetCurrentTuto().OnExit();
             
             var nextTuto = GetNextTuto();
@@ -55,7 +52,6 @@ namespace burglar.tutos
             // Teleport the player
             yield return StartCoroutine(TeleportPlayerToNewPosition());
             
-            Debug.Log("APPEL ON ENTER DE LA NOUVELLE ZONE !!!");
             nextTuto.OnEnter();
             
             // TutoManager.Instance._previousTuto.gameObject.SetActive(false);
@@ -114,17 +110,16 @@ namespace burglar.tutos
                 yield return null;
             }
             
-            Debug.Log("DIALOG IS OVER");
         }
 
         public virtual void OnEnter()
         {
-            Debug.Log("Tuto started");
+            
         }
         
         public virtual void OnExit()
         {
-            Debug.Log("Tuto ended");
+            
         }
     }
 }

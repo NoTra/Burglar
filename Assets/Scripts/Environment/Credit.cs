@@ -11,7 +11,6 @@ namespace burglar.environment
 
         protected override void Interact()
         {
-            Debug.Log("On interact with credit");
             EventManager.OnCreditCollected(_value);
             
             var audioManager = AudioManager.Instance;

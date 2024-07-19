@@ -22,14 +22,12 @@ namespace burglar.tutos
 
         private void OnInteract(Interactible interactible)
         {
-            Debug.Log("Interacted with: " + interactible.name);
             if (itemsToPickUp.Contains(interactible))
             {
                 itemsPickedUp.Add(interactible);
             }
 
             if (itemsPickedUp.Count == itemsToPickUp.Count) {
-                Debug.Log("Success");
                 Success();
             }
         }
@@ -43,13 +41,11 @@ namespace burglar.tutos
         public override void OnEnter()
         {
             base.OnEnter();
-            Debug.Log("Enter Tuto02");
         }
         
         public override void OnExit()
         {
             base.OnExit();
-            Debug.Log("Exit Tuto02");
         }
     }
 }

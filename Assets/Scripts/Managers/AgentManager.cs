@@ -48,7 +48,6 @@ namespace burglar.managers
             closestAgent.ChangeState(Agent.State.Suspicious);
             if (closestAgentPatrol != null)
             {
-                Debug.Log("Found a closest agent");
                 closestAgentPatrol.GoToSwitch(switchGO);
             }
         }

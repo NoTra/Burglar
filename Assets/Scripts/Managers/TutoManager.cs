@@ -64,6 +64,8 @@ namespace burglar.managers
                 if (_currentTuto == null) return;
                 
                 LoadTuto(_currentTuto);
+                
+                UIManager.Instance.HUD.SetActive(true);
 
                 StartCoroutine(LaunchTuto(1f));
             } catch (Exception ex)
@@ -74,12 +76,9 @@ namespace burglar.managers
 
         public IEnumerator LaunchTuto(float delay = 0)
         {
-            Debug.Log("Launch new tuto");
             // Teleport player
             _player.transform.position = _currentTuto.GetSpawnPoint().transform.position;
 
-            Debug.Log("Start Dialog new zone");
-            
             if (delay > 0)
             {
                 yield return new WaitForSeconds(delay);
@@ -92,10 +91,8 @@ namespace burglar.managers
 
         public IEnumerator EndTuto()
         {
-            Debug.Log("End tuto");
             UnloadTuto();
 
-            Debug.Log("Start end dialog");
             yield return StartCoroutine(DialogManager.Instance.StartDialog());
         }
 

@@ -83,46 +83,5 @@ namespace burglar.environment
             // Display laser if not illuminated
             _meshRenderer.enabled = !isIlluminated;
         }
-
-        // private bool IsObjectIlluminated()
-        // {
-        //     // Get all Light
-        //     var lights = FindObjectsOfType<Light>();
-        //
-        //     foreach (var light in lights)
-        //     {
-        //         if (light.type != LightType.Spot && light.type != LightType.Point) continue;
-        //
-        //         // Check if the light is on
-        //         if (light.enabled && light.isActiveAndEnabled && light.gameObject.activeInHierarchy)
-        //         {
-        //             if (light.type == LightType.Spot)
-        //             {
-        //                 // Check if the object is in the light cone 
-        //                 var direction = transform.position - light.transform.position;
-        //                 var angle = Vector3.Angle(light.transform.forward, direction);
-        //                 var halfAngle = light.spotAngle / 2;
-        //
-        //                 if (angle < halfAngle)
-        //                 {
-        //                     return true;
-        //                 }
-        //             }
-        //             
-        //             if (light.type == LightType.Point)
-        //             {
-        //                 // Check if the object is in the light radius
-        //                 var distance = Vector3.Distance(transform.position, light.transform.position);
-        //                 Debug.Log(distance + " < " + light.range + " ?");
-        //                 if (distance < light.range)
-        //                 {
-        //                     return true;
-        //                 }
-        //             }
-        //         }
-        //     }
-        //
-        //     return false;
-        // }
     }
 }

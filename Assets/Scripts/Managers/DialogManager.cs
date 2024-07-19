@@ -102,7 +102,6 @@ namespace burglar.managers
 
         public IEnumerator StartDialog()
         {
-            Debug.Log("StartDialog");
             // Move DialogPanel out of the screen
             if (DialogPanel is null) yield break;
             
@@ -112,8 +111,7 @@ namespace burglar.managers
             isInDialog = true;
 
             DialogPanel.SetActive(true);
-                
-            Debug.Log("SlideIn");
+            
             _slideInCoroutine = StartCoroutine(SlideIn());
             yield return _slideInCoroutine;
                 
@@ -133,22 +131,18 @@ namespace burglar.managers
             // Is there more to the story? (outside answers needed)
             if (_story.canContinue)
             {
-                Debug.Log("The story can continue");
                 WaitingForContinueButton.SetActive(false);
                 nametag.text = "Andy";
-                Debug.Log("[UPDATE] AdvanceDialogue");
                 _advanceDialogueCoroutine = StartCoroutine(AdvanceDialogue());
 
                 // Are there any choices?
                 if (_story.currentChoices.Count != 0)
                 {
-                    Debug.Log("ShowChoices");
                     _choicesCoroutine = StartCoroutine(ShowChoices());
                 }
             }
             else
             {
-                Debug.Log("FinishDialogue");
                 FinishDialogue();
             }
         }
@@ -171,7 +165,6 @@ namespace burglar.managers
 
         private void StopAllDialogCoroutines()
         {
-            Debug.Log("StopAllDialogCoroutines");
             // Stop all dialog coroutines
             if (_dialogTypingCoroutine != null)
             {
@@ -214,13 +207,9 @@ namespace burglar.managers
             
             yield return _dialogTypingCoroutine;
             
-            Debug.Log("Sentence displayed");
-
             _dialogTypingCoroutine = StartCoroutine(ShowChoices());
             
             yield return _dialogTypingCoroutine;
-            
-            Debug.Log("Choices displayed");
             
             yield return null;
         }

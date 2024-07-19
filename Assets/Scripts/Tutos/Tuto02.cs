@@ -32,30 +32,19 @@ namespace burglar.tutos
 
         private void OnSuccessSafeCrack(Safe safe)
         {
-            Debug.Log("Safe crack success");
             if (safesToCrack.Contains(safe))
             {
-                Debug.Log("Add safe to safesCracked");
                 _safesCracked.Add(safe);
-            }
-            else
-            {
-                Debug.Log("Safe not in safesToCrack");
             }
 
             if (safesToCrack.Count == _safesCracked.Count)
             {
                 Success();
             }
-            else
-            {
-                Debug.Log("Not all safes cracked yet");
-            }
         }
 
         private void OnFailSafeCrack(Safe safe)
         {
-            Debug.Log("Safe crack fail");
             TutoManager.Instance.SetStory(inkFileSafeFail);
             // Launch special dialog
             StartCoroutine(DialogManager.Instance.StartDialog());
@@ -63,7 +52,6 @@ namespace burglar.tutos
 
         private new void Success()
         {
-            Debug.Log("Success of Tuto02");
             // Do special success from Tuto02
             base.Success();
         }
@@ -71,13 +59,11 @@ namespace burglar.tutos
         public override void OnEnter()
         {
             base.OnEnter();
-            Debug.Log("Enter Tuto02");
         }
         
         public override void OnExit()
         {
             base.OnExit();
-            Debug.Log("Exit Tuto02");
         }
     }
 }

@@ -66,8 +66,6 @@ namespace burglar.managers
         public void LoadNextLevel()
         {
             _currentLevelIndex++;
-
-            Debug.Log("Change music to shop");
             
             // Change music for level music
             AudioManager.Instance.PlayMusic(AudioManager.Instance.musicTuto, false);

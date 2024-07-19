@@ -38,26 +38,16 @@ namespace burglar.UI
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            // if button selected, don't change color
-            if (EventSystem.current.currentSelectedGameObject == gameObject)
-            {
-                Debug.Log("Button selected");
-            }
-            else
-            {
-                Debug.Log("Button not selected so we change color");
-                _text.color = _defaultColor;
-            }
-
+            if (EventSystem.current.currentSelectedGameObject == gameObject) return;
             
+            _text.color = _defaultColor;
         }
         
         public void OnClick()
         {
-            if (triggerSoundOnClick)
-            {
-                AudioManager.Instance.PlaySFX(AudioManager.Instance.soundClick);                
-            }
+            if (!triggerSoundOnClick) return;
+            
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.soundClick);                
         }
     }
 }

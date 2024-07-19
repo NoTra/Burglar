@@ -44,20 +44,14 @@ namespace burglar.UI
 
         private void BuyItem()
         {
-            if (GameManager.Instance.credit >= _item.price)
-            {
-                GameManager.Instance.credit -= _item.price;
-                GameManager.Instance.items.Add(_item);
-                _buyButton.interactable = false;
-                _buyButtonText.text = "Owned";
-
-                EventManager.OnCreditChanged();
-            }
-            else
-            {
-                Debug.Log("Not enough credits");
-            }
+            if (GameManager.Instance.credit < _item.price) return;
             
+            GameManager.Instance.credit -= _item.price;
+            GameManager.Instance.items.Add(_item);
+            _buyButton.interactable = false;
+            _buyButtonText.text = "Owned";
+
+            EventManager.OnCreditChanged();
         }
     }
 }

@@ -44,20 +44,17 @@ namespace burglar.tutos
             EventManager.LightChange -= OnLightChange;
             EventManager.EnterUserWaypoint -= OnEnterUserWaypoint;
             EventManager.CheckpointReached -= OnCheckpointReached;
-            // EventManager.ExitUserWaypoint -= OnExitUserWaypoint;
         }
 
         private void OnCheckpointReached(Checkpoint checkpoint)
         {
             if (checkpoint.gameObject.name != "Checkpoint02_dialog_lasers_win") return;
             
-            Debug.Log("Checkpoint 02 reached, deactivate switch dialog");
             _boolWarnAlarm = true;
         }
 
         public override void OnEnter()
         {
-            Debug.Log("OnEnter Tuto03");
             _agent.gameObject.SetActive(true);
             
             // Storing agent start position
@@ -66,7 +63,6 @@ namespace burglar.tutos
 
         public override void OnExit()
         {
-            Debug.Log("OnExit Tuto03");
             _agent.gameObject.SetActive(false);
         }
         
@@ -80,8 +76,6 @@ namespace burglar.tutos
 
             if (userWaypoint.gameObject.name == _userWaypoint01.gameObject.name)
             {
-                Debug.Log("UserWaypoint 01 reached");
-
                 var story = new Story(inkFileWaypoint01.text);
             
                 var dialogManager = DialogManager.Instance;
@@ -98,13 +92,11 @@ namespace burglar.tutos
             }
             else
             {
-                Debug.Log("UserWaypoint 02 reached");
                 var story = new Story(inkFileWaypoint02.text);
                 
                 var dialogManager = DialogManager.Instance;
                 dialogManager.SetStory(story);
 
-                Debug.Log("Set BoolWarnAlarm to false");
                 // Stop dialog from running if player uses light switch 
                 _boolWarnAlarm = true;
                 
@@ -123,7 +115,6 @@ namespace burglar.tutos
 
         private void OnPlayerCaught(GameObject player)
         {
-            Debug.Log("Player caught");
             TutoManager.Instance.SetStory(inkFileCaughtAgent);
             
             _agent.transform.position = _agentStartPosition;
@@ -141,7 +132,6 @@ namespace burglar.tutos
             
             var dialogManager = DialogManager.Instance;
             dialogManager.SetStory(story);
-            Debug.Log("Change game state to alert so dialog launch !");
             StartCoroutine(StartDialogAndRestart());
         }
         
@@ -149,7 +139,6 @@ namespace burglar.tutos
         {
             yield return StartCoroutine(DialogManager.Instance.StartDialog());
             
-            Debug.Log("Dialog is over, now restart tuto");
             TutoManager.Instance._player.transform.position = GetSpawnPoint().transform.position;
         }
 
@@ -157,13 +146,10 @@ namespace burglar.tutos
         {
             if (_boolWarnAlarm) return;
             
-            Debug.Log("BoolWarnAlarm is false, launch dialog !");
-            
             var story = new Story(inkFileWarnAlarm.text);
             
             var dialogManager = DialogManager.Instance;
             dialogManager.SetStory(story);
-            Debug.Log("Change game state to alert so dialog launch !");
             StartCoroutine(dialogManager.StartDialog());
             
             _boolWarnAlarm = true;
@@ -173,14 +159,6 @@ namespace burglar.tutos
             var dialogCoroutine = DialogManager.Instance.StartDialog();
             yield return StartCoroutine(StartDialogAndWait(dialogCoroutine));
 
-            // Wait until the dialogue is finished
-            // while (DialogManager.Instance.isInDialog)
-            // {
-            //     yield return null;
-            // }
-            
-            Debug.Log("DIALOG IS OVER");
-            
             SaveLoadSystem.Instance.NewGame();
             AudioManager.Instance.PlayMusic(AudioManager.Instance.musicLevel, false);
         }

@@ -73,7 +73,6 @@ namespace burglar.player
         {
             if (!PlayerAnimator)
             {
-                Debug.Log("Pas de PlayerAnimator");
                 return;
             }
             
@@ -84,7 +83,6 @@ namespace burglar.player
         {
             if (!PlayerAnimator)
             {
-                Debug.Log("Pas de PlayerAnimator");
                 return;
             }
             
@@ -95,7 +93,6 @@ namespace burglar.player
         {
             if (!PlayerAnimator)
             {
-                Debug.Log("Pas de PlayerAnimator");
                 return;
             }
             
@@ -124,7 +121,6 @@ namespace burglar.player
         {
             if (!_meshRenderer) return;
             
-            Debug.Log("OnIsInvisible called");
             var color = _meshRenderer.material.color;
             _meshRenderer.material.color = new Color(color.r, color.g, color.b, 0.5f);
         }
@@ -156,9 +152,6 @@ namespace burglar.player
             GameManager.Instance.TogglePause();
         }
 
-        public void OnActivate()
-        {
-            Debug.Log("Activate");
-        }
+        public void OnActivate() { }
     }
 }

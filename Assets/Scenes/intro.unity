@@ -1453,7 +1453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95795430136727343b661b865e77b14c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teleportEffectPrefab: {fileID: 100000, guid: d43d7a81cc91ebe49b2178de4afc16e4, type: 3}
+  teleportEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
   _currentTuto: {fileID: 931111308}
   _previousTuto: {fileID: 0}
   _playerPrefab: {fileID: 7251914844115066297, guid: d56bbfaaa96829c4fa91c2101195290f,
@@ -1830,12 +1830,12 @@ PrefabInstance:
     - target: {fileID: 4896368034006731756, guid: e1cd135c9eb17e84a8c41b4e1cb5b785,
         type: 3}
       propertyPath: m_Orbits.Array.data[0].m_Height
-      value: 12.5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5691895114221714621, guid: e1cd135c9eb17e84a8c41b4e1cb5b785,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 12.5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6388766053252419581, guid: e1cd135c9eb17e84a8c41b4e1cb5b785,
         type: 3}
@@ -1845,12 +1845,12 @@ PrefabInstance:
     - target: {fileID: 7589805011112180204, guid: e1cd135c9eb17e84a8c41b4e1cb5b785,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 12.5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7737177038492161022, guid: e1cd135c9eb17e84a8c41b4e1cb5b785,
         type: 3}
       propertyPath: m_FollowOffset.y
-      value: 12.5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7781544280133796381, guid: e1cd135c9eb17e84a8c41b4e1cb5b785,
         type: 3}
@@ -5049,7 +5049,7 @@ PrefabInstance:
     - target: {fileID: 415138647982449183, guid: ed7f8ea571d68384b963d81e2f36564d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.3006439
+      value: 2.46
       objectReference: {fileID: 0}
     - target: {fileID: 415138647982449183, guid: ed7f8ea571d68384b963d81e2f36564d,
         type: 3}
@@ -7076,7 +7076,7 @@ PrefabInstance:
     - target: {fileID: 415138647982449183, guid: ed7f8ea571d68384b963d81e2f36564d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.3006439
+      value: 2.46
       objectReference: {fileID: 0}
     - target: {fileID: 415138647982449183, guid: ed7f8ea571d68384b963d81e2f36564d,
         type: 3}
@@ -7218,7 +7218,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.1
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: e96613e03f798804e898447543ec4431, type: 2}
   m_BuildHeightMesh: 0

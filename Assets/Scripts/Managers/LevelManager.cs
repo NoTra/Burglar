@@ -51,8 +51,8 @@ namespace burglar.managers
 
         public void LoadScene(string sceneName)
         {
-            AudioManager.Instance.PlaySFX(AudioManager.Instance.soundTransition);
-            TransitionManager.Instance().Transition(sceneName, transition, 0f);
+            // Play transition (effect & sound)
+            StartCoroutine(PlayTransition(sceneName));
 
             var level = FindLevelBySceneName(sceneName);
             
@@ -76,6 +76,18 @@ namespace burglar.managers
             EventManager.OnLoadLevel();
 
             StartCoroutine(ShowHudAndHidePanelAfterTransition());
+        }
+
+        private IEnumerator PlayTransition(string sceneName)
+        {
+            // Play audio for 1.3s
+            var transitionAudioSource = AudioManager.Instance.PlaySFX(AudioManager.Instance.soundTransition);
+            
+            TransitionManager.Instance().Transition(sceneName, transition, 0f);
+            
+            yield return new WaitForSeconds(2.2f);
+            
+            transitionAudioSource.Stop();
         }
 
         private LevelSO FindLevelBySceneName(string sceneName)

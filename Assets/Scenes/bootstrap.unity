@@ -6323,9 +6323,9 @@ RectTransform:
   - {fileID: 207897530}
   m_Father: {fileID: 1302874365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 820.00006, y: 195.04001}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -92, y: -279}
   m_SizeDelta: {x: 88, y: 478}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1373109328
@@ -7813,8 +7813,8 @@ MonoBehaviour:
   soundCredit: {fileID: 8300000, guid: 68e48f44e9e8a154291067b5aca69725, type: 3}
   soundSuccess: {fileID: 8300000, guid: fc976e790d1f80f4e962a179bae39153, type: 3}
   soundFail: {fileID: 8300000, guid: ef1e3f4c5a25a1241953394494207438, type: 3}
-  soundTeleport: {fileID: 8300000, guid: ce0a055255b833e4794cd9e036c99ef9, type: 3}
-  soundTeleportOut: {fileID: 8300000, guid: 23293aafa9c06194e8a68d80aa99d620, type: 3}
+  soundTeleport: {fileID: 8300000, guid: 6fde45876355bf440ace9efb64373d41, type: 3}
+  soundTeleportOut: {fileID: 8300000, guid: 6fde45876355bf440ace9efb64373d41, type: 3}
   soundSwoosh: {fileID: 8300000, guid: 4d3825d47ce9efc40b9f7fbf5493e7e2, type: 3}
   soundSlowDown: {fileID: 8300000, guid: 3c9a40a7ec698e847b2e4d325db37334, type: 3}
   soundSlowDownInvert: {fileID: 8300000, guid: e6a946327120e884ab60350a89b418e8, type: 3}

@@ -42,9 +42,15 @@ namespace burglar
                 Debug.LogError("Current level is null");
                 return;
             }
+
+            var levelManager = LevelManager.Instance;
+            minimumCredits = levelManager._currentLevel.minimumCredits;
+            maximumCredits = levelManager._currentLevel.maximumCredits;
             
-            minimumCredits = LevelManager.Instance._currentLevel.minimumCredits;
-            maximumCredits = LevelManager.Instance._currentLevel.maximumCredits;
+            if (levelManager._currentLevel.resetCredits)
+            {
+                GameManager.Instance.credit = 0;
+            }
             
             InitCredit();
         }

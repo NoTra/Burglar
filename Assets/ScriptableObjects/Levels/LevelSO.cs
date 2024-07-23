@@ -11,5 +11,6 @@ namespace burglar
         public int minimumCredits;
         public int maximumCredits;
         public AudioClip music;
+        public bool resetCredits = false;
     }
 }

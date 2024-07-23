@@ -49,11 +49,6 @@ namespace burglar.managers
         public Color _disabledColor = new(242, 242, 242, 1);
         public Color _disabledBGColor = new(242, 242, 242, 1);
 
-        // Outline
-        [Header("Outline")]
-        public Color OutlineColor = Color.yellow;
-        public float OutlineWidth = 3f;
-
         // Singleton
         private static UIManager instance = null;
         public static UIManager Instance => instance;

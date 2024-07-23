@@ -15,7 +15,7 @@ MonoBehaviour:
   title: Short invisibility
   slug: invisibility
   icon: {fileID: 21300000, guid: f3ab0c90901a69944bd3b70697135657, type: 3}
-  description: This technology prevent you from being seeing by agents for 5 seconds.
+  description: This technology prevents you from being seeing by agents for 5 seconds.
     Invisible but not inaudible...
   price: 100
   isPurchasable: 1

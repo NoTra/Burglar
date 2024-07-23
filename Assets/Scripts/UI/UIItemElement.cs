@@ -22,22 +22,16 @@ namespace burglar.UI
             _iconElement.sprite = item.icon;
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-            
-        }
-
         public void Select()
         {
             isSelected = true;
-            _border.color = Color.red;
+            _border.color = Color.white;
         }
 
         public void Deselect()
         {
             isSelected = false;
-            _border.color = Color.white;
+            _border.color = new Color(255, 255, 255, 0);
         }
     }
 }

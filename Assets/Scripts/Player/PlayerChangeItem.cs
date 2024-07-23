@@ -31,7 +31,7 @@ namespace burglar.player
             
             var index = GameManager.Instance.items.IndexOf(GameManager.Instance.selectedItem);
 
-            index += (scrollValue > 0) ? 1 : -1;
+            index += (scrollValue > 0) ? -1 : 1;
 
             // If over max, go back to start
             if (index >= GameManager.Instance.items.Count)

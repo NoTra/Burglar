@@ -116,7 +116,7 @@ namespace burglar.managers
         {
             Debug.Log("Play level music (AudioManager)");
             var music = LevelManager.Instance._currentLevel.music;
-            PlayMusic(music, true);
+            PlayMusicWithDelay(music, true, 1.3f);
         }
 
         private void OnFailSafeCrack(Safe arg0)
@@ -220,7 +220,19 @@ namespace burglar.managers
                 }
                 
             }
+        }
+        
+        private void PlayMusicWithDelay(AudioClip music, bool crossFade, float delay)
+        {
+            StartCoroutine(PlayMusicWithDelayCoroutine(music, crossFade, delay));
+        }
 
+        private IEnumerator PlayMusicWithDelayCoroutine(AudioClip music, bool crossFade, float delay)
+        {
+            // Wait for the delay
+            yield return new WaitForSeconds(delay);
+            
+            PlayMusic(music, crossFade);
         }
 
         private IEnumerator FadeOutThanIn(AudioClip music, float fadeTimeSeconds = 1f, float waitTimeSeconds = 0f)

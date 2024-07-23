@@ -1454,7 +1454,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teleportEffectPrefab: {fileID: 100000, guid: d43d7a81cc91ebe49b2178de4afc16e4, type: 3}
-  _currentTuto: {fileID: 169389668}
+  _currentTuto: {fileID: 931111308}
   _previousTuto: {fileID: 0}
   _playerPrefab: {fileID: 7251914844115066297, guid: d56bbfaaa96829c4fa91c2101195290f,
     type: 3}

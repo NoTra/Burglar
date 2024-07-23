@@ -37,9 +37,12 @@ namespace burglar
         
         private void OnLoadLevel()
         {
-            Debug.Log("OnLoadLevel (CreditManager)");
-            Debug.Log("Minimum credits : " + LevelManager.Instance._currentLevel.minimumCredits);
-            Debug.Log("Maximum credits : " + LevelManager.Instance._currentLevel.maximumCredits);
+            if (LevelManager.Instance?._currentLevel == null)
+            {
+                Debug.LogError("Current level is null");
+                return;
+            }
+            
             minimumCredits = LevelManager.Instance._currentLevel.minimumCredits;
             maximumCredits = LevelManager.Instance._currentLevel.maximumCredits;
             

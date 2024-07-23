@@ -372,8 +372,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
-  m_fontSizeBase: 18
+  m_fontSize: 14
+  m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4552,6 +4552,10 @@ MonoBehaviour:
   credit: 0
   items:
   - {fileID: 11400000, guid: 32691ab93560f4d419907a3997af1dcd, type: 2}
+  - {fileID: 11400000, guid: 15f9fc5568bf2904eb57b6b06bff2db6, type: 2}
+  - {fileID: 11400000, guid: 5aa49a5d4370a2b45a1afa12ca1815b3, type: 2}
+  - {fileID: 11400000, guid: d0c71d940bc87544bbf12dfd652d760a, type: 2}
+  - {fileID: 11400000, guid: dfea767a6ccb1d645b64cb16d8fe5f5a, type: 2}
   selectedItem: {fileID: 11400000, guid: 32691ab93560f4d419907a3997af1dcd, type: 2}
   _lightSwitchSelectedByRemote: {fileID: 0}
 --- !u!1 &948448530
@@ -8468,8 +8472,6 @@ MonoBehaviour:
   _selectedBGColor: {r: 1, g: 1, b: 1, a: 1}
   _disabledColor: {r: 1, g: 0.6313726, b: 0.20392157, a: 1}
   _disabledBGColor: {r: 1, g: 0.7529412, b: 0.38039216, a: 1}
-  OutlineColor: {r: 1, g: 0.6034084, b: 0.015686274, a: 1}
-  OutlineWidth: 3
 --- !u!4 &1876504382
 Transform:
   m_ObjectHideFlags: 0

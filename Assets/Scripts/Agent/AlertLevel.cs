@@ -9,7 +9,7 @@ namespace burglar.agent
         private float _alertLevel = 0.0f;
         private float _alertLevelDecrease = 0.1f;
         private float _maxAlertLevel = 1.0f;
-        private float _waitTimeBeforeDecrease = 1.0f;
+        private float _waitTimeBeforeDecrease = 5.0f;
         private float _elapsedTime = 0;
 
         private Agent _agent;
@@ -63,6 +63,8 @@ namespace burglar.agent
 
             if (_alertLevel > 0)
             {
+                if (DialogManager.Instance.isInDialog) return;
+                
                 if (_alertLevel >= _maxAlertLevel)
                 {
                     // Trigger alarm
@@ -70,7 +72,7 @@ namespace burglar.agent
 
                     return;
                 }
-
+                
                 if (_waitTimeBeforeDecrease < _elapsedTime)
                 {
                     _elapsedTime += Time.deltaTime;

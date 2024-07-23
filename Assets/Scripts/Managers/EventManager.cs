@@ -78,5 +78,8 @@ namespace burglar.managers
         
         public static event UnityAction TogglePause;
         public static void OnTogglePause() => TogglePause?.Invoke();
+
+        public static event UnityAction LoadLevel;
+        public static void OnLoadLevel() => LoadLevel?.Invoke();
     }
 }

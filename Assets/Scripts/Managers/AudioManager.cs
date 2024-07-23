@@ -52,6 +52,7 @@ namespace burglar.managers
         
         [Header("Environment")]
         public AudioClip soundLightSwitch;
+        public AudioClip soundAlarm;
         
         private float _musicVolume;
         private float _musicVolume2;
@@ -99,14 +100,23 @@ namespace burglar.managers
             EventManager.ChangeGameState += OnChangeGameState;
             EventManager.SuccessSafeCrack += OnSuccessSafeCrack;
             EventManager.FailSafeCrack += OnFailSafeCrack;
+            EventManager.LoadLevel += PlayLevelMusic;
         }
-        
+
         private void OnDisable()
         {
             EventManager.TogglePause -= OnTogglePause;
             EventManager.ChangeGameState -= OnChangeGameState;
             EventManager.SuccessSafeCrack -= OnSuccessSafeCrack;
             EventManager.FailSafeCrack -= OnFailSafeCrack;
+            EventManager.LoadLevel -= PlayLevelMusic;
+        }
+        
+        private void PlayLevelMusic()
+        {
+            Debug.Log("Play level music (AudioManager)");
+            var music = LevelManager.Instance._currentLevel.music;
+            PlayMusic(music, true);
         }
 
         private void OnFailSafeCrack(Safe arg0)
@@ -123,14 +133,16 @@ namespace burglar.managers
         {
             if (gameState == GameManager.GameState.Alert)
             {
-                // Play alert music
+                musicAudioSource2.clip = soundAlarm;
+                musicAudioSource2.Play();
                 
-                
-                // Pitch current music at 1.5
-                musicAudioSource.pitch = 1.5f;
+                // Pitch current music at 1.1
+                musicAudioSource.pitch = 1.1f;
             }
             else
             {
+                musicAudioSource2.Stop();
+                
                 // Pitch current music at 1.5
                 musicAudioSource.pitch = 1f;
             }

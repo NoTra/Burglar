@@ -15,6 +15,7 @@ namespace burglar
 
         private void OnTriggerEnter(Collider other)
         {
+            if (!other.CompareTag("Player")) return;
             if (alreadySeen) return;
             
             // Load and launch dialog

@@ -64,14 +64,10 @@ namespace burglar.managers
             /*_startScreenCanvas.SetActive(false);
             _hudCanvas.SetActive(true);*/
             SaveLoadSystem.Instance.NewGame();
-            AudioManager.Instance.PlayMusic(AudioManager.Instance.musicLevel, false);
         }
 
         public void TutorialButton()
         {
-            // Change music
-            AudioManager.Instance.PlayMusic(AudioManager.Instance.musicTuto, false);
-            
             LevelManager.Instance.LoadScene("intro");
         }
 

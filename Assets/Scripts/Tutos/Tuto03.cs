@@ -160,7 +160,6 @@ namespace burglar.tutos
             yield return StartCoroutine(StartDialogAndWait(dialogCoroutine));
 
             SaveLoadSystem.Instance.NewGame();
-            AudioManager.Instance.PlayMusic(AudioManager.Instance.musicLevel, false);
         }
     }
 }

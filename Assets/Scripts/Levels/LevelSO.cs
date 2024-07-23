@@ -10,5 +10,6 @@ namespace burglar
         public int levelIndex;
         public int minimumCredits;
         public int maximumCredits;
+        public AudioClip music;
     }
 }

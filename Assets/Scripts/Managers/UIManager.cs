@@ -25,6 +25,7 @@ namespace burglar.managers
         public GameObject HUD;
         [SerializeField] private TextMeshProUGUI UICreditTMP;
         [SerializeField] private GameObject UIInteractIcon;
+        public CreditManager creditManager;
 
         // GameOver 💀
         [Header("GameOver")]
@@ -83,8 +84,6 @@ namespace burglar.managers
 
         private void OnEnable()
         {
-            EventManager.CreditCollected += (amount) => OnCreditCollected(amount);
-
             EventManager.OpenSafe += (safe) => OpenSafeUI(safe);
 
             EventManager.SuccessSafeCrack += (safe) => OnSuccessSafeCrack(safe);
@@ -102,8 +101,6 @@ namespace burglar.managers
 
         private void OnDisable()
         {
-            EventManager.CreditCollected -= (amount) => OnCreditCollected(amount);
-
             EventManager.OpenSafe -= (safe) => OpenSafeUI(safe);
 
             EventManager.SuccessSafeCrack -= (safe) => OnSuccessSafeCrack(safe);
@@ -118,37 +115,6 @@ namespace burglar.managers
             
             EventManager.TogglePause -= () => OnTogglePause();
         }
-
-        #region CreditCollected
-        private void OnCreditCollected(int amount)
-        {
-            StartCoroutine(UpdateCreditUI(amount));
-        }
-
-        
-        private IEnumerator UpdateCreditUI(int amount)
-        {
-            var audioSource = AudioManager.Instance.PlaySFX(AudioManager.Instance.soundCredit);
-            
-            var previousCredit = GameManager.Instance.credit;
-            
-            var elapsedTime = 0f;
-            var duration = 1f;
-            
-            while (elapsedTime < duration)
-            {
-                UICreditTMP.text =  Mathf.Ceil(Mathf.Lerp(previousCredit, (previousCredit + amount), elapsedTime / duration)).ToString();
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-            
-            audioSource.Stop();
-            
-            GameManager.Instance.credit += amount;
-            UICreditTMP.text = GameManager.Instance.credit.ToString();
-        }
-
-        #endregion
 
         #region SafeUI
 

@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 using EasyTransition;
 using System.Collections;
+using System.Reflection.Emit;
 
 namespace burglar.managers
 {
@@ -14,8 +16,12 @@ namespace burglar.managers
         // List of scenes
         public List<LevelSO> levels;
 
+        private List<string> _levelNames = new List<string>();
+
         // Current level index
         public int _currentLevelIndex = 0;
+        
+        public LevelSO _currentLevel;
 
         // [SerializeField] private EasyTransition.Transition _transition;
         [SerializeField] private TransitionSettings transition;
@@ -34,19 +40,47 @@ namespace burglar.managers
             DontDestroyOnLoad(gameObject);
         }
 
+        private void Start()
+        {
+            // Loop through the levels and extract the names in levelNames List<string>
+            foreach (var level in levels)
+            {
+                _levelNames.Add(level.levelName);
+            }
+        }
+
         public void LoadScene(string sceneName)
         {
             AudioManager.Instance.PlaySFX(AudioManager.Instance.soundTransition);
             TransitionManager.Instance().Transition(sceneName, transition, 0f);
 
-            // Load the level SO
-            var levelSO = levels[_currentLevelIndex];
+            var level = FindLevelBySceneName(sceneName);
             
-            Debug.Log("Curent level : " + levelSO.levelName + "(" + levelSO.sceneName + ")");
+            if (level == null)
+            {
+                Debug.LogError("Level not found for scene name : " + sceneName);
+                return;
+            }
             
-            UIManager.Instance.HUD.GetComponent<CreditManager>().InitCredit(levelSO.maximumCredits, levelSO.minimumCredits);
+            // Change current level index
+            _currentLevelIndex = level.levelIndex;
+            _currentLevel = level;
             
+            Debug.Log("Level loaded : ");
+            Debug.Log(level.levelName);
+            Debug.Log(level.sceneName);
+            Debug.Log(level.minimumCredits);
+            Debug.Log(level.maximumCredits);
+
+            // Trigger the event OnLoadLevel
+            EventManager.OnLoadLevel();
+
             StartCoroutine(ShowHudAndHidePanelAfterTransition());
+        }
+
+        private LevelSO FindLevelBySceneName(string sceneName)
+        {
+            return levels.Find(level => level.sceneName == sceneName);
         }
 
         private IEnumerator ShowHudAndHidePanelAfterTransition()
@@ -57,7 +91,7 @@ namespace burglar.managers
             // UIManager.Instance.StartScreen.SetActive(false);
 
             // Activate the game HUD
-            // UIManager.Instance.HUD.SetActive(true);
+            UIManager.Instance.HUD.SetActive(true);
         }
 
         public void LoadShop()
@@ -71,9 +105,6 @@ namespace burglar.managers
         public void LoadNextLevel()
         {
             _currentLevelIndex++;
-            
-            // Change music for level music
-            AudioManager.Instance.PlayMusic(AudioManager.Instance.musicTuto, false);
             
             var levelSO = levels[_currentLevelIndex];
             // Load the next scene in Single mode

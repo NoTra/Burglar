@@ -15,5 +15,6 @@ MonoBehaviour:
   sceneName: level1
   levelName: House
   levelIndex: 0
-  minimumCredits: 100
-  maximumCredits: 400
+  minimumCredits: 500
+  maximumCredits: 1000
+  music: {fileID: 8300000, guid: 0eb18bfba8948f64599d6651bdfc33e5, type: 3}

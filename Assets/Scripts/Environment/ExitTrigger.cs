@@ -5,18 +5,19 @@ namespace burglar.environment
 {
     public class ExitTrigger : MonoBehaviour
     {
-
-        void Start()
-        {
-        
-        }
-
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))
             {
-                // Load ShopLevel
-                LevelManager.Instance.LoadShop();
+                if (LevelManager.Instance._currentLevel.minimumCredits > CreditManager.Instance.levelCredit)
+                {
+                    Debug.Log("You need more credits to exit the level");
+                }
+                else
+                {
+                    // Load ShopLevel
+                    LevelManager.Instance.LoadShop();
+                }
             }
         }
     }

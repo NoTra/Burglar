@@ -29,6 +29,11 @@ namespace burglar.player
             _meshRenderer = GetComponent<MeshRenderer>();
         }
 
+        private void Start()
+        {
+            GameManager.Instance.playerInput = _playerInput;
+        }
+
         private void OnEnable()
         {
             EventManager.IsInvisible += () => OnIsInvisible();

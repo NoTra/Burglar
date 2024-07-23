@@ -10,7 +10,7 @@ namespace burglar
 {
     public class CreditManager : MonoBehaviour
     {
-        private int levelCredit = 0;
+        public int levelCredit = 0;
         public int minimumCredits;
         public int maximumCredits;
         
@@ -18,6 +18,24 @@ namespace burglar
         [SerializeField] private Slider _creditSlider;
         
         [SerializeField] private GameObject _minMarker;
+        
+        private static CreditManager instance = null;
+        
+        public static CreditManager Instance => instance;
+        
+        private void Awake()
+        {
+            if (instance != null && instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            else
+            {
+                instance = this;
+            }
+            DontDestroyOnLoad(gameObject);
+        }
 
         private void OnEnable()
         {

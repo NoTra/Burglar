@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using burglar.environment;
 using burglar.UI;
+using static burglar.managers.EventManager;
 
 namespace burglar.managers
 {
@@ -79,36 +80,24 @@ namespace burglar.managers
 
         private void OnEnable()
         {
-            EventManager.OpenSafe += (safe) => OpenSafeUI(safe);
-
-            EventManager.SuccessSafeCrack += (safe) => OnSuccessSafeCrack(safe);
-
-            EventManager.FailSafeCrack += (safe) => OnFailSafeCrack(safe);
-            
-            EventManager.EnterInteractibleArea += (interactible) => OnEnterInteractibleArea(interactible);
-            
-            EventManager.Interact += (interactible) => OnInteract(interactible);
-            
-            EventManager.ExitInteractibleArea += (interactible) => OnExitInteractibleArea(interactible);
-            
-            EventManager.TogglePause += () => OnTogglePause();
+            OpenSafe += (safe) => OpenSafeUI(safe);
+            SuccessSafeCrack += (safe) => OnSuccessSafeCrack(safe);
+            FailSafeCrack += (safe) => OnFailSafeCrack(safe);
+            EnterInteractibleArea += (interactible) => OnEnterInteractibleArea(interactible);
+            Interact += (interactible) => OnInteract(interactible);
+            ExitInteractibleArea += (interactible) => OnExitInteractibleArea(interactible);
+            TogglePause += () => OnTogglePause();
         }
 
         private void OnDisable()
         {
-            EventManager.OpenSafe -= (safe) => OpenSafeUI(safe);
-
-            EventManager.SuccessSafeCrack -= (safe) => OnSuccessSafeCrack(safe);
-
-            EventManager.FailSafeCrack -= (safe) => OnFailSafeCrack(safe);
-            
-            EventManager.EnterInteractibleArea -= (interactible) => OnEnterInteractibleArea(interactible);
-            
-            EventManager.Interact -= (interactible) => OnInteract(interactible);
-            
-            EventManager.ExitInteractibleArea -= (interactible) => OnExitInteractibleArea(interactible);
-            
-            EventManager.TogglePause -= () => OnTogglePause();
+            OpenSafe -= (safe) => OpenSafeUI(safe);
+            SuccessSafeCrack -= (safe) => OnSuccessSafeCrack(safe);
+            FailSafeCrack -= (safe) => OnFailSafeCrack(safe);
+            EnterInteractibleArea -= (interactible) => OnEnterInteractibleArea(interactible);
+            Interact -= (interactible) => OnInteract(interactible);
+            ExitInteractibleArea -= (interactible) => OnExitInteractibleArea(interactible);
+            TogglePause -= () => OnTogglePause();
         }
 
         #region SafeUI

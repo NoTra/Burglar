@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using burglar.managers;
 using System.Collections;
@@ -23,8 +24,31 @@ namespace burglar
         
         private SettingsManager _settingsManager;
 
+        private void OnEnable()
+        {
+            EventManager.TogglePause += OnTogglePause;
+        }
+        
+        private void OnDisable()
+        {
+            EventManager.TogglePause -= OnTogglePause;
+        }
+
+        private void OnTogglePause()
+        {
+            Debug.Log("OnTogglePause (PauseScreenManager)");
+            // If we are in settings, we just want to go back
+            if (_settingsCanvas.gameObject.activeSelf)
+            {
+                Debug.Log("No pause, we go back !");
+                _settingsManager._backButton.onClick.Invoke();
+            }
+        }
+
         private void Start()
         {
+            EventManager.TogglePause += OnTogglePause;
+            
             screenWidth = Screen.width;
             
             _settingsCanvas.anchoredPosition = _settingsStartPosition + new Vector2(screenWidth, 0);
@@ -82,20 +106,8 @@ namespace burglar
             ));
         }
         
-        private void Update()
-        {
-            // If esc is pressed, Invoke click on back button
-            if (Input.GetKeyUp(KeyCode.Escape) && _settingsCanvas.gameObject.activeSelf)
-            {
-                _settingsManager._backButton.onClick.Invoke();
-            }
-        }
-        
         private IEnumerator SlideInSettings(Vector2 startMenuFrom, Vector2 startMenuTo, Vector2 settingsFrom, Vector2 settingsTo, bool setActiveValue = true)
         {
-            Debug.Log("pauseMenu from : " + startMenuFrom + " - pauseMenu to : " + startMenuTo);
-            Debug.Log("settings from : " + settingsFrom + " - settings to : " + settingsTo);
-            
             AudioManager.Instance.PlaySFX(AudioManager.Instance.soundSwoosh);
             
             var elapsedTime = 0f;
@@ -105,8 +117,6 @@ namespace burglar
                 _pauseMenuCanvas.anchoredPosition = Vector2.LerpUnclamped(startMenuFrom, startMenuTo, _animationCurve.Evaluate(elapsedTime / _animationDuration));
                 _settingsCanvas.anchoredPosition = Vector2.LerpUnclamped(settingsFrom, settingsTo, _animationCurve.Evaluate(elapsedTime / _animationDuration));
                 elapsedTime += Time.fixedUnscaledDeltaTime;
-                
-                Debug.Log("PauseMenu x : " + _pauseMenuCanvas.anchoredPosition.x + " - Settings x : " + _settingsCanvas.anchoredPosition.x);
                 
                 yield return null;
             }

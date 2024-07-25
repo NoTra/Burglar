@@ -292,7 +292,8 @@ namespace burglar.managers
         public static void SetDecision(object element)
         {
             choiceSelected = (Choice)element;
-            TutoManager.Instance.GetStory().ChooseChoiceIndex(choiceSelected.index);
+            // TutoManager.Instance.GetStory().ChooseChoiceIndex(choiceSelected.index);
+            Instance._story.ChooseChoiceIndex(choiceSelected.index);
             Instance.WaitingForAnswer = false;
         }
 
@@ -374,6 +375,18 @@ namespace burglar.managers
 
             nametag.text = "";
             message.text = "";
+        }
+        
+        public IEnumerator StartDialogAndWait()
+        {
+            StartCoroutine(StartDialog());
+
+            // Wait until the dialogue is finished
+            while (isInDialog)
+            {
+                yield return null;
+            }
+            
         }
     }
 }

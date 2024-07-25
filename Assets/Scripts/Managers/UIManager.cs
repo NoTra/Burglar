@@ -24,9 +24,14 @@ namespace burglar.managers
         // HUD 💰
         [Header("HUD")]
         public GameObject HUD;
-        [SerializeField] private TextMeshProUGUI UICreditTMP;
         [SerializeField] private GameObject UIInteractIcon;
+        [SerializeField] private TextMeshProUGUI UICreditTMP;
         public CreditManager creditManager;
+        
+        [Header("Objectives")]
+        public GameObject UIObjective;
+        public GameObject objectivesContainer;
+        public GameObject objectivePrefab;
 
         // GameOver 💀
         [Header("GameOver")]
@@ -272,6 +277,9 @@ namespace burglar.managers
             {
                 return;
             }
+            
+            // Do not show HUD when pause screen is active
+            HUD.SetActive(PauseScreen.activeSelf);
             
             // Activate pause screen
             PauseScreen.SetActive(!PauseScreen.activeSelf);

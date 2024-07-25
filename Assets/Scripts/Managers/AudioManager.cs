@@ -45,6 +45,7 @@ namespace burglar.managers
         public AudioClip soundSwoosh;
         public AudioClip soundSlowDown;
         public AudioClip soundSlowDownInvert;
+        public AudioClip soundObjectiveSuccess;
         
         [Header("Player")]
         public AudioClip soundFootstep;
@@ -96,20 +97,22 @@ namespace burglar.managers
 
         private void OnEnable()
         {
-            EventManager.TogglePause += OnTogglePause;
+            EventManager.TimeScaleChanged += OnTimeScaleChanged;
             EventManager.ChangeGameState += OnChangeGameState;
             EventManager.SuccessSafeCrack += OnSuccessSafeCrack;
             EventManager.FailSafeCrack += OnFailSafeCrack;
             EventManager.LoadLevel += PlayLevelMusic;
+            EventManager.ObjectiveCompleted += OnObjectiveCompleted;
         }
 
         private void OnDisable()
         {
-            EventManager.TogglePause -= OnTogglePause;
+            EventManager.TimeScaleChanged -= OnTimeScaleChanged;
             EventManager.ChangeGameState -= OnChangeGameState;
             EventManager.SuccessSafeCrack -= OnSuccessSafeCrack;
             EventManager.FailSafeCrack -= OnFailSafeCrack;
             EventManager.LoadLevel -= PlayLevelMusic;
+            EventManager.ObjectiveCompleted -= OnObjectiveCompleted;
         }
         
         private void PlayLevelMusic()
@@ -148,7 +151,7 @@ namespace burglar.managers
             }
         }
 
-        private void OnTogglePause()
+        private void OnTimeScaleChanged()
         {
             // Play slowdown sound
             PlaySFX((Time.timeScale == 0) ? soundSlowDown : soundSlowDownInvert);
@@ -165,8 +168,6 @@ namespace burglar.managers
                 musicAudioSource2.pitch = 1f;
             }
         }
-        
-        
 
         public void PlayMusic(AudioClip music, bool crossFade, bool doFade = true)
         {
@@ -314,7 +315,9 @@ namespace burglar.managers
             }
         }
         
-        
-        
+        private void OnObjectiveCompleted(Objective objective)
+        {
+            PlaySFX(soundObjectiveSuccess);
+        }
     }
 }

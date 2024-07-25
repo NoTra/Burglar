@@ -42,7 +42,8 @@ namespace burglar.tutos
             var nextTuto = GetNextTuto();
             
             // Launch first dialog
-            yield return StartCoroutine(StartDialogAndWait(TutoManager.Instance.EndTuto()));
+            TutoManager.Instance.UnloadTuto();
+            yield return StartCoroutine(DialogManager.Instance.StartDialogAndWait());
 
             // Load next tuto
             TutoManager.Instance.LoadTuto(nextTuto);
@@ -114,18 +115,6 @@ namespace burglar.tutos
             
             // Destroy second teleport fx after 1s
             Destroy(effect);
-        }
-
-        public IEnumerator StartDialogAndWait(IEnumerator dialogCoroutine)
-        {
-            StartCoroutine(dialogCoroutine);
-
-            // Wait until the dialogue is finished
-            while (DialogManager.Instance.isInDialog)
-            {
-                yield return null;
-            }
-            
         }
 
         public virtual void OnEnter()

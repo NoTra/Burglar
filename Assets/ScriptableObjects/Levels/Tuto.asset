@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tuto
   m_EditorClassIdentifier: 
   sceneName: intro
-  levelName: Tutorial
+  levelName: Read the manual
   levelIndex: 0
   minimumCredits: 0
   maximumCredits: 600

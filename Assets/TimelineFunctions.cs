@@ -7,14 +7,12 @@ namespace burglar
     {
         public void DeactivatePlayerInput()
         {
-            Debug.Log("DeactivatePlayerInput");
-            GameManager.Instance.playerInput.DeactivateInput();
+            GameManager.Instance.player._playerInput.DeactivateInput();
         }
         
         public void ActivatePlayerInput()
         {
-            Debug.Log("ActivatePlayerInput");
-            GameManager.Instance.playerInput.ActivateInput();
+            GameManager.Instance.player._playerInput.ActivateInput();
         }
     }
 }

@@ -31,6 +31,7 @@ namespace burglar.player
 
         private void Start()
         {
+            GameManager.Instance.player = this;
             GameManager.Instance.playerInput = _playerInput;
         }
 

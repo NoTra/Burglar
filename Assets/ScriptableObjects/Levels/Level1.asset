@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level1
   m_EditorClassIdentifier: 
   sceneName: level1
-  levelName: House
+  levelName: The house
   levelIndex: 0
   minimumCredits: 500
   maximumCredits: 1000

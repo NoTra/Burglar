@@ -89,13 +89,6 @@ namespace burglar.managers
             _currentTuto.OnEnter();
         }
 
-        public IEnumerator EndTuto()
-        {
-            UnloadTuto();
-
-            yield return StartCoroutine(DialogManager.Instance.StartDialog());
-        }
-
         public void LoadTuto(Tuto currentTuto)
         {
             _currentTuto = currentTuto;
@@ -110,7 +103,7 @@ namespace burglar.managers
             }
         }
 
-        private void UnloadTuto()
+        public void UnloadTuto()
         {
             _previousTuto = _currentTuto;
             

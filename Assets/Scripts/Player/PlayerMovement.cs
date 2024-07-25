@@ -77,7 +77,7 @@ namespace burglar.player
 
                     _player.PlayerAnimator.SetBool(Crouch, false);
                 }
-                else if (_speed == _runSpeed)
+                else if (Mathf.Approximately(_speed, _runSpeed))
                 {
                     _player.PlayerAnimator.SetBool(IsRunning, true);
                     _player.PlayerAnimator.SetBool(IsWalking, false);

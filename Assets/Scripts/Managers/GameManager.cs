@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using burglar.environment;
 using burglar.items;
+using burglar.player;
 
 namespace burglar.managers
 {
@@ -15,6 +16,7 @@ namespace burglar.managers
 
         public static GameManager Instance => instance;
 
+        public Player player;
         public PlayerInput playerInput;
 
         public AudioManager audioManager;
@@ -32,7 +34,7 @@ namespace burglar.managers
 
         public int credit = 0;
 
-        public List<Item> items = new List<Item>();
+        public List<Item> items = new();
 
         public Item selectedItem;
 
@@ -123,10 +125,19 @@ namespace burglar.managers
                 return;
             }
             
+            EventManager.OnTogglePause();
+            
+            if ( 
+                UIManager.Instance.PauseScreen.activeSelf && 
+                UIManager.Instance.PauseScreen.GetComponent<PauseScreenManager>().GetSettingsCanvas().gameObject.activeSelf
+            ) {
+                return;
+            }
+            
             gameState = (gameState == GameState.Paused) ? GameState.Playing : GameState.Paused;
             Time.timeScale = (gameState == GameState.Paused) ? 0 : 1;
 
-            EventManager.OnTogglePause();
+            EventManager.OnTimeScaleChanged();
         }
     }
 }

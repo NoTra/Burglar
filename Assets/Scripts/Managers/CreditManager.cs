@@ -39,7 +39,6 @@ namespace burglar
 
         private void OnEnable()
         {
-            Debug.Log("ONAWAKE (CreditManager)");
             EventManager.CreditCollected += AddCredit;
             EventManager.LoadLevel += OnLoadLevel;
             
@@ -80,11 +79,8 @@ namespace burglar
             _creditSlider.value = 0;
             levelCredit = 0;
             _creditText.text = levelCredit + " / " + maximumCredits;
-
-            Debug.Log("min : " + minimumCredits + " max : " + maximumCredits);
-            var t = (float)minimumCredits / maximumCredits;
-            Debug.Log("t : " + t);
             
+            var t = (float)minimumCredits / maximumCredits;
             var x = Mathf.Lerp(-111f, 108f, t);
             
             // Move the min marker to represent the minimum credit (0 we put x at 0, 100% we put the x at 220, we lerp in between)
@@ -131,8 +127,6 @@ namespace burglar
         
         private void AddCredit(int creditAmount)
         {
-            Debug.Log("AddCredit");
-            
             StartCoroutine(UpdateCreditUI(creditAmount));
             
             levelCredit += creditAmount;

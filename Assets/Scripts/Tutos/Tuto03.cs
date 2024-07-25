@@ -156,8 +156,8 @@ namespace burglar.tutos
         }
         
         private IEnumerator StartDialogAndGoToNewGame() {
-            var dialogCoroutine = DialogManager.Instance.StartDialog();
-            yield return StartCoroutine(StartDialogAndWait(dialogCoroutine));
+            var dialogManager = DialogManager.Instance;
+            yield return StartCoroutine(dialogManager.StartDialogAndWait());
 
             SaveLoadSystem.Instance.NewGame();
         }

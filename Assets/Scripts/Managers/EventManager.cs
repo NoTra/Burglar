@@ -81,5 +81,11 @@ namespace burglar.managers
 
         public static event UnityAction LoadLevel;
         public static void OnLoadLevel() => LoadLevel?.Invoke();
+        
+        public static event UnityAction<Objective> ObjectiveCompleted;
+        public static void OnObjectiveCompleted(Objective objective) => ObjectiveCompleted?.Invoke(objective);
+        
+        public static event UnityAction TimeScaleChanged;
+        public static void OnTimeScaleChanged() => TimeScaleChanged?.Invoke();
     }
 }

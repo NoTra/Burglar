@@ -27,7 +27,7 @@ namespace burglar
             if (!creditText) return;
             
             // Change creditText to amount
-            creditText.text = "+" + amount.ToString();
+            creditText.text = "+" + amount;
             creditText.enabled = true;
             
             // Launch animation : reduce Y to 0 and grow scale to 1.5 and make it slowly disappear
@@ -37,28 +37,33 @@ namespace burglar
         private IEnumerator AnimateCreditCollected()
         {
             float time = 0;
-            var initialScale = creditText.transform.localScale;
-            var initialPosition = creditText.transform.position;
-            var targetScale = new Vector3(2f, 2f, 2f);
-            var targetPosition = new Vector3(initialPosition.x, initialPosition.y + 100, initialPosition.z);
-            var initialOpacity = 1;
-            var targetOpacity = 0;
+            var duration = 1f;
             
-            while (time < 1)
+            var initialScale = creditText.rectTransform.localScale;
+            var targetScale = new Vector3(2f, 2f, 2f);
+            
+            var initialPosition = creditText.rectTransform.position;
+            var targetPosition = new Vector3(initialPosition.x, initialPosition.y + 100, initialPosition.z);
+            
+            var initialColor = creditText.color;
+            var targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 0);
+            
+            while (time < duration)
             {
                 time += Time.deltaTime;
-                creditText.transform.localScale = Vector3.Lerp(initialScale, targetScale, time);
-                creditText.transform.position = Vector3.Lerp(initialPosition, targetPosition, time);
+                var t = time / duration; 
                 
-                var color = creditText.color;
-                color.a = Mathf.Lerp(initialOpacity, targetOpacity, time);
-                creditText.color = color;
+                creditText.rectTransform.localScale = Vector3.Lerp(initialScale, targetScale, t);
+                creditText.rectTransform.position = Vector3.Lerp(initialPosition, targetPosition, t);
+                creditText.color = Color.Lerp(initialColor, targetColor, t);
                 
                 yield return null;
             }
+            
             creditText.enabled = false;
             creditText.transform.localScale = initialScale;
             creditText.transform.position = initialPosition;
+            creditText.color = initialColor;
             
         }
     }

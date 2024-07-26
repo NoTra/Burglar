@@ -87,5 +87,8 @@ namespace burglar.managers
         
         public static event UnityAction TimeScaleChanged;
         public static void OnTimeScaleChanged() => TimeScaleChanged?.Invoke();
+
+        public static event UnityAction ObjectiveLoaded;
+        public static void OnObjectiveLoaded() => ObjectiveLoaded?.Invoke();
     }
 }

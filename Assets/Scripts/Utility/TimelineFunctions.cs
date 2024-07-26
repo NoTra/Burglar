@@ -14,5 +14,20 @@ namespace burglar
         {
             GameManager.Instance.player._playerInput.ActivateInput();
         }
+
+        public void StartTuto()
+        {
+            TutoManager.Instance.StartTuto();
+        }
+        
+        public void HideHUD()
+        {
+            UIManager.Instance.HideHud();
+        }
+        
+        public void ToggleHUD()
+        {
+            UIManager.Instance.ToggleHudVisiblity();
+        }
     }
 }

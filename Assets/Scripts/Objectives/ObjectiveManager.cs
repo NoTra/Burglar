@@ -25,7 +25,7 @@ namespace burglar
                 var objectiveIndex = objective.Key;
                 foreach (var obj in objective.Value)
                 {
-                    Debug.Log("Objective: id -> " + objectiveIndex + " text -> " + obj.Key + " value -> " + obj.Value);
+                    // Debug.Log("Objective: id -> " + objectiveIndex + " text -> " + obj.Key + " value -> " + obj.Value);
                     
                     // Text = first element of the dictionary object.value
                     var objectiveText = obj.Key;

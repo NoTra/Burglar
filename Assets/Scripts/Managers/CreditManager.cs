@@ -34,7 +34,8 @@ namespace burglar
             {
                 instance = this;
             }
-            DontDestroyOnLoad(gameObject);
+            
+            Debug.Log("CreditManager Awake");
         }
 
         private void OnEnable()
@@ -94,7 +95,6 @@ namespace burglar
         
         private IEnumerator UpdateCreditUI(int amount)
         {
-            var audioSource = AudioManager.Instance.PlaySFX(AudioManager.Instance.soundCredit);
             var previousCredit = levelCredit;
             var targetCredit = previousCredit + amount;
             
@@ -121,12 +121,11 @@ namespace burglar
             
             // Global credits
             GameManager.Instance.credit += amount;
-            
-            audioSource.Stop();
         }
         
         private void AddCredit(int creditAmount)
         {
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.soundCredit);
             StartCoroutine(UpdateCreditUI(creditAmount));
             
             levelCredit += creditAmount;

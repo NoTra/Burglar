@@ -635,6 +635,7 @@ GameObject:
   m_Component:
   - component: {fileID: 157677660}
   - component: {fileID: 157677661}
+  - component: {fileID: 157677662}
   m_Layer: 5
   m_Name: Objectives
   m_TagString: Untagged
@@ -689,6 +690,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &157677662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157677659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fdbe997de54a3249ae625733930517e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &173988367
 GameObject:
   m_ObjectHideFlags: 0
@@ -4611,6 +4624,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3356dbf21e980fb489929e488f45680d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   playerInput: {fileID: 0}
   audioManager: {fileID: 1874585130}
   gameState: 0
@@ -6390,6 +6404,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1302874365}
   - component: {fileID: 1302874367}
+  - component: {fileID: 1302874368}
   m_Layer: 5
   m_Name: HUD
   m_TagString: Untagged
@@ -6427,6 +6442,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1302874364}
   m_CullTransparentMesh: 1
+--- !u!225 &1302874368
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302874364}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1362297879
 GameObject:
   m_ObjectHideFlags: 0
@@ -8011,7 +8038,7 @@ MonoBehaviour:
   soundTyping: {fileID: 8300000, guid: f2c900533ed1fe74ebfe6e69cae0df59, type: 3}
   soundClick: {fileID: 8300000, guid: 71a74d428fd4a4e49b071d03110aba25, type: 3}
   soundTransition: {fileID: 8300000, guid: 94664901c2247ba4898ec730f3e120cf, type: 3}
-  soundCredit: {fileID: 8300000, guid: 68e48f44e9e8a154291067b5aca69725, type: 3}
+  soundCredit: {fileID: 8300000, guid: ae1867f900809564091394d2379c4459, type: 3}
   soundSuccess: {fileID: 8300000, guid: fc976e790d1f80f4e962a179bae39153, type: 3}
   soundFail: {fileID: 8300000, guid: ef1e3f4c5a25a1241953394494207438, type: 3}
   soundTeleport: {fileID: 8300000, guid: 6fde45876355bf440ace9efb64373d41, type: 3}

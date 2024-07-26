@@ -12,10 +12,6 @@ namespace burglar
         private new void Start()
         {
             base.Start();
-
-            InitObjectives();
-            
-            DisplayObjective();
         }
 
         protected override void InitObjectives()
@@ -25,11 +21,25 @@ namespace burglar
                 _objectives = new Dictionary<int, Dictionary<string, Func<bool>>>();
             }
             
+            if (CreditManager.Instance == null)
+            {
+                Debug.LogError("CreditManager is null");
+                return;
+            }
+            
+            if (LevelManager.Instance == null)
+            {
+                Debug.LogError("LevelManager is null");
+                return;
+            }
+            
             _objectives.Add(0, new Dictionary<string, Func<bool>>
             {
                 {
                     "Steal the minimum amount to be able to get out !", 
-                    () => CreditManager.Instance.levelCredit >= LevelManager.Instance._currentLevel.minimumCredits
+                    () => 
+                        CreditManager.Instance.levelCredit >= 
+                          LevelManager.Instance._currentLevel.minimumCredits
                 }
             });
         }
@@ -37,11 +47,20 @@ namespace burglar
         private void OnEnable()
         {
             EventManager.CreditCollected += OnCreditCollected;
+            EventManager.ObjectiveLoaded += OnObjectiveLoaded;
         }
-        
+
         private void OnDisable()
         {
             EventManager.CreditCollected -= OnCreditCollected;
+            EventManager.ObjectiveLoaded -= OnObjectiveLoaded;
+        }
+        
+        private void OnObjectiveLoaded()
+        {
+            InitObjectives();
+            
+            DisplayObjective();
         }
         
         private void OnCreditCollected(int amount)

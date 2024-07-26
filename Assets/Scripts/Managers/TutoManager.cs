@@ -32,7 +32,7 @@ namespace burglar.managers
         [SerializeField] private Tuto _currentTuto;
         [HideInInspector] public Tuto _previousTuto;
         [SerializeField] private GameObject _playerPrefab;
-        [HideInInspector] public Player _player;
+        [HideInInspector]public Player _player;
         public CinemachineFreeLook _freeLook;
 
         private PlayerInput _playerInput;
@@ -50,14 +50,13 @@ namespace burglar.managers
 
         private void Start()
         {
-            // Spawn player at the start of the game
-            var playerGo = Instantiate(_playerPrefab, _currentTuto.GetSpawnPoint().transform.position,
-                Quaternion.identity);
-            _player = playerGo.GetComponent<Player>();
+            _player = GameManager.Instance.player;
             _playerInput = _player._playerInput;
-            
-            // Make freelook camera look at player
-            _freeLook.Follow = _player.transform;
+        }
+
+        public void StartTuto()
+        {
+            Debug.Log("StartTuto");
             
             try
             {
@@ -65,7 +64,7 @@ namespace burglar.managers
                 
                 LoadTuto(_currentTuto);
                 
-                UIManager.Instance.HUD.SetActive(true);
+                UIManager.Instance.ToggleHudVisiblity();
 
                 StartCoroutine(LaunchTuto(1f));
             } catch (Exception ex)
@@ -76,8 +75,11 @@ namespace burglar.managers
 
         public IEnumerator LaunchTuto(float delay = 0)
         {
-            // Teleport player
-            _player.transform.position = _currentTuto.GetSpawnPoint().transform.position;
+            if (_currentTuto.GetSpawnPoint().transform.position != _player.transform.position)
+            {
+                // Teleport player
+                _player.transform.position = _currentTuto.GetSpawnPoint().transform.position;
+            }
 
             if (delay > 0)
             {

@@ -42,3 +42,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Notification
+    uniqueID: 2193528257
+    locked: 0

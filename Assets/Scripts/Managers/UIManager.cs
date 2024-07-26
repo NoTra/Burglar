@@ -105,6 +105,63 @@ namespace burglar.managers
             TogglePause -= () => OnTogglePause();
         }
 
+        public void HideHud()
+        {
+            HUD.SetActive(false);
+        }
+        
+        public void ToggleHudVisiblity()
+        {
+            var go = HUD.gameObject;
+            // Make the gameObject appear slowly or disappear slowly
+            if (go.activeSelf)
+            {
+                StartCoroutine(FadeOut(go));
+            }
+            else
+            {
+                StartCoroutine(FadeIn(go));
+            }
+        }
+        
+        private IEnumerator FadeOut(GameObject go)
+        {
+            // Get the CanvasGroup component of the gameObject
+            var canvasGroup = go.GetComponent<CanvasGroup>();
+            
+            // While the alpha of the CanvasGroup is greater than 0
+            while (canvasGroup.alpha > 0)
+            {
+                // Decrease the alpha of the CanvasGroup
+                canvasGroup.alpha -= Time.deltaTime;
+                
+                // Wait for the end of the frame
+                yield return null;
+            }
+            
+            // Deactivate the gameObject
+            go.SetActive(false);
+        }
+        
+        private IEnumerator FadeIn(GameObject go)
+        {
+            // Get the CanvasGroup component of the gameObject
+            var canvasGroup = go.GetComponent<CanvasGroup>();
+            
+            // Activate the gameObject
+            go.SetActive(true);
+            
+            // While the alpha of the CanvasGroup is less than 1
+            while (canvasGroup.alpha < 1)
+            {
+                // Increase the alpha of the CanvasGroup
+                canvasGroup.alpha += Time.deltaTime;
+                
+                // Wait for the end of the frame
+                yield return null;
+            }
+        }
+
         #region SafeUI
 
         private void OpenSafeUI(Safe safe)

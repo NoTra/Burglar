@@ -32,6 +32,23 @@ namespace burglar.managers
 
         private void Start()
         {
+            UIManager.Instance.HUD.SetActive(false);
+            
+            var audioManager = AudioManager.Instance;
+            // If a music is playing, stop it
+            if (audioManager.musicAudioSource.isPlaying)
+            {
+                audioManager.musicAudioSource.Stop();
+            }
+            
+            if (audioManager.musicAudioSource2.isPlaying)
+            {
+                audioManager.musicAudioSource2.Stop();
+            }
+            
+            audioManager.PlayMusic(AudioManager.Instance.musicMenu, false, false);
+            
+            
             screenWidth = Screen.width;
             _settingsCanvas.anchoredPosition = _settingsStartPosition + new Vector2(screenWidth, 0);
             

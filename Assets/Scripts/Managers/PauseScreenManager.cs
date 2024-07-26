@@ -82,7 +82,8 @@ namespace burglar
         public void ReturnMainMenuButton()
         {
             // Remove HUD
-            UIManager.Instance.HUD.SetActive(false);
+            // UIManager.Instance.HUD.SetActive(false);
+            UIManager.Instance.ToggleHudVisiblity();
             
             // Remove pause
             GameManager.Instance.TogglePause();

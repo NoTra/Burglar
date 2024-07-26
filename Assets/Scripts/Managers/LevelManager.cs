@@ -74,8 +74,6 @@ namespace burglar.managers
 
             // Trigger the event OnLoadLevel
             EventManager.OnLoadLevel();
-
-            StartCoroutine(ShowHudAndHidePanelAfterTransition());
         }
 
         private IEnumerator PlayTransition(string sceneName)
@@ -94,18 +92,7 @@ namespace burglar.managers
         {
             return levels.Find(level => level.sceneName == sceneName);
         }
-
-        private IEnumerator ShowHudAndHidePanelAfterTransition()
-        {
-            yield return new WaitForSeconds(1.3f);
-
-            // Deactivate UI Start Menu if opened
-            // UIManager.Instance.StartScreen.SetActive(false);
-
-            // Activate the game HUD
-            UIManager.Instance.HUD.SetActive(true);
-        }
-
+        
         public void LoadShop()
         {
             // Change music for shop music

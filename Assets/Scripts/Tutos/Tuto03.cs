@@ -18,6 +18,7 @@ namespace burglar.tutos
 
         // Check if dialog has already been launched
         private bool _boolWarnAlarm = false;
+        private Coroutine playerCaughtCoroutine = null;
         
         [Header("Agent")]
         [SerializeField] private Agent _agent;
@@ -30,7 +31,7 @@ namespace burglar.tutos
         private void OnEnable()
         {
             EventManager.PlayerCaught += OnPlayerCaught;
-            EventManager.ChangeGameState += OnChangeGameState;
+            // EventManager.ChangeGameState += OnChangeGameState;
             EventManager.LightChange += OnLightChange;
             EventManager.EnterUserWaypoint += OnEnterUserWaypoint;
             // EventManager.ExitUserWaypoint += OnExitUserWaypoint;
@@ -40,7 +41,7 @@ namespace burglar.tutos
         private void OnDisable()
         {
             EventManager.PlayerCaught -= OnPlayerCaught;
-            EventManager.ChangeGameState -= OnChangeGameState;
+            // EventManager.ChangeGameState -= OnChangeGameState;
             EventManager.LightChange -= OnLightChange;
             EventManager.EnterUserWaypoint -= OnEnterUserWaypoint;
             EventManager.CheckpointReached -= OnCheckpointReached;
@@ -97,15 +98,13 @@ namespace burglar.tutos
                 var dialogManager = DialogManager.Instance;
                 dialogManager.SetStory(story);
 
-                // Stop dialog from running if player uses light switch 
+                // Stop dialog from running if player uses light switch
                 _boolWarnAlarm = true;
                 
                 // Start the dialog
                 StartCoroutine(StartDialogAndGoToNewGame());
             }
         }
-        
-        
 
         private new void Success()
         {
@@ -115,32 +114,42 @@ namespace burglar.tutos
 
         private void OnPlayerCaught(GameObject player)
         {
+            if (playerCaughtCoroutine != null) return;
+
+            playerCaughtCoroutine = StartCoroutine(PlayerCaughtCoroutine());
+        }
+
+        private IEnumerator PlayerCaughtCoroutine()
+        {
+            Debug.Log("Player caught coroutine");
             TutoManager.Instance.SetStory(inkFileCaughtAgent);
+            
+            _userWaypoint02.gameObject.SetActive(false);
+            _userWaypoint01.gameObject.SetActive(true);
+            
+            yield return StartCoroutine(DialogManager.Instance.StartDialogAndWait());
+
+            yield return StartCoroutine(TeleportPlayerToNewPosition(GetSpawnPoint().transform.position));
             
             _agent.transform.position = _agentStartPosition;
             _agent.ChangeState(Agent.State.Patrol);
-            player.transform.position = GetSpawnPoint().transform.position;
+            _agent.GetPatrol().ResetSuspiciousPoint();
             
-            StartCoroutine(StartDialogAndRestart());
+            GameManager.Instance.SetGameState(GameManager.GameState.Playing);
+            
+            playerCaughtCoroutine = null;
         }
 
-        private void OnChangeGameState(GameManager.GameState gameState)
-        {
-            if (gameState != GameManager.GameState.Alert) return;
-            
-            var story = new Story(inkFileCaughtAlarm.text);
-            
-            var dialogManager = DialogManager.Instance;
-            dialogManager.SetStory(story);
-            StartCoroutine(StartDialogAndRestart());
-        }
-        
-        private IEnumerator StartDialogAndRestart()
-        {
-            yield return StartCoroutine(DialogManager.Instance.StartDialog());
-            
-            TutoManager.Instance._player.transform.position = GetSpawnPoint().transform.position;
-        }
+        // private void OnChangeGameState(GameManager.GameState gameState)
+        // {
+        //     if (gameState != GameManager.GameState.Alert) return;
+        //     
+        //     var story = new Story(inkFileCaughtAlarm.text);
+        //     
+        //     var dialogManager = DialogManager.Instance;
+        //     dialogManager.SetStory(story);
+        //     StartCoroutine(StartDialogAndRestart());
+        // }
 
         private void OnLightChange(GameObject arg0)
         {

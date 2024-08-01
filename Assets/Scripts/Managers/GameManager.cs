@@ -98,6 +98,11 @@ namespace burglar.managers
                     break;
             }
         }
+        
+        public void SetGameState(GameState state)
+        {
+            EventManager.OnChangeGameState(state);
+        }
 
         IEnumerator ResumeToStateIn(GameState gameState, float durationInSeconds)
         {

@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 namespace burglar
 {
@@ -12,5 +14,6 @@ namespace burglar
         public int maximumCredits;
         public AudioClip music;
         public bool resetCredits = false;
+        public TimelineAsset startCinematic;
     }
 }

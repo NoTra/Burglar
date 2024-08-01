@@ -41,19 +41,19 @@ namespace burglar
         private void OnEnable()
         {
             EventManager.CreditCollected += AddCredit;
-            EventManager.LoadLevel += OnLoadLevel;
+            EventManager.LoadLevelStart += InitLevelCredits;
             
             // First time enabled we load level
-            OnLoadLevel();
+            InitLevelCredits();
         }
         
         private void OnDisable()
         {
             EventManager.CreditCollected -= AddCredit;
-            EventManager.LoadLevel -= OnLoadLevel;
+            EventManager.LoadLevelStart -= InitLevelCredits;
         }
         
-        private void OnLoadLevel()
+        private void InitLevelCredits()
         {
             if (LevelManager.Instance?._currentLevel == null)
             {

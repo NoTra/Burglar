@@ -1,13 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Ink.Runtime;
 using TMPro;
-using UnityEngine.Rendering;
 
 namespace burglar.managers
 {
+    [Serializable]
+    public class Emotion
+    {
+        public string emotion;
+        public Sprite sprite;
+    }
+    
     public class DialogManager : MonoBehaviour
     {
         public static DialogManager Instance { get; private set; }
@@ -17,6 +24,7 @@ namespace burglar.managers
         public GameObject CustomButton;
         public GameObject AnswerContainer;
         public GameObject WaitingForContinueButton;
+        public Image CharacterImage;
         public bool isTalking = false;
 
         Text nametag;
@@ -41,6 +49,10 @@ namespace burglar.managers
         private Coroutine _advanceDialogueCoroutine;
         private Coroutine _slideInCoroutine;
         private Coroutine _advanceFromDecisionCoroutine;
+        
+        public List<Emotion> AvailableEmotions;
+        
+        public string currentEmotion = "happy";
 
         private void Awake()
         {
@@ -199,7 +211,7 @@ namespace burglar.managers
             
             var currentSentence = _story.Continue();
 
-            // ParseTags();
+            ParseTags();
             StopAllDialogCoroutines();
 
             // Store typeSentence coroutine in _dialogTypingCoroutine and yield return at the same time
@@ -319,19 +331,30 @@ namespace burglar.managers
         void ParseTags()
         {
             tags = _story.currentTags;
-            foreach (string t in tags)
+            
+            var emotion = tags.Find(tag => tag.StartsWith("emotion:"));
+            if (emotion != null)
             {
-                var prefix = t.Split(' ')[0];
-                var param = t.Split(' ')[1];
+                SetEmotion(emotion);
+            }
+        }
 
-                switch (prefix.ToLower())
+        private void SetEmotion(string emotion)
+        {
+            var newEmotion = emotion.Split(':')[1];
+            
+            Debug.Log("SetEmotion: " + newEmotion);
+            
+            if (currentEmotion != newEmotion)
+            {
+                if (AvailableEmotions.Find(e => e.emotion == newEmotion) is { } foundEmotion)
                 {
-                    case "anim":
-                        SetAnimation(param);
-                        break;
-                    case "color":
-                        SetTextColor(param);
-                        break;
+                    currentEmotion = newEmotion;
+                    CharacterImage.sprite = foundEmotion.sprite;
+                }
+                else
+                {
+                    Debug.Log($"Emotion {newEmotion} not found in the list of available emotions");
                 }
             }
         }
@@ -368,7 +391,7 @@ namespace burglar.managers
         {
             nametag = TextBox.transform.GetChild(0).GetComponent<Text>();
             message = TextBox.transform.GetChild(1).GetComponent<Text>();
-            tags = new List<string>();
+            // tags = new List<string>();
             choiceSelected = null;
             
             WaitingForContinueButton.SetActive(false);
@@ -386,7 +409,6 @@ namespace burglar.managers
             {
                 yield return null;
             }
-            
         }
     }
 }

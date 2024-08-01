@@ -1,15 +1,21 @@
 using UnityEngine;
 using burglar.managers;
+using TMPro;
+using UnityEngine.Playables;
+using UnityEngine.UI;
 
-namespace burglar
+namespace burglar.utility
 {
     public class TimelineFunctions : MonoBehaviour
     {
+        [SerializeField] private TextMeshProUGUI _title;
+        [SerializeField] private Image _radial;
+
         public void DeactivatePlayerInput()
         {
             GameManager.Instance.player._playerInput.DeactivateInput();
         }
-        
+
         public void ActivatePlayerInput()
         {
             GameManager.Instance.player._playerInput.ActivateInput();
@@ -27,7 +33,7 @@ namespace burglar
         
         public void ToggleHUD()
         {
-            UIManager.Instance.ToggleHudVisiblity();
+            UIManager.Instance.ToggleHudVisibility();
         }
     }
 }

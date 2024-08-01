@@ -32,12 +32,23 @@ namespace burglar.managers
         [SerializeField] private Tuto _currentTuto;
         [HideInInspector] public Tuto _previousTuto;
         [SerializeField] private GameObject _playerPrefab;
-        [HideInInspector]public Player _player;
+        [HideInInspector] public Player _player;
         public CinemachineFreeLook _freeLook;
 
         private PlayerInput _playerInput;
 
         public Story story;
+
+        private void OnEnable()
+        {
+            Debug.Log("OnEnable (TutoManager)");
+            EventManager.CinematicEnd += StartTuto;
+        }
+        
+        private void OnDisable()
+        {
+            EventManager.CinematicEnd -= StartTuto;
+        }
 
         public Story GetStory() { return story; }
         
@@ -50,6 +61,7 @@ namespace burglar.managers
 
         private void Start()
         {
+            Debug.Log("OnStart (TutoManager)");
             _player = GameManager.Instance.player;
             _playerInput = _player._playerInput;
         }
@@ -64,8 +76,17 @@ namespace burglar.managers
                 
                 LoadTuto(_currentTuto);
                 
-                UIManager.Instance.ToggleHudVisiblity();
-
+                UIManager.Instance.UITitle.SetActive(true);
+                // Instantiate(UIManager.Instance.titlePrefab, UIManager.Instance.GetCanvasGO().transform);
+                
+                if (_player.transform.position != _currentTuto.GetSpawnPoint().transform.position)
+                {
+                    StartCoroutine(Tuto.TeleportPlayerToNewPosition(_currentTuto.GetSpawnPoint().transform.position));
+                    _currentTuto.OnEnter();
+                }
+                
+                UIManager.Instance.ToggleHudVisibility();
+                
                 StartCoroutine(LaunchTuto(1f));
             } catch (Exception ex)
             {

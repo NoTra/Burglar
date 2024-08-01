@@ -24,12 +24,14 @@ namespace burglar.environment
         {
             EventManager.SuccessSafeCrack += (safe) => OnSuccessSafeCrack(safe);
             EventManager.FailSafeCrack += (safe) => OnFailSafeCrack(safe);
+            EventManager.CloseSafe += ClearSelectedCombination;
         }
 
         private void OnDisable()
         {
             EventManager.SuccessSafeCrack -= (safe) => OnSuccessSafeCrack(safe);
             EventManager.FailSafeCrack -= (safe) => OnFailSafeCrack(safe);
+            EventManager.CloseSafe -= ClearSelectedCombination;
         }
 
         private void Start()
@@ -42,6 +44,11 @@ namespace burglar.environment
         public void SetLevel(int newLevel)
         {
             _level = newLevel;
+        }
+        
+        public void ClearSelectedCombination()
+        {
+            _selectedCombination.Clear();
         }
 
         private void GenerateMatrix()

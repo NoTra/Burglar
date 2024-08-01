@@ -29,6 +29,17 @@ namespace burglar.agent
             _agent = GetComponent<Agent>();
         }
 
+        public Vector3 GetSuspiciousPoint()
+        {
+            return _suspiciousPoint;
+        }
+        
+        public void ResetSuspiciousPoint()
+        {
+            _suspiciousPoint = Vector3.zero;
+            GoToNextWaypoint();
+        }
+        
         private void Start()
         {
             var destinationGO = _waypoints[_currentWaypointIndex];
@@ -48,6 +59,7 @@ namespace burglar.agent
 
         private void CheckSuspiciousPoint(Vector3 point, bool checkDistance = true)
         {
+            Debug.Log("CHECK SUSPICIOUS POINT : " + gameObject.name);
             // Check if the point is in range of agent's earing radius
             if (checkDistance && Vector3.Distance(transform.position, point) > _agent._earingDistance)
             {

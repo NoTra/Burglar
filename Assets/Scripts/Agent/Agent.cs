@@ -34,7 +34,6 @@ namespace burglar.agent
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _patrol = GetComponent<Patrol>();
         }
-        
 
         private void Start()
         {
@@ -58,6 +57,11 @@ namespace burglar.agent
             EventManager.DialogEnd -= OnDialogEnd;
         }
 
+        public Patrol GetPatrol()
+        {
+            return _patrol;
+        }
+        
         private void OnDialogEnd()
         {
             // "unpause" the agent
@@ -110,7 +114,6 @@ namespace burglar.agent
                     // Increase m_Speed of _navMeshAgent
                     _navMeshAgent.speed = _chaseSpeed;
                     _patrol._searchTimeBetweenPoints = 1f;
-
 
                     _animator.SetBool("isRunning", true);
                     _animator.SetBool("isWalking", false);

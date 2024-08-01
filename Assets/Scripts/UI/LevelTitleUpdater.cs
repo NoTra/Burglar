@@ -11,12 +11,12 @@ namespace burglar
     {
         private void OnEnable()
         {
-            EventManager.LoadLevel += UpdateLevelTitle;
+            EventManager.LoadLevelStart += UpdateLevelTitle;
         }
         
         private void OnDisable()
         {
-            EventManager.LoadLevel -= UpdateLevelTitle;
+            EventManager.LoadLevelStart -= UpdateLevelTitle;
         }
 
         // Start is called before the first frame update

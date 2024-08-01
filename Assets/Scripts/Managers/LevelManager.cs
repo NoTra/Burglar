@@ -51,29 +51,31 @@ namespace burglar.managers
 
         public void LoadScene(string sceneName)
         {
+            Debug.Log("Play transition...");
             // Play transition (effect & sound)
-            StartCoroutine(PlayTransition(sceneName));
+            StartCoroutine(PlayTransitionAndLoadLevel(sceneName));
+        }
 
+        private IEnumerator PlayTransitionAndLoadLevel(string sceneName)
+        {
             var level = FindLevelBySceneName(sceneName);
             
-            if (level == null)
+            if (!level)
             {
                 Debug.LogError("Level not found for scene name : " + sceneName);
-                return;
+                yield break;
             }
             
             // Change current level index
             _currentLevelIndex = level.levelIndex;
             _currentLevel = level;
             
-            Debug.Log("Level loaded : ");
-            Debug.Log(level.levelName);
-            Debug.Log(level.sceneName);
-            Debug.Log(level.minimumCredits);
-            Debug.Log(level.maximumCredits);
-
             // Trigger the event OnLoadLevel
-            EventManager.OnLoadLevel();
+            EventManager.OnLoadLevelStart();
+            
+            yield return StartCoroutine(PlayTransition(sceneName));
+            
+            EventManager.OnLoadLevelEnd();
         }
 
         private IEnumerator PlayTransition(string sceneName)

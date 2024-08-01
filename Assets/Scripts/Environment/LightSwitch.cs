@@ -10,6 +10,7 @@ namespace burglar.environment
         private Color _materialColor;
         [SerializeField] private AnimationCurve colorChangeCurve;
         public List<Light> _lights;
+        [SerializeField] private bool forceAlert = true;
 
         private void Awake()
         {
@@ -23,6 +24,13 @@ namespace burglar.environment
             audioManager.PlaySFX(audioManager.soundLightSwitch);
             
             ToggleLightSwitch();
+
+            if (gameObject)
+            {
+                var checkDistance = !forceAlert;
+                EventManager.OnSoundGenerated(gameObject.transform.position, 0.1f, checkDistance);                
+            }
+            
         }
 
         protected override void OnTriggerExit(Collider other)

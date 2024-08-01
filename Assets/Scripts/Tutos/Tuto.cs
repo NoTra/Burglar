@@ -39,6 +39,7 @@ namespace burglar.tutos
         {
             TutoManager.Instance.GetCurrentTuto().OnExit();
             
+            var previousTuto = TutoManager.Instance.GetCurrentTuto();
             var nextTuto = GetNextTuto();
             
             // Launch first dialog
@@ -49,20 +50,20 @@ namespace burglar.tutos
             TutoManager.Instance.LoadTuto(nextTuto);
             
             // Teleport the player
-            yield return StartCoroutine(TeleportPlayerToNewPosition());
+            var newPosition = TutoManager.Instance.GetCurrentTuto()._spawnPoint.transform.position;
+            yield return StartCoroutine(TeleportPlayerToNewPosition(newPosition));
             
             nextTuto.OnEnter();
             
             // TutoManager.Instance._previousTuto.gameObject.SetActive(false);
             
-            // Wait 1s
-            yield return new WaitForSeconds(1f);
-            
             // Launch second dialog
-            StartCoroutine(_startDialogEnumerator);
+            yield return StartCoroutine(DialogManager.Instance.StartDialogAndWait());
+            
+            previousTuto.gameObject.SetActive(false);
         }
 
-        private static IEnumerator TeleportPlayerToNewPosition()
+        public static IEnumerator TeleportPlayerToNewPosition(Vector3 newPosition)
         {
             var facingTop = Quaternion.Euler(90, 0, 0);
             // Instantiate TutoManager.Instance.teleportEffectPrefab at player position and rotation to have Y up and position on the ground
@@ -72,7 +73,7 @@ namespace burglar.tutos
                 facingTop
             );
             // Bump up the scale of the teleport effect
-            effect.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            effect.transform.localScale = new Vector3(2f, 2f, 2f);
             
             // Make player disappear
             TutoManager.Instance._player.gameObject.SetActive(false);
@@ -85,10 +86,10 @@ namespace burglar.tutos
             tpSound.Stop();
             
             // Wait 1s
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
             
             // Move him to the new position
-            TutoManager.Instance._player.transform.position = TutoManager.Instance.GetCurrentTuto()._spawnPoint.transform.position;
+            TutoManager.Instance._player.transform.position = newPosition;
             
             // Destroy first teleport fx
             Destroy(effect);
@@ -101,7 +102,7 @@ namespace burglar.tutos
             // Instantiate second teleport fx
             effect = Instantiate(TutoManager.Instance.teleportEffectPrefab, TutoManager.Instance._player.transform.position, facingTop);
             // Bump up the scale of the teleport effect
-            effect.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            effect.transform.localScale = new Vector3(2f, 2f, 2f);
             
             tpSound = AudioManager.Instance.PlaySFX(AudioManager.Instance.soundTeleportOut);
             

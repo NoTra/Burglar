@@ -48,6 +48,9 @@ namespace burglar.player
             
             EventManager.DialogStart += OnDialogStart;
             EventManager.DialogEnd += OnDialogEnd;
+            
+            EventManager.CinematicStart += _playerInput.DeactivateInput;
+            EventManager.CinematicEnd += _playerInput.ActivateInput;
         }
 
         private void OnDisable()
@@ -63,6 +66,9 @@ namespace burglar.player
             
             EventManager.DialogStart -= OnDialogStart;
             EventManager.DialogEnd -= OnDialogEnd;
+            
+            EventManager.CinematicStart -= _playerInput.DeactivateInput;
+            EventManager.CinematicEnd -= _playerInput.ActivateInput;
         }
 
         private void OnDialogStart()

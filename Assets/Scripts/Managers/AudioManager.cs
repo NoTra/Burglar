@@ -101,7 +101,7 @@ namespace burglar.managers
             EventManager.ChangeGameState += OnChangeGameState;
             EventManager.SuccessSafeCrack += OnSuccessSafeCrack;
             EventManager.FailSafeCrack += OnFailSafeCrack;
-            EventManager.LoadLevel += PlayLevelMusic;
+            EventManager.LoadLevelStart += PlayLevelMusic;
             EventManager.ObjectiveCompleted += OnObjectiveCompleted;
         }
 
@@ -111,7 +111,7 @@ namespace burglar.managers
             EventManager.ChangeGameState -= OnChangeGameState;
             EventManager.SuccessSafeCrack -= OnSuccessSafeCrack;
             EventManager.FailSafeCrack -= OnFailSafeCrack;
-            EventManager.LoadLevel -= PlayLevelMusic;
+            EventManager.LoadLevelStart -= PlayLevelMusic;
             EventManager.ObjectiveCompleted -= OnObjectiveCompleted;
         }
         

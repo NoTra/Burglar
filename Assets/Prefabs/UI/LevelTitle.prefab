@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -205}
-  m_SizeDelta: {x: 1456.6819, y: 410}
+  m_SizeDelta: {x: 0, y: 410}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7478379833780573936
 CanvasRenderer:
@@ -131,10 +131,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1857622494924663271}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -142.19006}
-  m_SizeDelta: {x: 463.3181, y: 50}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -201}
+  m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3086206515015238271
 CanvasRenderer:
@@ -277,6 +277,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1857622494924663271}
   - component: {fileID: 1598117032366108081}
+  - component: {fileID: 3838087518110950901}
+  - component: {fileID: 3946439457999655842}
   m_Layer: 0
   m_Name: LevelTitle
   m_TagString: Untagged
@@ -300,10 +302,10 @@ RectTransform:
   - {fileID: 493137073530807778}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 463.3181, y: 410}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!320 &1598117032366108081
 PlayableDirector:
@@ -316,10 +318,16 @@ PlayableDirector:
   serializedVersion: 3
   m_PlayableAsset: {fileID: 11400000, guid: b5bc48ce82a039f458d1df86059130cd, type: 2}
   m_InitialState: 1
-  m_WrapMode: 2
+  m_WrapMode: 0
   m_DirectorUpdateMode: 2
   m_InitialTime: 0
   m_SceneBindings:
+  - key: {fileID: 7281733708974955920, guid: 88289e096894eb243843ff7403e1010a, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 3060810179611050629, guid: 88289e096894eb243843ff7403e1010a, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 8890787732401195853, guid: 88289e096894eb243843ff7403e1010a, type: 2}
+    value: {fileID: 0}
   - key: {fileID: -7560198477129598022, guid: b5bc48ce82a039f458d1df86059130cd, type: 2}
     value: {fileID: 537646426253324080}
   - key: {fileID: -1414227285546391520, guid: b5bc48ce82a039f458d1df86059130cd, type: 2}
@@ -330,3 +338,84 @@ PlayableDirector:
     value: {fileID: 5961657763516242228}
   m_ExposedReferences:
     m_References: []
+--- !u!114 &3838087518110950901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1420056125760289942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c50589175594dd244a0edb69129e598e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3946439457999655842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1420056125760289942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 370014bbf619ae84598972d03e50aa9c, type: 2}
+    - {fileID: 11400000, guid: 01f65fd3176b9414193ac59bb49fc864, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3838087518110950901}
+          m_TargetAssemblyTypeName: burglar.TimelineFunctions, Assembly-CSharp
+          m_MethodName: ActivatePlayerInput
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 3838087518110950901}
+          m_TargetAssemblyTypeName: burglar.TimelineFunctions, Assembly-CSharp
+          m_MethodName: ToggleHUD
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3838087518110950901}
+          m_TargetAssemblyTypeName: burglar.TimelineFunctions, Assembly-CSharp
+          m_MethodName: HideHUD
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 3838087518110950901}
+          m_TargetAssemblyTypeName: burglar.TimelineFunctions, Assembly-CSharp
+          m_MethodName: DeactivatePlayerInput
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2

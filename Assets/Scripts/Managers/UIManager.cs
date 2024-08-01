@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using burglar.environment;
 using burglar.UI;
-using static burglar.managers.EventManager;
 
 namespace burglar.managers
 {
@@ -27,6 +26,7 @@ namespace burglar.managers
         [SerializeField] private GameObject UIInteractIcon;
         [SerializeField] private TextMeshProUGUI UICreditTMP;
         public CreditManager creditManager;
+        public GameObject UITitle;
         
         [Header("Objectives")]
         public GameObject UIObjective;
@@ -85,41 +85,60 @@ namespace burglar.managers
 
         private void OnEnable()
         {
-            OpenSafe += (safe) => OpenSafeUI(safe);
-            SuccessSafeCrack += (safe) => OnSuccessSafeCrack(safe);
-            FailSafeCrack += (safe) => OnFailSafeCrack(safe);
-            EnterInteractibleArea += (interactible) => OnEnterInteractibleArea(interactible);
-            Interact += (interactible) => OnInteract(interactible);
-            ExitInteractibleArea += (interactible) => OnExitInteractibleArea(interactible);
-            TogglePause += () => OnTogglePause();
+            EventManager.OpenSafe += (safe) => OpenSafeUI(safe);
+            EventManager.SuccessSafeCrack += (safe) => OnSuccessSafeCrack(safe);
+            EventManager.FailSafeCrack += (safe) => OnFailSafeCrack(safe);
+            EventManager.EnterInteractibleArea += (interactible) => OnEnterInteractibleArea(interactible);
+            EventManager.Interact += (interactible) => OnInteract(interactible);
+            EventManager.ExitInteractibleArea += (interactible) => OnExitInteractibleArea(interactible);
+            EventManager.TogglePause += () => OnTogglePause();
+            EventManager.CinematicEnd += ShowTitle;
         }
 
         private void OnDisable()
         {
-            OpenSafe -= (safe) => OpenSafeUI(safe);
-            SuccessSafeCrack -= (safe) => OnSuccessSafeCrack(safe);
-            FailSafeCrack -= (safe) => OnFailSafeCrack(safe);
-            EnterInteractibleArea -= (interactible) => OnEnterInteractibleArea(interactible);
-            Interact -= (interactible) => OnInteract(interactible);
-            ExitInteractibleArea -= (interactible) => OnExitInteractibleArea(interactible);
-            TogglePause -= () => OnTogglePause();
+            EventManager.OpenSafe -= (safe) => OpenSafeUI(safe);
+            EventManager.SuccessSafeCrack -= (safe) => OnSuccessSafeCrack(safe);
+            EventManager.FailSafeCrack -= (safe) => OnFailSafeCrack(safe);
+            EventManager.EnterInteractibleArea -= (interactible) => OnEnterInteractibleArea(interactible);
+            EventManager.Interact -= (interactible) => OnInteract(interactible);
+            EventManager.ExitInteractibleArea -= (interactible) => OnExitInteractibleArea(interactible);
+            EventManager.TogglePause -= () => OnTogglePause();
+            EventManager.CinematicEnd -= ShowTitle;
         }
 
+        private void ShowTitle()
+        {
+            Debug.Log("ShowTitle called !");
+            // StartCoroutine(WaitAndShowTitle(1.3f));
+            // UITitle.SetActive(true);
+            ToggleHudVisibility();
+        }
+        
+        // private IEnumerator WaitAndShowTitle(float durationInSeconds)
+        // {
+        //     Debug.Log("UITitle.SetActive(true);");
+        //     yield return new WaitForSeconds(durationInSeconds);
+        //     
+        // }
+        
         public void HideHud()
         {
             HUD.SetActive(false);
         }
         
-        public void ToggleHudVisiblity()
+        public void ToggleHudVisibility()
         {
             var go = HUD.gameObject;
             // Make the gameObject appear slowly or disappear slowly
             if (go.activeSelf)
             {
+                Debug.Log("FadeOut");
                 StartCoroutine(FadeOut(go));
             }
             else
             {
+                Debug.Log("FadeIn");
                 StartCoroutine(FadeIn(go));
             }
         }
@@ -297,7 +316,9 @@ namespace burglar.managers
         public void CloseSafeUI()
         {
             UISafePanel.SetActive(false);
-
+            
+            EventManager.OnCloseSafe();
+            
             Time.timeScale = 1;
         }
 
@@ -343,5 +364,10 @@ namespace burglar.managers
         }
         
         #endregion
+
+        public GameObject GetCanvasGO()
+        {
+            return canvas;
+        }
     }
 }

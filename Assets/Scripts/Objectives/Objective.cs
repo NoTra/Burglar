@@ -51,6 +51,8 @@ namespace burglar
             
             _objectiveToggle.isOn = value.Invoke();
             _objectiveCompleted = true;
+            
+            if (_objectiveToggle.isActiveAndEnabled == false) return;
 
             StartCoroutine(AnimateCheckmarkCoroutine(checkmark));
         }

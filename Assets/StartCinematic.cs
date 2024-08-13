@@ -1,4 +1,5 @@
 using System;
+using burglar.managers;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -6,40 +7,40 @@ namespace burglar
 {
     public class StartCinematic : MonoBehaviour
     {
-        [SerializeField] PlayableDirector playableDirector;
-
-
         private void OnEnable()
         {
-            playableDirector.stopped += OnPlayableDirectorStopped;
-        }
-        
-        private void OnDisable()
-        {
-            playableDirector.stopped -= OnPlayableDirectorStopped;
+            EventManager.CinematicEnd += LoadIntro;
+            // EventManager.LoadLevelStart += LoadCinematic;
         }
 
-        private void Start()
+        private void LoadCinematic()
         {
-            if (playableDirector)
+            var currentLevel = LevelManager.Instance._currentLevel;
+            if (currentLevel.startCinematic)
             {
-                playableDirector.Play();
+                Debug.Log("LaunchCinematic with startCinematic");
+                CinematicManager.Instance.LaunchCinematic(currentLevel.startCinematic);
             }
         }
 
-        private void OnPlayableDirectorStopped(PlayableDirector obj)
+        private void OnDisable()
         {
-            // Load main scene
-            UnityEngine.SceneManagement.SceneManager.LoadScene("main");
+            EventManager.CinematicEnd -= LoadIntro;
         }
-        
+
         // If player skips the cinematic by pressing esc key
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                UnityEngine.SceneManagement.SceneManager.LoadScene("main");
+                LoadIntro();
             }
+        }
+
+        private void LoadIntro()
+        {
+            LevelManager.Instance.LoadScene("intro");
+            // UnityEngine.SceneManagement.SceneManager.LoadScene("intro");
         }
     }
 }

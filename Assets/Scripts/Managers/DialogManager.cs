@@ -94,6 +94,8 @@ namespace burglar.managers
 
         private IEnumerator SlideIn()
         {
+            Debug.Log("SlideIn !");
+            
             var elapsedTime = 0f;
             var startingPosition = DialogOffScreenPosition;
 
@@ -114,6 +116,7 @@ namespace burglar.managers
 
         public IEnumerator StartDialog()
         {
+            Debug.Log("StartDialog !");
             // Move DialogPanel out of the screen
             if (DialogPanel is null) yield break;
             

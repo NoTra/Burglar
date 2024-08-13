@@ -57,6 +57,8 @@ namespace burglar
         {
             if (LevelManager.Instance?._currentLevel == null)
             {
+                // We hide the credit UI if the current level is null
+                gameObject.SetActive(false);
                 Debug.LogError("Current level is null");
                 return;
             }
@@ -75,6 +77,11 @@ namespace burglar
         
         private void InitCredit()
         {
+            if (minimumCredits == 0 && maximumCredits == 0)
+            {
+                return;
+            }
+            
             _creditSlider.maxValue = maximumCredits;
             _creditSlider.minValue = 0;
             _creditSlider.value = 0;

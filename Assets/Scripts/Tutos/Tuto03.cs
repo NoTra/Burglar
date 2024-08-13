@@ -4,6 +4,8 @@ using burglar.managers;
 using burglar.persistence;
 using Ink.Runtime;
 using System.Collections;
+using Cinemachine;
+using EasyTransition;
 
 namespace burglar.tutos
 {
@@ -128,6 +130,8 @@ namespace burglar.tutos
             _userWaypoint01.gameObject.SetActive(true);
             
             yield return StartCoroutine(DialogManager.Instance.StartDialogAndWait());
+            
+            TransitionManager.Instance().Transition(UIManager.Instance.caughtTransition, 0f);
 
             yield return StartCoroutine(TeleportPlayerToNewPosition(GetSpawnPoint().transform.position));
             
@@ -168,7 +172,10 @@ namespace burglar.tutos
             var dialogManager = DialogManager.Instance;
             yield return StartCoroutine(dialogManager.StartDialogAndWait());
 
+            Debug.Log("Launch NEW GAME !");
             SaveLoadSystem.Instance.NewGame();
+            
+            LevelManager.Instance.LoadScene("level1");
         }
     }
 }

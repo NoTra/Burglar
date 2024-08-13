@@ -59,7 +59,12 @@ namespace burglar.agent
 
         private void CheckSuspiciousPoint(Vector3 point, bool checkDistance = true)
         {
-            Debug.Log("CHECK SUSPICIOUS POINT : " + gameObject.name);
+            // if object is destroyed, we don't want to go to it
+            if (gameObject == null)
+            {
+                return;
+            }
+            
             // Check if the point is in range of agent's earing radius
             if (checkDistance && Vector3.Distance(transform.position, point) > _agent._earingDistance)
             {

@@ -7,7 +7,6 @@ using System.Collections;
 using burglar.tutos;
 using Cinemachine;
 
-
 namespace burglar.managers
 {
     public class TutoManager : MonoBehaviour
@@ -36,12 +35,13 @@ namespace burglar.managers
         public CinemachineFreeLook _freeLook;
 
         private PlayerInput _playerInput;
+        
+        private bool _tutoLoaded = false;
 
         public Story story;
 
         private void OnEnable()
         {
-            Debug.Log("OnEnable (TutoManager)");
             EventManager.CinematicEnd += StartTuto;
         }
         
@@ -61,18 +61,19 @@ namespace burglar.managers
 
         private void Start()
         {
-            Debug.Log("OnStart (TutoManager)");
             _player = GameManager.Instance.player;
             _playerInput = _player._playerInput;
         }
 
         public void StartTuto()
         {
-            Debug.Log("StartTuto");
+            if (_tutoLoaded) return;
             
             try
             {
                 if (_currentTuto == null) return;
+
+                _tutoLoaded = true;
                 
                 LoadTuto(_currentTuto);
                 
@@ -110,6 +111,8 @@ namespace burglar.managers
             yield return StartCoroutine(DialogManager.Instance.StartDialog());
             
             _currentTuto.OnEnter();
+            
+            _tutoLoaded = false;
         }
 
         public void LoadTuto(Tuto currentTuto)

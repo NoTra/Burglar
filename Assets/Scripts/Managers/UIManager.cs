@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using burglar.environment;
 using burglar.UI;
+using EasyTransition;
 
 namespace burglar.managers
 {
@@ -55,6 +56,12 @@ namespace burglar.managers
         public Color _disabledColor = new(242, 242, 242, 1);
         public Color _disabledBGColor = new(242, 242, 242, 1);
 
+        [Header("Transitions")]
+        public TransitionSettings caughtTransition;
+        public TransitionSettings levelTransition;
+        public TransitionSettings fadeTransition;
+        
+        
         // Singleton
         private static UIManager instance = null;
         public static UIManager Instance => instance;
@@ -133,17 +140,15 @@ namespace burglar.managers
             // Make the gameObject appear slowly or disappear slowly
             if (go.activeSelf)
             {
-                Debug.Log("FadeOut");
-                StartCoroutine(FadeOut(go));
+                StartCoroutine(FadeOutHud(go));
             }
             else
             {
-                Debug.Log("FadeIn");
-                StartCoroutine(FadeIn(go));
+                StartCoroutine(FadeInHud(go));
             }
         }
         
-        private IEnumerator FadeOut(GameObject go)
+        private IEnumerator FadeOutHud(GameObject go)
         {
             // Get the CanvasGroup component of the gameObject
             var canvasGroup = go.GetComponent<CanvasGroup>();
@@ -162,7 +167,7 @@ namespace burglar.managers
             go.SetActive(false);
         }
         
-        private IEnumerator FadeIn(GameObject go)
+        private IEnumerator FadeInHud(GameObject go)
         {
             // Get the CanvasGroup component of the gameObject
             var canvasGroup = go.GetComponent<CanvasGroup>();

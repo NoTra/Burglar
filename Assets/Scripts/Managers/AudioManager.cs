@@ -285,9 +285,12 @@ namespace burglar.managers
                 audioSourceFree.volume += Time.deltaTime / fadeTime;
                 yield return null;
             }
+            
+            // Stop the audio source playing
+            audioSourcePlaying.Stop();
         }
         
-        private IEnumerator FadeOut(AudioSource audioSource, float fadeTime)
+        public IEnumerator FadeOut(AudioSource audioSource, float fadeTime)
         {
             // Fade out the audio source
             float startVolume = audioSource.volume;
@@ -297,6 +300,8 @@ namespace burglar.managers
                 audioSource.volume -= startVolume * Time.deltaTime / fadeTime;
                 yield return null;
             }
+            
+            audioSource.Stop();
         }
         
         private IEnumerator FadeIn(AudioSource audioSource, AudioClip music, float fadeTime)
@@ -313,6 +318,8 @@ namespace burglar.managers
                 audioSource.volume += Time.deltaTime / fadeTime;
                 yield return null;
             }
+            
+            audioSource.volume = audioSourceTarget;
         }
         
         private void OnObjectiveCompleted(Objective objective)

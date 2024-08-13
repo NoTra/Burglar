@@ -60,7 +60,7 @@ namespace burglar.managers
         {
             var level = FindLevelBySceneName(sceneName);
             
-            if (!level)
+            if (!level && sceneName != "shop")
             {
                 Debug.LogError("Level not found for scene name : " + sceneName);
                 yield break;
@@ -81,13 +81,16 @@ namespace burglar.managers
         private IEnumerator PlayTransition(string sceneName)
         {
             // Play audio for 1.3s
-            var transitionAudioSource = AudioManager.Instance.PlaySFX(AudioManager.Instance.soundTransition);
+            // var transitionAudioSource = AudioManager.Instance.PlaySFX(AudioManager.Instance.soundTransition);
             
-            TransitionManager.Instance().Transition(sceneName, transition, 0f);
+            Debug.Log("Transition : " + UIManager.Instance.levelTransition.name);
             
-            yield return new WaitForSeconds(2.2f);
+            TransitionManager.Instance().Transition(sceneName, UIManager.Instance.levelTransition, 0f);
             
-            transitionAudioSource.Stop();
+            // yield return new WaitForSeconds(2.2f);
+            
+            // transitionAudioSource.Stop();
+            yield return null;
         }
 
         private LevelSO FindLevelBySceneName(string sceneName)
@@ -100,7 +103,12 @@ namespace burglar.managers
             // Change music for shop music
             AudioManager.Instance.PlayMusic(AudioManager.Instance.musicShop, false);
             
-            LoadScene("shop");
+            // Trigger the event OnLoadLevel
+            // EventManager.OnLoadLevelStart();
+            
+            StartCoroutine(PlayTransition("shop"));
+            
+            // EventManager.OnLoadLevelEnd();
         }
 
         public void LoadNextLevel()

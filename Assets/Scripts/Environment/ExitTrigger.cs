@@ -17,6 +17,7 @@ namespace burglar.environment
         
         [SerializeField] private Transform playerStartLocation;
         private bool _playerMoving = false;
+        private static readonly int IsWalking = Animator.StringToHash("isWalking");
 
         private void OnTriggerEnter(Collider other)
         {
@@ -38,8 +39,17 @@ namespace burglar.environment
             }
             else
             {
-                // Load ShopLevel
-                LevelManager.Instance.LoadShop();
+                // If current level is the last level
+                if (LevelManager.Instance._currentLevelIndex == LevelManager.Instance.levels.Count - 1)
+                {
+                    // Load EndGame
+                    // LevelManager.Instance.LoadEndGame();
+                }
+                else
+                {
+                    // Load ShopLevel
+                    LevelManager.Instance.LoadShop();
+                }
             }
         }
 
@@ -60,7 +70,7 @@ namespace burglar.environment
             Debug.Log("playerNavmesh.remainingDistance: " + playerNavmesh.remainingDistance);
             GameManager.Instance.playerInput.DeactivateInput();
             
-            GameManager.Instance.player.PlayerAnimator.SetBool("isWalking", true);
+            GameManager.Instance.player.PlayerAnimator.SetBool(IsWalking, true);
             _playerMoving = true;
             yield return new WaitUntil(() =>
             {
@@ -68,12 +78,10 @@ namespace burglar.environment
                 return playerNavmesh.remainingDistance < playerNavmesh.stoppingDistance;
             });
             _playerMoving = false;
-            GameManager.Instance.player.PlayerAnimator.SetBool("isWalking", false);
+            GameManager.Instance.player.PlayerAnimator.SetBool(IsWalking, false);
             GameManager.Instance.playerInput.ActivateInput();
-            // playerCapsuleCollider.enabled = true;
             
             playerNavmesh.ResetPath();
-            Debug.Log("End (StartDialogAndForcePlayerToWalkTo)");
             
             var dialogManager = DialogManager.Instance;
             yield return StartCoroutine(dialogManager.StartDialogAndWait());

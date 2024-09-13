@@ -1,7 +1,8 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace burglar
 {
@@ -9,6 +10,8 @@ namespace burglar
     {
         [SerializeField] private Toggle _toggleFullscreen;
         [SerializeField] private TMP_Dropdown _resolutionDropdown;
+
+        private List<Resolution> _resolutions;
         
         public Button _backButton;
 
@@ -22,8 +25,14 @@ namespace burglar
             if (PlayerPrefs.HasKey("resolution"))
             {
                 var resolutionIndex = PlayerPrefs.GetInt("resolution");
-                var resolutions = Screen.resolutions;
-                Screen.SetResolution(resolutions[resolutionIndex].width, resolutions[resolutionIndex].height, Screen.fullScreen);
+                
+                _resolutions = Screen.resolutions
+                    .Select(res => new Resolution { width = res.width, height = res.height })
+                    .Distinct()
+                    .OrderByDescending(res => res.width * res.height)
+                    .ToList();
+                
+                Screen.SetResolution(_resolutions[resolutionIndex].width, _resolutions[resolutionIndex].height, Screen.fullScreen);
             }
         }
 
@@ -44,8 +53,7 @@ namespace burglar
             
             _resolutionDropdown.onValueChanged.AddListener((int value) =>
             {
-                var resolutions = Screen.resolutions;
-                Screen.SetResolution(resolutions[value].width, resolutions[value].height, Screen.fullScreen);
+                Screen.SetResolution(_resolutions[value].width, _resolutions[value].height, Screen.fullScreen);
                 
                 // Save the value in player prefs
                 PlayerPrefs.SetInt("resolution", value);
@@ -55,22 +63,25 @@ namespace burglar
         private void InitResolutionDropdownOptions()
         {
             _resolutionDropdown.ClearOptions();
-            
-            var resolutions = Screen.resolutions;
+
             var options = new System.Collections.Generic.List<string>();
             var currentResolution = Screen.currentResolution;
             
-            foreach (var resolution in resolutions)
+            var currentIndex = 0;
+            for (var i = 0; i < _resolutions.Count; i++)
             {
+                var resolution = _resolutions[i];
                 options.Add(resolution.width + "x" + resolution.height);
-                
+
                 if (resolution.width == currentResolution.width && resolution.height == currentResolution.height)
                 {
-                    _resolutionDropdown.value = resolutions.Length - 1;
+                    currentIndex = i;
                 }
             }
-            
+
             _resolutionDropdown.AddOptions(options);
+            _resolutionDropdown.value = currentIndex;
+            _resolutionDropdown.RefreshShownValue(); // Rafraîchir la valeur sélectionnée
         }
     }
 }

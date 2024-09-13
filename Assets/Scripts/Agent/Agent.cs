@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering.Universal;
@@ -12,7 +13,8 @@ namespace burglar.agent
             Patrol,
             Suspicious,
             Search,
-            Chase
+            Chase,
+            PlayerCaught
         }
 
         private State _currentState;
@@ -28,11 +30,21 @@ namespace burglar.agent
         [SerializeField] private float _chaseSpeed = 7f;
 
         private Patrol _patrol;
+        
+        private Vector3 _agentStartPosition;
+        private Vector3 _agentStartRotation;
+        
+        private bool _freezeAgent = false;
+        private static readonly int IsWalking = Animator.StringToHash("isWalking");
+        private static readonly int IsRunning = Animator.StringToHash("isRunning");
 
         private void Awake()
         {
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _patrol = GetComponent<Patrol>();
+            
+            _agentStartPosition = transform.position;
+            _agentStartRotation = transform.eulerAngles;
         }
 
         private void Start()
@@ -45,16 +57,23 @@ namespace burglar.agent
 
         private void OnEnable()
         {
-            EventManager.ChangeGameState += (state) => OnChangeGameState(state);
+            EventManager.ChangeGameState += OnChangeGameState;
             EventManager.DialogStart += OnDialogStart;
             EventManager.DialogEnd += OnDialogEnd;
+            EventManager.PlayerCaught += OnPlayerCaught;
         }
 
         private void OnDisable()
         {
-            EventManager.ChangeGameState -= (state) => OnChangeGameState(state);
+            EventManager.ChangeGameState -= OnChangeGameState;
             EventManager.DialogStart -= OnDialogStart;
             EventManager.DialogEnd -= OnDialogEnd;
+            EventManager.PlayerCaught -= OnPlayerCaught;
+        }
+        
+        private void OnPlayerCaught(GameObject arg0)
+        {
+            ChangeState(State.PlayerCaught);
         }
 
         public Patrol GetPatrol()
@@ -91,22 +110,34 @@ namespace burglar.agent
 
         public void ChangeState(State newState)
         {
+            if (_currentState == newState)
+            {
+                return;
+            }
+            
             _currentState = newState;
+            
+            Debug.Log("Agent state changed to " + _currentState);
 
             switch(_currentState)
             {
                 case State.Patrol:
+                    _freezeAgent = false;
                     _suspiciousIcon.SetActive(false);
                     _navMeshAgent.speed = _speed;
                     _patrol._searchTimeBetweenPoints = 2f;
 
-                    _animator.SetBool("isWalking", true);
-                    _animator.SetBool("isRunning", false);
+                    _animator.SetBool(IsWalking, true);
+                    _animator.SetBool(IsRunning, false);
+                    
+                    _patrol.ResumePatrol();
                     break;
                 case State.Suspicious:
+                    _freezeAgent = false;
                     _suspiciousIcon.SetActive(true);
                     break;
                 case State.Search:
+                    _freezeAgent = false;
                     _suspiciousIcon.SetActive(false);
                     break;
                 case State.Chase:
@@ -115,8 +146,18 @@ namespace burglar.agent
                     _navMeshAgent.speed = _chaseSpeed;
                     _patrol._searchTimeBetweenPoints = 1f;
 
-                    _animator.SetBool("isRunning", true);
-                    _animator.SetBool("isWalking", false);
+                    _animator.SetBool(IsRunning, true);
+                    _animator.SetBool(IsWalking, false);
+                    break;
+                case State.PlayerCaught:
+                    transform.LookAt(GameManager.Instance.player.transform);
+                    _freezeAgent = true;
+                    
+                    _patrol.ResetSuspiciousPoint();
+                    _navMeshAgent.isStopped = true;
+                    _suspiciousIcon.SetActive(true);
+                    _animator.SetBool(IsRunning, false);
+                    _animator.SetBool(IsWalking, false);
                     break;
                 default:
                     break;
@@ -126,6 +167,28 @@ namespace burglar.agent
         public State GetCurrentState()
         {
             return _currentState;
+        }
+
+        public void Reset()
+        {
+            _patrol.ResetSuspiciousPoint();
+            
+            transform.position = _agentStartPosition;
+            transform.eulerAngles = _agentStartRotation;
+            _patrol.SetCurrentWaypointIndex(0);
+            
+            _patrol.ResumePatrol();
+        }
+
+        private void LateUpdate()
+        {
+            // Prevent decalprojector from rotating with the agent on z axis
+            _decalProjector.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+        }
+
+        public bool IsFrozen()
+        {
+            return _freezeAgent;
         }
     }
 }

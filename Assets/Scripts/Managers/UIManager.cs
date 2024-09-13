@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using burglar.environment;
+using burglar.objectives;
 using burglar.UI;
 using EasyTransition;
 
@@ -28,6 +29,7 @@ namespace burglar.managers
         [SerializeField] private TextMeshProUGUI UICreditTMP;
         public CreditManager creditManager;
         public GameObject UITitle;
+        public TextMeshProUGUI UICreditText;
         
         [Header("Objectives")]
         public GameObject UIObjective;
@@ -100,6 +102,58 @@ namespace burglar.managers
             EventManager.ExitInteractibleArea += (interactible) => OnExitInteractibleArea(interactible);
             EventManager.TogglePause += () => OnTogglePause();
             EventManager.CinematicEnd += ShowTitle;
+            EventManager.CreditCollected += (credit) => LaunchCreditCollectedAnimation(credit);
+        }
+
+        public void HideHUD()
+        {
+            HUD.SetActive(false);
+            DialogManager.Instance.DialogPanel.SetActive(false);
+        }
+        
+        private void LaunchCreditCollectedAnimation(int amount)
+        {
+            if (!UICreditText) return;
+            
+            // Change creditText to amount
+            UICreditText.text = amount.ToString();
+            UICreditText.enabled = true;
+            
+            // Launch animation : reduce Y to 0 and grow scale to 1.5 and make it slowly disappear
+            StartCoroutine(AnimateCreditCollected());
+        }
+
+        private IEnumerator AnimateCreditCollected()
+        {
+            var time = 0f;
+            var duration = 1f;
+            
+            var initialScale = UICreditText.rectTransform.localScale;
+            var targetScale = new Vector3(2f, 2f, 2f);
+            
+            var initialPosition = UICreditText.rectTransform.position;
+            var targetPosition = new Vector3(initialPosition.x, initialPosition.y + 100, initialPosition.z);
+            
+            var initialColor = UICreditText.color;
+            var targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 0);
+            
+            // Go up, grow and disappear slowly
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                var t = time / duration; 
+                
+                UICreditText.rectTransform.localScale = Vector3.Lerp(initialScale, targetScale, t);
+                UICreditText.rectTransform.position = Vector3.Lerp(initialPosition, targetPosition, t);
+                UICreditText.color = Color.Lerp(initialColor, targetColor, t);
+                
+                yield return null;
+            }
+            
+            UICreditText.enabled = false;
+            UICreditText.transform.localScale = initialScale;
+            UICreditText.transform.position = initialPosition;
+            UICreditText.color = initialColor;
         }
 
         private void OnDisable()
@@ -110,16 +164,24 @@ namespace burglar.managers
             EventManager.EnterInteractibleArea -= (interactible) => OnEnterInteractibleArea(interactible);
             EventManager.Interact -= (interactible) => OnInteract(interactible);
             EventManager.ExitInteractibleArea -= (interactible) => OnExitInteractibleArea(interactible);
-            EventManager.TogglePause -= () => OnTogglePause();
+            EventManager.TogglePause -= OnTogglePause;
             EventManager.CinematicEnd -= ShowTitle;
+            // ReSharper disable once EventUnsubscriptionViaAnonymousDelegate
+            EventManager.CreditCollected -= LaunchCreditCollectedAnimation;
         }
 
         private void ShowTitle()
         {
-            Debug.Log("ShowTitle called !");
-            // StartCoroutine(WaitAndShowTitle(1.3f));
-            // UITitle.SetActive(true);
-            ToggleHudVisibility();
+            if (LevelManager.Instance._currentLevel == null) LevelManager.Instance.LoadNextLevel();
+
+            var levelTitle = LevelManager.Instance._currentLevel.levelName;
+            
+            // Update title
+            UITitle.GetComponentInChildren<TextMeshProUGUI>().text = levelTitle;
+            UITitle.SetActive(true);
+            
+            StartCoroutine(ShowHud());
+            // ToggleHudVisibility();
         }
         
         // private IEnumerator WaitAndShowTitle(float durationInSeconds)
@@ -148,6 +210,14 @@ namespace burglar.managers
             }
         }
         
+        private IEnumerator ShowHud()
+        {
+            yield return new WaitForSeconds(4f);
+            
+            // Make the gameObject appear slowly or disappear slowly
+            StartCoroutine(FadeInHud(HUD.gameObject));
+        }
+        
         private IEnumerator FadeOutHud(GameObject go)
         {
             // Get the CanvasGroup component of the gameObject
@@ -157,7 +227,7 @@ namespace burglar.managers
             while (canvasGroup.alpha > 0)
             {
                 // Decrease the alpha of the CanvasGroup
-                canvasGroup.alpha -= Time.deltaTime;
+                canvasGroup.alpha -= Time.fixedDeltaTime;
                 
                 // Wait for the end of the frame
                 yield return null;
@@ -175,21 +245,32 @@ namespace burglar.managers
             // Activate the gameObject
             go.SetActive(true);
             
+            canvasGroup.alpha = 0;
+            
+            float duration = 1f;
+            float elapsedTime = 0f;
+            
             // While the alpha of the CanvasGroup is less than 1
-            while (canvasGroup.alpha < 1)
+            while (elapsedTime < duration)
             {
                 // Increase the alpha of the CanvasGroup
-                canvasGroup.alpha += Time.deltaTime;
+                canvasGroup.alpha += elapsedTime / duration;
+                
+                elapsedTime += Time.fixedDeltaTime;
                 
                 // Wait for the end of the frame
                 yield return null;
             }
+            
+            canvasGroup.alpha = 1;
+            go.SetActive(true);
         }
 
         #region SafeUI
 
         private void OpenSafeUI(Safe safe)
         {
+            Debug.Log("OpenSafeUI called !");
             ClearSafe();
 
             var audioManager = AudioManager.Instance;

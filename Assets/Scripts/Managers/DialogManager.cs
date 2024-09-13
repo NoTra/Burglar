@@ -43,6 +43,9 @@ namespace burglar.managers
         private Vector2 _dialogOnScreenPosition;
         [SerializeField] private AnimationCurve _animationDialogStart = new AnimationCurve();
         [SerializeField] private float _slideDuration = 0.8f;
+        
+        // InkfileCaughtAgent
+        public TextAsset inkFileCaughtAgent;
 
         private Coroutine _dialogTypingCoroutine;
         private Coroutine _choicesCoroutine;
@@ -94,8 +97,6 @@ namespace burglar.managers
 
         private IEnumerator SlideIn()
         {
-            Debug.Log("SlideIn !");
-            
             var elapsedTime = 0f;
             var startingPosition = DialogOffScreenPosition;
 
@@ -112,11 +113,12 @@ namespace burglar.managers
             }
 
             _dialogPanelRectTransform.anchoredPosition = _dialogOnScreenPosition;
+            
+            _slideInCoroutine = null;
         }
 
         public IEnumerator StartDialog()
         {
-            Debug.Log("StartDialog !");
             // Move DialogPanel out of the screen
             if (DialogPanel is null) yield break;
             
@@ -141,7 +143,7 @@ namespace burglar.managers
 
         private void Update()
         {
-            if (!Input.GetKeyDown(KeyCode.Space) || WaitingForAnswer || isTalking || _story == null) return;
+            if (!Input.GetKeyDown(KeyCode.Space) || WaitingForAnswer || isTalking || _story == null || _slideInCoroutine != null) return;
             
             // Is there more to the story? (outside answers needed)
             if (_story.canContinue)
@@ -346,8 +348,6 @@ namespace burglar.managers
         {
             var newEmotion = emotion.Split(':')[1];
             
-            Debug.Log("SetEmotion: " + newEmotion);
-            
             if (currentEmotion != newEmotion)
             {
                 if (AvailableEmotions.Find(e => e.emotion == newEmotion) is { } foundEmotion)
@@ -357,7 +357,7 @@ namespace burglar.managers
                 }
                 else
                 {
-                    Debug.Log($"Emotion {newEmotion} not found in the list of available emotions");
+                    Debug.LogWarning($"Emotion {newEmotion} not found in the list of available emotions");
                 }
             }
         }
@@ -385,7 +385,7 @@ namespace burglar.managers
                     message.color = Color.white;
                     break;
                 default:
-                    Debug.Log($"{_color} is not available as a text color");
+                    Debug.LogWarning($"{_color} is not available as a text color");
                     break;
             }
         }

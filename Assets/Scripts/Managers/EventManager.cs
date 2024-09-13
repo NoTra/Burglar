@@ -11,15 +11,29 @@ namespace burglar.managers
         public static void OnSoundGenerated(Vector3 point, float strength, bool checkDistance) => SoundGenerated?.Invoke(point, strength, checkDistance);
 
         public static event UnityAction<GameObject> PlayerCaught;
-        public static void OnPlayerCaught(GameObject player) => PlayerCaught?.Invoke(player);
+        public static void OnPlayerCaught(GameObject agent)
+        {
+            if (GameManager.Instance.gameState == GameManager.GameState.Caught)
+            {
+                return;
+            }
+            
+            GameManager.Instance.SetGameState(GameManager.GameState.Caught);
+            // Debug.Log("Player caught triggered !");
+            PlayerCaught?.Invoke(agent);
+        }
 
         public static event UnityAction<GameObject> LightChange;
         public static void OnLightChange(GameObject switchGO) => LightChange?.Invoke(switchGO);
 
         #region Credit
         public static event UnityAction<int> CreditCollected;
-        public static void OnCreditCollected(int amount) => CreditCollected?.Invoke(amount);
-        
+        public static void OnCreditCollected(int amount)
+        {
+            Debug.Log("CreditCollected triggered");
+            CreditCollected?.Invoke(amount);
+        }
+
         public static event UnityAction CreditChanged;
         public static void OnCreditChanged() => CreditChanged?.Invoke();
         
@@ -89,11 +103,19 @@ namespace burglar.managers
         public static void OnTogglePause() => TogglePause?.Invoke();
 
         public static event UnityAction LoadLevelStart;
-        public static void OnLoadLevelStart() => LoadLevelStart?.Invoke();
-        
+        public static void OnLoadLevelStart()
+        {
+            Debug.Log("LoadLevelStart triggered");
+            LoadLevelStart?.Invoke();
+        }
+
         public static event UnityAction LoadLevelEnd;
-        public static void OnLoadLevelEnd() => LoadLevelEnd?.Invoke();
-        
+        public static void OnLoadLevelEnd()
+        {
+            Debug.Log("LoadLevelEnd triggered");
+            LoadLevelEnd?.Invoke();
+        }
+
         public static event UnityAction<Objective> ObjectiveCompleted;
         public static void OnObjectiveCompleted(Objective objective) => ObjectiveCompleted?.Invoke(objective);
         
@@ -104,9 +126,24 @@ namespace burglar.managers
         public static void OnObjectiveLoaded() => ObjectiveLoaded?.Invoke();
         
         public static event UnityAction CinematicStart;
-        public static void OnCinematicStart() => CinematicStart?.Invoke();
+
+        public static void OnCinematicStart()
+        {
+            Debug.Log("CinematicStart triggered");
+            CinematicStart?.Invoke();
+        }
         
         public static event UnityAction CinematicEnd;
-        public static void OnCinematicEnd() => CinematicEnd?.Invoke();
+        public static void OnCinematicEnd()
+        {
+            Debug.Log("CinematicEnd triggered");
+            CinematicEnd?.Invoke();
+        }
+
+        public static event UnityAction LevelSuccess;
+        public static void OnLevelSuccess() => LevelSuccess?.Invoke();
+
+        public static event UnityAction UpdateObjectives;
+        public static void OnUpdateObjectives() => UpdateObjectives?.Invoke();
     }
 }

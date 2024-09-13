@@ -36,12 +36,8 @@ namespace burglar
         {
             slider.onValueChanged.AddListener((float value) =>
             {
-                Debug.Log("Value changed to " + value);
-                
                 // Convert value to percentage
                 var percentValue = ((value + _diffBetweenMaxAndMin) / _diffBetweenMaxAndMin) * 100;
-                
-                Debug.Log("Percent value: " + percentValue);
                 
                 _valueText.text = Mathf.Ceil(percentValue) + "%";
                 

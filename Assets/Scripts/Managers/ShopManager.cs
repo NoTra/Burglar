@@ -16,7 +16,7 @@ namespace burglar.managers
             // Add all items to the shop
             foreach (var item in _availableItems)
             {
-                if (item.isPurchasable == false) continue;
+                // if (item.isPurchasable == false) continue;
 
                 var shopItem = Instantiate(_shopItemPrefab, _itemGridContainer.transform);
                 shopItem.GetComponent<ShopItem>().SetItem(item);

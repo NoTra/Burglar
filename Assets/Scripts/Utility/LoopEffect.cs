@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,11 +12,9 @@ namespace burglar
         private List<VisualEffect> _visualEffects;
         
         // Start is called before the first frame update
-        private void Start()
+        private void Awake()
         {
             _visualEffects = new List<VisualEffect>(GetComponentsInChildren<VisualEffect>());
-            
-            StartCoroutine(LoopEffectCoroutine());
         }
         
         private IEnumerator LoopEffectCoroutine()
@@ -29,6 +28,15 @@ namespace burglar
                 }
             }
         }
-        
+
+        private void OnEnable()
+        {
+            StartCoroutine(LoopEffectCoroutine());
+        }
+
+        private void OnDisable()
+        {
+            StopAllCoroutines();
+        }
     }
 }

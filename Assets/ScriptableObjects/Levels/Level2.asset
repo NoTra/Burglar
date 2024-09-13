@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Level2
   m_EditorClassIdentifier: 
   sceneName: level2
-  levelName: Office
-  levelIndex: 1
-  minimumCredits: 200
-  maximumCredits: 500
+  levelName: The office
+  levelIndex: 2
+  minimumCredits: 600
+  music: {fileID: 8300000, guid: 0eb18bfba8948f64599d6651bdfc33e5, type: 3}
+  resetCredits: 0
+  startCinematic: {fileID: 0}

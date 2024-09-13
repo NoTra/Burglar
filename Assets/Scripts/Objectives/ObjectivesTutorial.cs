@@ -5,7 +5,7 @@ using UnityEngine;
 using burglar.environment;
 using burglar.managers;
 
-namespace burglar
+namespace burglar.objectives
 {
     public class ObjectivesTutorial : ObjectiveManager
     {
@@ -33,17 +33,17 @@ namespace burglar
 
             InitObjectives();
             
-            DisplayObjective();
+            DisplayUIObjective();
         }
 
         protected override void InitObjectives()
         {
-            if (_objectives == null)
+            if (Objectives == null)
             {
-                _objectives = new Dictionary<int, Dictionary<string, Func<bool>>>();
+                Objectives = new Dictionary<int, Dictionary<string, Func<bool>>>();
             }
             
-            _objectives.Add(0, new Dictionary<string, Func<bool>>
+            Objectives.Add(0, new Dictionary<string, Func<bool>>
             {
                 {
                     "Take the object on the table (press E)",
@@ -89,7 +89,7 @@ namespace burglar
             if (!_objectTaken && interactible.gameObject == _objectToTake)
             {
                 _objectTaken = true;
-                UpdateObjective();
+                UpdateUIObjectives();
             }
         }
         
@@ -98,7 +98,7 @@ namespace burglar
             if (!_safeSuccessFullyOpened && safe.gameObject == _safe)
             {
                 _safeSuccessFullyOpened = true;
-                UpdateObjective();
+                UpdateUIObjectives();
             }
         }
         
@@ -107,12 +107,12 @@ namespace burglar
             if (!_hasPassedUserWaypoint1 && userWaypoint == _userWaypoint1)
             {
                 _hasPassedUserWaypoint1 = true;
-                UpdateObjective();
+                UpdateUIObjectives();
             }
             else if (!_hasPassedUserWaypoint2 && userWaypoint == _userWaypoint2)
             {
                 _hasPassedUserWaypoint2 = true;
-                UpdateObjective();
+                UpdateUIObjectives();
             }
         }
 
@@ -121,7 +121,7 @@ namespace burglar
             if (!_hasSwitchOnLight && _lightSwitches.Contains(light.GetComponent<LightSwitch>()))
             {
                 _hasSwitchOnLight = true;
-                UpdateObjective();
+                UpdateUIObjectives();
             }
         }
     }

@@ -11,12 +11,15 @@ namespace burglar.environment
 
         protected override void Interact()
         {
+            Debug.Log("Interact with credit name: " + gameObject.name);
+            gameObject.SetActive(false);
+            
             EventManager.OnCreditCollected(_value);
             
             var audioManager = AudioManager.Instance;
             audioManager.PlaySFX(audioManager.soundDialogSlideIn);
             
-            Destroy(gameObject);
+            // Destroy(gameObject);
         }
     }
 }

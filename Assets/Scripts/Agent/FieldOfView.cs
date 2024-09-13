@@ -24,6 +24,10 @@ namespace burglar.agent
 
         [SerializeField] Material viewMaterial;
         [SerializeField] Material viewMaterialPlayerIsInView;
+        
+        [SerializeField] Light spotLight;
+        [SerializeField] Color spotColorNormal;
+        [SerializeField] Color spotColorSpotted;
 
         public int edgeResolveIterations;
 
@@ -108,7 +112,8 @@ namespace burglar.agent
             viewMesh.Clear();
             viewMesh.vertices = vertices;
             viewMesh.triangles = triangles;
-            viewMeshRenderer.material = (visibleTargets.Count > 0) ? viewMaterialPlayerIsInView : viewMaterial;
+            // viewMeshRenderer.material = (visibleTargets.Count > 0) ? viewMaterialPlayerIsInView : viewMaterial;
+            spotLight.color = (visibleTargets.Count > 0) ? spotColorSpotted : spotColorNormal;
             viewMesh.RecalculateNormals();
         }
 
@@ -198,7 +203,7 @@ namespace burglar.agent
                     if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
                     {
                         visibleTargets.Add(target);
-                        EventManager.OnPlayerCaught(target.gameObject);
+                        EventManager.OnPlayerCaught(gameObject);
                     }
                 }
             }

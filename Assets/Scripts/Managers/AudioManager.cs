@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using System.Collections;
 using burglar.environment;
+using EasyTransition;
 
 namespace burglar.managers
 {
@@ -50,6 +51,7 @@ namespace burglar.managers
         [Header("Player")]
         public AudioClip soundFootstep;
         public AudioClip soundSneakyFootstep;
+        public AudioClip soundCaught;
         
         [Header("Environment")]
         public AudioClip soundLightSwitch;
@@ -113,11 +115,11 @@ namespace burglar.managers
             EventManager.FailSafeCrack -= OnFailSafeCrack;
             EventManager.LoadLevelStart -= PlayLevelMusic;
             EventManager.ObjectiveCompleted -= OnObjectiveCompleted;
+            
         }
         
         private void PlayLevelMusic()
         {
-            Debug.Log("Play level music (AudioManager)");
             var music = LevelManager.Instance._currentLevel.music;
             PlayMusicWithDelay(music, true, 1.3f);
         }
@@ -325,6 +327,12 @@ namespace burglar.managers
         private void OnObjectiveCompleted(Objective objective)
         {
             PlaySFX(soundObjectiveSuccess);
+        }
+
+        public void StopMusic()
+        {
+            StartCoroutine(FadeOut(musicAudioSource.isPlaying ? musicAudioSource : musicAudioSource2, 1f));
+            
         }
     }
 }

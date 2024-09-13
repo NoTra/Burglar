@@ -40,7 +40,6 @@ namespace burglar.player
             EventManager.IsInvisible += () => OnIsInvisible();
             EventManager.IsVisible += () => OnIsVisible();
 
-            EventManager.PlayerCaught += (player) => OnPlayerCaught(player);
             EventManager.ChangeGameState += (state) => OnChangeGameState(state);
             EventManager.EndOfAlertState += () => OnEndOfAlertState();
 
@@ -57,8 +56,7 @@ namespace burglar.player
         {
             EventManager.IsInvisible -= () => OnIsInvisible();
             EventManager.IsVisible -= () => OnIsVisible();
-
-            EventManager.PlayerCaught -= (player) => OnPlayerCaught(player);
+            
             EventManager.ChangeGameState -= (state) => OnChangeGameState(state);
             EventManager.EndOfAlertState -= () => OnEndOfAlertState();
 
@@ -91,16 +89,6 @@ namespace burglar.player
             PlayerAnimator?.SetTrigger(Interact);
         }
 
-        private void OnPlayerCaught(GameObject player)
-        {
-            if (!PlayerAnimator)
-            {
-                return;
-            }
-            
-            PlayerAnimator?.SetTrigger(Caught);
-        }
-
         private void OnEndOfAlertState()
         {
             if (!PlayerAnimator)
@@ -113,16 +101,23 @@ namespace burglar.player
 
         private void OnChangeGameState(GameManager.GameState state)
         {
+            Debug.Log("Player state changed to " + state);
+            
+            if (PlayerAnimator == null)
+            {
+                return;
+            }
+            
             switch (state)
             {
-                case GameManager.GameState.GameOver:
-                    PlayerAnimator?.SetTrigger(Caught);
-                    break;
                 case GameManager.GameState.Alert:
-                    PlayerAnimator?.SetTrigger(Surprised);
+                    PlayerAnimator.SetTrigger(Surprised);
                     break;
                 case GameManager.GameState.Playing:
-                    PlayerAnimator?.SetTrigger(Relieved);
+                    PlayerAnimator.SetTrigger(Relieved);
+                    break;
+                case GameManager.GameState.Caught:
+                    PlayerAnimator.SetTrigger(Caught);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(state), state, null);

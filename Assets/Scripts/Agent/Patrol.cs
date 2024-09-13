@@ -18,10 +18,14 @@ namespace burglar.agent
         private NavMeshAgent _navMeshAgent;
         public float _searchTimeBetweenPoints;
         private Coroutine _searchCoroutine;
+        private IEnumerator _turnLeftAndRightCoroutine;
 
         private Vector3 _suspiciousPoint;
 
         [SerializeField] private Animator _agentAnimator;
+        
+        private static readonly int Search = Animator.StringToHash("Search");
+        private static readonly int IsWalking = Animator.StringToHash("isWalking");
 
         private void Awake()
         {
@@ -34,10 +38,14 @@ namespace burglar.agent
             return _suspiciousPoint;
         }
         
+        public void SetCurrentWaypointIndex(int index)
+        {
+            _currentWaypointIndex = index;
+        }
+        
         public void ResetSuspiciousPoint()
         {
             _suspiciousPoint = Vector3.zero;
-            GoToNextWaypoint();
         }
         
         private void Start()
@@ -45,6 +53,7 @@ namespace burglar.agent
             var destinationGO = _waypoints[_currentWaypointIndex];
             var destinationPosition = new Vector3(destinationGO.transform.position.x, destinationGO.transform.position.y, destinationGO.transform.position.z);
             _navMeshAgent.SetDestination(destinationPosition);
+            _agentAnimator.SetBool(IsWalking, true);
         }
 
         private void OnEnable()
@@ -60,7 +69,7 @@ namespace burglar.agent
         private void CheckSuspiciousPoint(Vector3 point, bool checkDistance = true)
         {
             // if object is destroyed, we don't want to go to it
-            if (gameObject == null)
+            if (!this || !isActiveAndEnabled)
             {
                 return;
             }
@@ -77,10 +86,18 @@ namespace burglar.agent
             var pointToGo = point - direction;
             
             _navMeshAgent.SetDestination(pointToGo);
+            _agentAnimator.SetBool(IsWalking, true);
         }
 
         private void Update()
         {
+            if (_agent.IsFrozen())
+            {
+                StopCoroutine(_turnLeftAndRightCoroutine);
+                
+                return;
+            }
+            
             // We have a suspicious point to go to ?
             if (_suspiciousPoint != Vector3.zero)
             {
@@ -119,7 +136,6 @@ namespace burglar.agent
 
         private IEnumerator SearchBeforeNextWaypoint()
         {
-            _agentAnimator.SetBool("isWalking", false);
             // Rotate player to LookAt the _centerOfArea
             var playerStartRotation = transform.rotation;
 
@@ -137,14 +153,16 @@ namespace burglar.agent
             }
             transform.rotation = destinationRotation;
 
-            yield return TurnLeftAndRight();
+            _turnLeftAndRightCoroutine = TurnLeftAndRight();
+
+            yield return _turnLeftAndRightCoroutine;
 
             GoToNextWaypoint();
         }
 
         private IEnumerator TurnLeftAndRight()
         {
-            _agentAnimator.SetTrigger("Search");
+            _agentAnimator.SetTrigger(Search);
 
             // Turn left then right during _searchTimeBetweenPoints seconds
             var playerStartRotation = transform.rotation;
@@ -175,12 +193,13 @@ namespace burglar.agent
             }
             transform.rotation = playerRightRotation;
 
-            _agentAnimator.SetBool("isWalking", true);
+            _agentAnimator.SetBool(IsWalking, true);
         }
 
         private IEnumerator SearchBeforeContinueWaypoint()
         {
-            yield return TurnLeftAndRight();
+            _turnLeftAndRightCoroutine = TurnLeftAndRight(); 
+            yield return _turnLeftAndRightCoroutine;
 
             ResumePatrol();
 
@@ -191,6 +210,11 @@ namespace burglar.agent
 
         private void GoToNextWaypoint()
         {
+            if (_suspiciousPoint != Vector3.zero)
+            {
+                return;
+            }
+            
             var newDestinationGO = _waypoints[_currentWaypointIndex];
             var newDestinationPosition = new Vector3(newDestinationGO.transform.position.x, newDestinationGO.transform.position.y, newDestinationGO.transform.position.z);
             _navMeshAgent.SetDestination(newDestinationPosition);
@@ -198,7 +222,7 @@ namespace burglar.agent
             _searchCoroutine = null;
         }
 
-        private void ResumePatrol()
+        public void ResumePatrol()
         {
             _agent.ChangeState(Agent.State.Patrol);
             _navMeshAgent.SetDestination(_waypoints[_currentWaypointIndex].transform.position);
@@ -225,6 +249,8 @@ namespace burglar.agent
             {
                 yield return null;
             }
+            
+            _agentAnimator.SetBool(IsWalking, false);
 
             var switchComponent = switchGO.GetComponent<LightSwitch>();
             switchComponent.TurnOnLight();

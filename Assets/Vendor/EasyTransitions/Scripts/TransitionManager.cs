@@ -18,19 +18,35 @@ namespace EasyTransition
         public UnityAction onTransitionEnd;
 
         private static TransitionManager instance;
+        
+        public static TransitionManager Instance() => instance;
 
         private void Awake()
         {
-            instance = this;
+            if (instance != null && instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            else
+            {
+                instance = this;
+            }
+            DontDestroyOnLoad(gameObject);
         }
-
-        public static TransitionManager Instance()
+        
+        public void SetRunningTransition(bool value)
         {
-            if (instance == null)
-                Debug.LogError("You tried to access the instance before it exists.");
-
-            return instance;
+            runningTransition = value;
         }
+
+        // public static TransitionManager Instance()
+        // {
+        //     if (instance == null)
+        //         Debug.LogError("You tried to access the instance before it exists.");
+        //
+        //     return instance;
+        // }
 
         /// <summary>
         /// Starts a transition without loading a new level.
@@ -59,7 +75,15 @@ namespace EasyTransition
         {
             if (transition == null || runningTransition)
             {
-                Debug.LogError("You have to assing a transition.");
+                if (transition == null)
+                {
+                    Debug.LogError("You have to assing a transition.");
+                }
+                else
+                {
+                    Debug.LogError("Transition already running.");
+                }
+                
                 return;
             }
 
@@ -96,7 +120,7 @@ namespace EasyTransition
 
         IEnumerator Timer(string sceneName, float startDelay, TransitionSettings transitionSettings)
         {
-            yield return new WaitForSecondsRealtime(startDelay);
+            yield return new WaitForSeconds(startDelay);
 
             onTransitionBegin?.Invoke();
 
@@ -107,21 +131,21 @@ namespace EasyTransition
             if (transitionSettings.autoAdjustTransitionTime)
                 transitionTime = transitionTime / transitionSettings.transitionSpeed;
 
-            yield return new WaitForSecondsRealtime(transitionTime);
+            yield return new WaitForSeconds(transitionTime);
 
             onTransitionCutPointReached?.Invoke();
 
 
             SceneManager.LoadScene(sceneName);
 
-            yield return new WaitForSecondsRealtime(transitionSettings.destroyTime);
+            yield return new WaitForSeconds(transitionSettings.destroyTime);
 
             onTransitionEnd?.Invoke();
         }
 
         IEnumerator Timer(int sceneIndex, float startDelay, TransitionSettings transitionSettings)
         {
-            yield return new WaitForSecondsRealtime(startDelay);
+            yield return new WaitForSeconds(startDelay);
 
             onTransitionBegin?.Invoke();
 
@@ -132,20 +156,20 @@ namespace EasyTransition
             if (transitionSettings.autoAdjustTransitionTime)
                 transitionTime = transitionTime / transitionSettings.transitionSpeed;
 
-            yield return new WaitForSecondsRealtime(transitionTime);
+            yield return new WaitForSeconds(transitionTime);
 
             onTransitionCutPointReached?.Invoke();
 
             SceneManager.LoadScene(sceneIndex);
 
-            yield return new WaitForSecondsRealtime(transitionSettings.destroyTime);
+            yield return new WaitForSeconds(transitionSettings.destroyTime);
 
             onTransitionEnd?.Invoke();
         }
 
         IEnumerator Timer(float delay, TransitionSettings transitionSettings)
         {
-            yield return new WaitForSecondsRealtime(delay);
+            yield return new WaitForSeconds(delay);
 
             onTransitionBegin?.Invoke();
 
@@ -156,13 +180,13 @@ namespace EasyTransition
             if (transitionSettings.autoAdjustTransitionTime)
                 transitionTime = transitionTime / transitionSettings.transitionSpeed;
 
-            yield return new WaitForSecondsRealtime(transitionTime);
+            yield return new WaitForSeconds(transitionTime);
 
             onTransitionCutPointReached?.Invoke();
 
             template.GetComponent<Transition>().OnSceneLoad(SceneManager.GetActiveScene(), LoadSceneMode.Single);
 
-            yield return new WaitForSecondsRealtime(transitionSettings.destroyTime);
+            yield return new WaitForSeconds(transitionSettings.destroyTime);
 
             onTransitionEnd?.Invoke();
 
@@ -178,9 +202,16 @@ namespace EasyTransition
                 if (managerCount > 1)
                     Debug.LogError($"There are {managerCount.ToString()} Transition Managers in your scene. Please ensure there is only one Transition Manager in your scene or overlapping transitions may occur.");
             
-                yield return new WaitForSecondsRealtime(1f);
+                yield return new WaitForSeconds(1f);
             }
         }
+        
+        // Get transition settings currently in use
+        public TransitionSettings GetTransitionSettings()
+        {
+            return transitionTemplate.GetComponent<Transition>().transitionSettings;
+        }
+        
     }
 
 }

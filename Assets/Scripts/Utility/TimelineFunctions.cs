@@ -23,7 +23,6 @@ namespace burglar.utility
 
         public void StartTuto()
         {
-            Debug.Log("StartTuto from TimelineFunctions");
             TutoManager.Instance.StartTuto();
         }
         

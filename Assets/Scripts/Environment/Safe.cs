@@ -18,6 +18,7 @@ namespace burglar.environment
 
         private bool _isCracked = false;
         [SerializeField] private int _value = 500;
+        public int Value => _value;
 
 
         private void OnEnable()
@@ -37,7 +38,6 @@ namespace burglar.environment
         private void Start()
         {
             GenerateMatrix();
-            
             GenerateCombination();
         }
 
@@ -144,7 +144,12 @@ namespace burglar.environment
         {
             if (!_isCracked)
             {
+                Debug.Log("Safe is not cracked yet");
                 EventManager.OnOpenSafe(this);
+            }
+            else
+            {
+                Debug.Log("Safe is already cracked (" + gameObject.name + ")");
             }
         }
 
@@ -210,15 +215,27 @@ namespace burglar.environment
 
         private void OnSuccessSafeCrack(Safe safe)
         {
-            safe._isCracked = true;
-            safe.GetComponent<Interactible>().enabled = false;
+            if (safe != this) return;
             
+            safe._isCracked = true;
+            // safe.GetComponent<Interactible>().enabled = false;
             EventManager.OnCreditCollected(safe._value);
         }
 
         private void OnFailSafeCrack(Safe safe)
         {
             _selectedCombination.Clear();
+        }
+        
+        public void Reset()
+        {
+            _selectedCombination.Clear();
+            _isCracked = false;
+            
+            GenerateMatrix();
+            GenerateCombination();
+            
+            enabled = true;
         }
     }
 }

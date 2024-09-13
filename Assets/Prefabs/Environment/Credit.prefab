@@ -4787,7 +4787,6 @@ GameObject:
   - component: {fileID: 4668253688765683274}
   - component: {fileID: 7282903816875831942}
   - component: {fileID: 1264005027646057121}
-  - component: {fileID: 423054230717775983}
   m_Layer: 0
   m_Name: Credit
   m_TagString: Untagged
@@ -4856,18 +4855,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9c89decbea8942848af56b14367e40f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &423054230717775983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7056334462625304675}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c969c9fa11f125d429e7563f1e7fb528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8301618370076331000

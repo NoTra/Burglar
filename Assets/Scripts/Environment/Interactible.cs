@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using burglar.managers;
@@ -7,9 +8,11 @@ namespace burglar.environment
     public class Interactible : MonoBehaviour
     {
         private PlayerInput _playerInput;
+        private bool _canBeInteractedWith = false;
 
-        private void Start()
+        private void OnEnable()
         {
+            _canBeInteractedWith = false;
         }
 
         protected virtual void OnTriggerEnter(Collider other)
@@ -17,6 +20,7 @@ namespace burglar.environment
             if (other.CompareTag("Player"))
             {
                 EventManager.OnEnterInteractibleArea(this);
+                _canBeInteractedWith = true;
 
                 if (_playerInput == null)
                 {
@@ -27,7 +31,7 @@ namespace burglar.environment
 
         protected virtual void Update()
         {
-            if (!_playerInput || !_playerInput.actions["Activate"].triggered) return;
+            if (!_playerInput || !_playerInput.actions["Activate"].triggered || !_canBeInteractedWith) return;
 
             try
             {
@@ -43,6 +47,7 @@ namespace burglar.environment
         protected virtual void OnTriggerExit(Collider other)
         {
             EventManager.OnExitInteractibleArea(this);
+            _canBeInteractedWith = false;
 
             _playerInput = null;
         }

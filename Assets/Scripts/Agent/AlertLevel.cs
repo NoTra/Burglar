@@ -23,14 +23,14 @@ namespace burglar.agent
 
         private void OnEnable()
         {
-            EventManager.SoundGenerated += (point, strength, checkDistance) => IncreaseAlertLevel(point, strength, checkDistance);
-            EventManager.EndOfAlertState += () => ResetAlertLevel();
+            // EventManager.SoundGenerated += (point, strength, checkDistance) => IncreaseAlertLevel(point, strength, checkDistance);
+            EventManager.EndOfAlertState += ResetAlertLevel;
         }
 
         private void OnDisable()
         {
-            EventManager.SoundGenerated -= (point, strength, checkDistance) => IncreaseAlertLevel(point, strength, checkDistance);
-            EventManager.EndOfAlertState -= () => ResetAlertLevel();
+            // EventManager.SoundGenerated -= (point, strength, checkDistance) => IncreaseAlertLevel(point, strength, checkDistance);
+            EventManager.EndOfAlertState -= ResetAlertLevel;
         }
 
         private void ResetAlertLevel()
@@ -78,14 +78,14 @@ namespace burglar.agent
                     _elapsedTime += Time.deltaTime;
                 } else
                 {
-                    DicreaseAlertLevel(_alertLevelDecrease);
+                    DecreaseAlertLevel(_alertLevelDecrease);
 
                     _elapsedTime = 0;
                 }
             }
         }
 
-        private void DicreaseAlertLevel(float dicreaseValue)
+        private void DecreaseAlertLevel(float dicreaseValue)
         {
             _alertLevel = Mathf.Clamp01(_alertLevel - (dicreaseValue * Time.deltaTime));
             UpdateAlertLevel();

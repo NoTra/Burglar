@@ -5,20 +5,41 @@ using UnityEngine;
 
 using burglar.managers;
 
-namespace burglar
+namespace burglar.objectives
 {
     public class ObjectivesLvl1 : ObjectiveManager
     {
         private new void Start()
         {
             base.Start();
+            
+            InitObjectives();
+        }
+
+        private void OnEnable()
+        {
+            EventManager.UpdateObjectives += UpdateUIObjectives;
+            EventManager.PlayerCaught += OnPlayerCaught;
+            EventManager.CreditCollected += OnCreditCollected;
+        }
+
+        private void OnDisable()
+        {
+            EventManager.UpdateObjectives -= UpdateUIObjectives;
+            EventManager.PlayerCaught -= OnPlayerCaught;
+            EventManager.CreditCollected -= OnCreditCollected;
         }
 
         protected override void InitObjectives()
         {
-            if (_objectives == null)
+            if (Objectives.Count > 0)
             {
-                _objectives = new Dictionary<int, Dictionary<string, Func<bool>>>();
+                return;
+            }
+            
+            if (Objectives == null)
+            {
+                Objectives = new Dictionary<int, Dictionary<string, Func<bool>>>();
             }
             
             if (CreditManager.Instance == null)
@@ -33,39 +54,43 @@ namespace burglar
                 return;
             }
             
-            _objectives.Add(0, new Dictionary<string, Func<bool>>
+            Objectives.Add(0, new Dictionary<string, Func<bool>>
             {
                 {
-                    "Steal the minimum amount to be able to get out !", 
+                    "Steal the minimum amount to be able to get out. (" + LevelManager.Instance._currentLevel.minimumCredits + ")", 
                     () => 
                         CreditManager.Instance.levelCredit >= 
                           LevelManager.Instance._currentLevel.minimumCredits
+                },
+                {
+                    "[Optional] Steal the maximum amount to get the maximum reward.", 
+                    () => 
+                        CreditManager.Instance.levelCredit >= 
+                          CreditManager.Instance.maximumCredits
                 }
+                
             });
-        }
-
-        private void OnEnable()
-        {
-            EventManager.CreditCollected += OnCreditCollected;
-            EventManager.ObjectiveLoaded += OnObjectiveLoaded;
-        }
-
-        private void OnDisable()
-        {
-            EventManager.CreditCollected -= OnCreditCollected;
-            EventManager.ObjectiveLoaded -= OnObjectiveLoaded;
-        }
-        
-        private void OnObjectiveLoaded()
-        {
-            InitObjectives();
             
-            DisplayObjective();
+            DisplayUIObjective();
+            UIManager.Instance.UIObjective.SetActive(true);
         }
-        
-        private void OnCreditCollected(int amount)
+
+        private void OnCreditCollected(int arg0)
         {
-            UpdateObjective();
+            Debug.Log("Credit Collected from objectives lvl1");
+            UpdateUIObjectives();
+        }
+
+        private void OnUpdateObjectives()
+        {
+            Debug.Log("Update Objectives from objectives lvl1");
+            UpdateUIObjectives();
+        }
+
+        private void OnPlayerCaught(GameObject arg0)
+        {
+            Debug.Log("Player Caught from objectives lvl1");
+            UpdateUIObjectives();
         }
     }
 }

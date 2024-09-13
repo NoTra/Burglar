@@ -17,4 +17,4 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 2399defc06c923b4d88f485729bf6223, type: 3}
   description: 'With this new technology, safe difficulty is reduced by 1. '
   price: 50
-  isPurchasable: 1
+  isPurchasable: 0

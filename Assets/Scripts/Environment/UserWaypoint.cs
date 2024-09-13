@@ -8,6 +8,7 @@ namespace burglar
 {
     public class UserWaypoint : MonoBehaviour
     {
+        
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))

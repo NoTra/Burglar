@@ -72,12 +72,12 @@ namespace burglar.tutos
         private void OnEnterUserWaypoint(UserWaypoint userWaypoint)
         {
             if (
-                userWaypoint.gameObject.name != _userWaypoint01.gameObject.name && 
-                userWaypoint.gameObject.name != _userWaypoint02.gameObject.name
+                userWaypoint != _userWaypoint01 && 
+                userWaypoint != _userWaypoint02
             ) return;
 
 
-            if (userWaypoint.gameObject.name == _userWaypoint01.gameObject.name)
+            if (userWaypoint == _userWaypoint01)
             {
                 var story = new Story(inkFileWaypoint01.text);
             
@@ -88,7 +88,7 @@ namespace burglar.tutos
                 StartCoroutine(dialogManager.StartDialog());
                 
                 // Make effect disappear
-                userWaypoint.gameObject.SetActive(false);
+                _userWaypoint01.gameObject.SetActive(false);
                 
                 // Make user waypoint 02 appear
                 _userWaypoint02.gameObject.SetActive(true);
@@ -123,12 +123,11 @@ namespace burglar.tutos
 
         private IEnumerator PlayerCaughtCoroutine()
         {
-            Debug.Log("Player caught coroutine");
             TutoManager.Instance.SetStory(inkFileCaughtAgent);
             
             _userWaypoint02.gameObject.SetActive(false);
             _userWaypoint01.gameObject.SetActive(true);
-            
+
             yield return StartCoroutine(DialogManager.Instance.StartDialogAndWait());
             
             TransitionManager.Instance().Transition(UIManager.Instance.caughtTransition, 0f);
@@ -172,7 +171,6 @@ namespace burglar.tutos
             var dialogManager = DialogManager.Instance;
             yield return StartCoroutine(dialogManager.StartDialogAndWait());
 
-            Debug.Log("Launch NEW GAME !");
             SaveLoadSystem.Instance.NewGame();
             
             LevelManager.Instance.LoadScene("level1");

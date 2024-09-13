@@ -11,5 +11,5 @@ I like the spirit, go ahead ! #emotion:happy
 
 === no ===
 Ok, I'll repeat slowly. #emotion:happy
-The combination is written at the top of the grid. You must dial every number in the right order. Every number must be adjacent to each other. Go ahead, you can do it ! #emotion:happy
+The combination is written at the top of the grid. You must dial every number in the right order. They must be adjacent to each other ! #emotion:happy
 -> END

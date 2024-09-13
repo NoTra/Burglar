@@ -18,4 +18,4 @@ MonoBehaviour:
   description: This technology prevents you from being seeing by agents for 5 seconds.
     Invisible but not inaudible...
   price: 100
-  isPurchasable: 1
+  isPurchasable: 0

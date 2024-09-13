@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 using burglar.managers;
+using EasyTransition;
 
 namespace burglar.utility
 {
@@ -23,19 +24,26 @@ namespace burglar.utility
 
         private void Start()
         {
+            StartCoroutine(WaitForSecondsAndEndTransition(1f));
+            
             if (!playableDirector) return;
             
-            Debug.Log("SetCurrentScenePlayableDirector to CinematicManager");
             CinematicManager.Instance.SetCurrentScenePlayableDirector(playableDirector);
             
             // On lance la cinématique
-            Debug.Log("LaunchCinematic with playableAsset");
             CinematicManager.Instance.LaunchCinematic(playableDirector.playableAsset);
+        }
+        
+        private IEnumerator WaitForSecondsAndEndTransition(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            
+            TransitionManager.Instance().onTransitionEnd?.Invoke();
+            TransitionManager.Instance().SetRunningTransition(false);
         }
 
         private IEnumerator LoadGameManagerAndWaitForIt()
         {
-            Debug.Log("GameManager not found, loading bootstrap scene");
             if (!GameManager.Instance)
             {
                 // On charge la scène "main"

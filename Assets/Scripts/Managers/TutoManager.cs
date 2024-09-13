@@ -63,6 +63,8 @@ namespace burglar.managers
         {
             _player = GameManager.Instance.player;
             _playerInput = _player._playerInput;
+            
+            CreditManager.Instance.SetMaxCredits(600);
         }
 
         public void StartTuto()

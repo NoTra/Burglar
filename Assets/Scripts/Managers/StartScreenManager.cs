@@ -78,18 +78,12 @@ namespace burglar.managers
 
         public void NewGameButton()
         {
-            /*_startScreenCanvas.SetActive(false);
-            _hudCanvas.SetActive(true);*/
             SaveLoadSystem.Instance.NewGame();
             
-            Debug.Log("Start transition");
             TransitionManager.Instance().Transition("StartCinematic", UIManager.Instance.fadeTransition, 0f);
             
             // Stop current music
             StartCoroutine(AudioManager.Instance.FadeOut(AudioManager.Instance.musicAudioSource, 0.5f));
-            
-            // Load scene with SceneManager
-            // SceneManager.LoadScene("StartCinematic");
         }
 
         public void TutorialButton()
@@ -103,12 +97,22 @@ namespace burglar.managers
 
             SaveLoadSystem.Instance.LoadGame(lastSaveName);
         }
+        
+        private Resolution GetCurrentResolution()
+        {
+            return Screen.currentResolution;
+        }
 
         public void SettingsButton()
         {
             // gameObject.SetActive(false);
             // Position settingsCanvas at the right of the screen 
             _settingsCanvas.gameObject.SetActive(true);
+            
+            _settingsStartPosition = _settingsCanvas.anchoredPosition;
+            _startMenuStartPosition = _startMenuCanvas.anchoredPosition;
+            
+            screenWidth = GetCurrentResolution().width;
             
             StartCoroutine(SlideInSettings(
                 _startMenuStartPosition,

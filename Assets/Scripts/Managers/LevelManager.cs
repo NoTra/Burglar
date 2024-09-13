@@ -1,9 +1,8 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
 using EasyTransition;
 using System.Collections;
-using System.Reflection.Emit;
+using UnityEngine.SceneManagement;
 
 namespace burglar.managers
 {
@@ -12,6 +11,8 @@ namespace burglar.managers
         private static LevelManager instance = null;
 
         public static LevelManager Instance => instance;
+
+        private Coroutine playerCaughtCoroutine;
         
         // List of scenes
         public List<LevelSO> levels;
@@ -47,11 +48,33 @@ namespace burglar.managers
             {
                 _levelNames.Add(level.levelName);
             }
+            
+            // Get current sceneName
+            var currentScene = SceneManager.GetActiveScene();
+            
+            // Find the current level
+            _currentLevel = FindLevelBySceneName(currentScene.name);
+            
+            if (_currentLevel != null)
+            {
+                _currentLevelIndex = _currentLevel.levelIndex;
+            }
+        }
+
+        public void LoadLevelByIndex(int index)
+        {
+            if (index < 0 || index >= levels.Count)
+            {
+                Debug.LogError("Level index out of range");
+                return;
+            }
+            
+            _currentLevelIndex = index;
+            _currentLevel = levels[_currentLevelIndex];
         }
 
         public void LoadScene(string sceneName)
         {
-            Debug.Log("Play transition...");
             // Play transition (effect & sound)
             StartCoroutine(PlayTransitionAndLoadLevel(sceneName));
         }
@@ -60,7 +83,7 @@ namespace burglar.managers
         {
             var level = FindLevelBySceneName(sceneName);
             
-            if (!level && sceneName != "shop")
+            if (!level && sceneName != "shop" && sceneName != "main")
             {
                 Debug.LogError("Level not found for scene name : " + sceneName);
                 yield break;
@@ -76,20 +99,18 @@ namespace burglar.managers
             yield return StartCoroutine(PlayTransition(sceneName));
             
             EventManager.OnLoadLevelEnd();
+            
+            // Clear previous level
+            
         }
 
         private IEnumerator PlayTransition(string sceneName)
         {
-            // Play audio for 1.3s
-            // var transitionAudioSource = AudioManager.Instance.PlaySFX(AudioManager.Instance.soundTransition);
+            AudioManager.Instance.StopMusic();
             
-            Debug.Log("Transition : " + UIManager.Instance.levelTransition.name);
-            
+            TransitionManager.Instance().SetRunningTransition(false);
             TransitionManager.Instance().Transition(sceneName, UIManager.Instance.levelTransition, 0f);
             
-            // yield return new WaitForSeconds(2.2f);
-            
-            // transitionAudioSource.Stop();
             yield return null;
         }
 
@@ -101,12 +122,37 @@ namespace burglar.managers
         public void LoadShop()
         {
             // Change music for shop music
-            AudioManager.Instance.PlayMusic(AudioManager.Instance.musicShop, false);
+            AudioManager.Instance.PlayMusic(AudioManager.Instance.musicShop, true);
             
             // Trigger the event OnLoadLevel
             // EventManager.OnLoadLevelStart();
             
             StartCoroutine(PlayTransition("shop"));
+
+            // EventManager.OnLoadLevelEnd();
+        }
+        
+        public void LoadEndCredits()
+        {
+            // Trigger the event OnLoadLevel
+            // EventManager.OnLoadLevelStart();
+            
+            AudioManager.Instance.StopMusic();
+            
+            StartCoroutine(PlayTransition("EndCredit"));
+            
+            // EventManager.OnLoadLevelEnd();
+        }
+        
+        public void LoadMainMenu()
+        {
+            // Change music for shop music
+            AudioManager.Instance.PlayMusic(AudioManager.Instance.musicMenu, true);
+            
+            // Trigger the event OnLoadLevel
+            // EventManager.OnLoadLevelStart();
+            
+            StartCoroutine(PlayTransition("main"));
             
             // EventManager.OnLoadLevelEnd();
         }
@@ -115,7 +161,14 @@ namespace burglar.managers
         {
             _currentLevelIndex++;
             
+            if (_currentLevelIndex >= levels.Count)
+            {
+                Debug.Log("No more levels");
+                return;
+            }
+            
             var levelSO = levels[_currentLevelIndex];
+            
             // Load the next scene in Single mode
             LoadScene(levelSO.sceneName);
         }

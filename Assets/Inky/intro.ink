@@ -2,7 +2,7 @@ Hey ! Can you hear me ? #emotion:surprised
 
 * [Listen carefully at the young kid voice in you head.]
 
-I'm Nathan and you are my friend ! I found you in a dupster 2 weeks ago. #emotion:happy
+I'm Andy and you are my friend ! I found you in a dupster 2 weeks ago. #emotion:happy
 
 I repaired you and I think you are alive now. #emotion:happy
     

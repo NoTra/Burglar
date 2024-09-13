@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using burglar.levels;
 
-namespace burglar
+namespace burglar.managers
 {
     [CreateAssetMenu(fileName = "Level", menuName = "ScriptableObjects/Level")]
     public class LevelSO : ScriptableObject
@@ -11,7 +12,6 @@ namespace burglar
         public string levelName;
         public int levelIndex;
         public int minimumCredits;
-        public int maximumCredits;
         public AudioClip music;
         public bool resetCredits = false;
         public TimelineAsset startCinematic;

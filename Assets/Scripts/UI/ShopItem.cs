@@ -16,6 +16,11 @@ namespace burglar.UI
         [SerializeField] private Button _buyButton;
         private TextMeshProUGUI _buyButtonText;
 
+        [SerializeField] private Color disableColor;
+        [SerializeField] private Color disableBorderColor;
+
+        [SerializeField] private GameObject _notAvailable;
+
         private void Awake() {
             _buyButtonText = _buyButton.GetComponentInChildren<TextMeshProUGUI>();
         }
@@ -30,6 +35,16 @@ namespace burglar.UI
             else
             {
                 _buyButton.onClick.AddListener(BuyItem);
+            }
+            
+            _notAvailable.SetActive(!_item.isPurchasable);
+            
+            if (!_item.isPurchasable)
+            {
+                _title.color = disableColor;
+                _price.color = disableColor;
+                _description.color = disableColor;
+                GetComponent<Image>().color = disableBorderColor;
             }
         }
 

@@ -62,8 +62,6 @@ namespace burglar
             // }
             if (!isSelected)
             {
-                Debug.Log("Colors update");
-                Debug.Log(_defaultColor);
                 _text.color = _defaultColor;
                 _bgImage.color = _defaultBgColor;
             }

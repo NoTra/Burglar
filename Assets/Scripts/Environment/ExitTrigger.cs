@@ -22,7 +22,8 @@ namespace burglar.environment
         private void OnTriggerEnter(Collider other)
         {
             if (!other.CompareTag("Player") || _playerMoving || DialogManager.Instance.isInDialog) return;
-            
+            Debug.Log("Current level : " + LevelManager.Instance._currentLevelIndex);
+            // Player has not collected enough credits
             if (LevelManager.Instance._currentLevel.minimumCredits > CreditManager.Instance.levelCredit)
             {
                 if (_dialogCoroutine != null)
@@ -39,11 +40,14 @@ namespace burglar.environment
             }
             else
             {
+                EventManager.OnLevelSuccess();
+                
                 // If current level is the last level
                 if (LevelManager.Instance._currentLevelIndex == LevelManager.Instance.levels.Count - 1)
                 {
                     // Load EndGame
                     // LevelManager.Instance.LoadEndGame();
+                    LevelManager.Instance.LoadEndCredits();
                 }
                 else
                 {
@@ -57,29 +61,25 @@ namespace burglar.environment
         {
             while (playerNavmesh.pathPending)
             {
-                Debug.Log("Path pending...");
                 yield return null;
             }
             
-            Debug.Log("Making player walk to " + position);
             // Deactivate player collision
             // var playerCapsuleCollider = GameManager.Instance.player.GetComponent<CapsuleCollider>();
             // playerCapsuleCollider.enabled = false;
             
             playerNavmesh.SetDestination(position);
-            Debug.Log("playerNavmesh.remainingDistance: " + playerNavmesh.remainingDistance);
-            GameManager.Instance.playerInput.DeactivateInput();
+            GameManager.Instance.player._playerInput.DeactivateInput();
             
             GameManager.Instance.player.PlayerAnimator.SetBool(IsWalking, true);
             _playerMoving = true;
             yield return new WaitUntil(() =>
             {
-                Debug.Log("Walking to destination... (distance remaining: " + playerNavmesh.remainingDistance + ")"); 
                 return playerNavmesh.remainingDistance < playerNavmesh.stoppingDistance;
             });
             _playerMoving = false;
             GameManager.Instance.player.PlayerAnimator.SetBool(IsWalking, false);
-            GameManager.Instance.playerInput.ActivateInput();
+            GameManager.Instance.player._playerInput.ActivateInput();
             
             playerNavmesh.ResetPath();
             

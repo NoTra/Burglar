@@ -36,11 +36,9 @@ namespace burglar
 
         private void OnTogglePause()
         {
-            Debug.Log("OnTogglePause (PauseScreenManager)");
             // If we are in settings, we just want to go back
             if (_settingsCanvas.gameObject.activeSelf)
             {
-                Debug.Log("No pause, we go back !");
                 _settingsManager._backButton.onClick.Invoke();
             }
         }
@@ -83,15 +81,13 @@ namespace burglar
         {
             // Remove HUD
             // UIManager.Instance.HUD.SetActive(false);
-            UIManager.Instance.ToggleHudVisibility();
+            DialogManager.Instance.DialogPanel.SetActive(false);
+            // UIManager.Instance.ToggleHudVisibility();
             
             // Remove pause
             GameManager.Instance.TogglePause();
             
-            // Change music
-            AudioManager.Instance.PlayMusic(AudioManager.Instance.musicMenu, false);
-            
-            LevelManager.Instance.LoadScene("main");
+            LevelManager.Instance.LoadMainMenu();
         }
         
         public void SettingsButton()
@@ -126,6 +122,11 @@ namespace burglar
             _settingsCanvas.anchoredPosition = settingsTo;
             
             _settingsCanvas.gameObject.SetActive(setActiveValue);
+        }
+        
+        public void ResumeButton()
+        {
+            GameManager.Instance.TogglePause();
         }
     }
 }

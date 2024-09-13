@@ -7,6 +7,7 @@ namespace burglar.managers
     public class AgentManager : MonoBehaviour
     {
         [SerializeField] private List<Agent> _agents = new();
+        private Coroutine agentGoingToSwitch;
 
         private void OnEnable()
         {
@@ -29,7 +30,7 @@ namespace burglar.managers
                 {
                     continue;
                 }
-
+                
                 var distance = Vector3.Distance(agent.transform.position, switchGO.transform.position);
                 if (distance < closestDistance)
                 {
@@ -42,6 +43,8 @@ namespace burglar.managers
             {
                 return;
             }
+            
+            Debug.Log("Closest agent to switch is: " + closestAgent.name);
 
             var closestAgentPatrol = closestAgent.GetComponent<Patrol>();
 
@@ -50,6 +53,11 @@ namespace burglar.managers
             {
                 closestAgentPatrol.GoToSwitch(switchGO);
             }
+        }
+
+        public void ResetAgents()
+        {
+            _agents.ForEach(agent => agent.Reset());
         }
     }
 }

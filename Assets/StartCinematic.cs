@@ -10,17 +10,6 @@ namespace burglar
         private void OnEnable()
         {
             EventManager.CinematicEnd += LoadIntro;
-            // EventManager.LoadLevelStart += LoadCinematic;
-        }
-
-        private void LoadCinematic()
-        {
-            var currentLevel = LevelManager.Instance._currentLevel;
-            if (currentLevel.startCinematic)
-            {
-                Debug.Log("LaunchCinematic with startCinematic");
-                CinematicManager.Instance.LaunchCinematic(currentLevel.startCinematic);
-            }
         }
 
         private void OnDisable()
@@ -39,6 +28,7 @@ namespace burglar
 
         private void LoadIntro()
         {
+            CinematicManager.Instance.ClearCurrentCinematic();
             LevelManager.Instance.LoadScene("intro");
             // UnityEngine.SceneManagement.SceneManager.LoadScene("intro");
         }

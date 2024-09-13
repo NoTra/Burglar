@@ -16,6 +16,8 @@ namespace burglar.managers
 
         private PlayableDirector _currentScenePlayableDirector;
         
+        [CanBeNull] private Coroutine _currentCinematicCoroutine = null;
+        
         private void Awake()
         {
             if (instance != null && instance != this)
@@ -34,15 +36,23 @@ namespace burglar.managers
         {
             EventManager.LoadLevelEnd += LaunchCinematic;
         }
+        
+        private void OnDisable()
+        {
+            EventManager.LoadLevelEnd -= LaunchCinematic;
+        }
 
         public void LaunchCinematic([CanBeNull] PlayableAsset cinematic = null)
         {
-            Debug.Log("[CinematicManager] LaunchCinematic(cinematic)");
+            // if (_currentCinematicCoroutine != null)
+            // {
+            //     Debug.Log("Cinematic already playing (blocked " + cinematic.name + ")");
+            //     return;
+            // }
             
             if (cinematic)
             {
-                Debug.Log("[CinematicManager] LaunchCinematic(cinematic) -> PlayCinematic() : " + _currentScenePlayableDirector.playableAsset.name);
-                StartCoroutine(PlayCinematic(cinematic as TimelineAsset));
+                _currentCinematicCoroutine = StartCoroutine(PlayCinematic(cinematic as TimelineAsset));
                 
                 return;
             }
@@ -50,13 +60,18 @@ namespace burglar.managers
         
         private void LaunchCinematic()
         {
-            Debug.Log("[CinematicManager] LaunchCinematic()");
+            if (_currentCinematicCoroutine != null)
+            {
+                Debug.Log("Cinematic already playing");
+                return;
+            }
+            
             var currentLevel = LevelManager.Instance._currentLevel;
             
             if (currentLevel.startCinematic)
             {
-                Debug.Log("[CinematicManager] LaunchCinematic() -> PlayCinematic()");
-                StartCoroutine(PlayCinematic(currentLevel.startCinematic));
+                Debug.Log("LaunchCinematic(" + currentLevel.startCinematic.name + " for " + currentLevel.startCinematic.duration + "s)");
+                _currentCinematicCoroutine = StartCoroutine(PlayCinematic(currentLevel.startCinematic));
             }
         }
         
@@ -64,19 +79,41 @@ namespace burglar.managers
         {
             EventManager.OnCinematicStart();
             
-            Debug.Log("Play(" + cinematic.name + ")");
+            if (_currentScenePlayableDirector == null)
+            {
+                Debug.LogError("No PlayableDirector set for CinematicManager");
+                yield break;
+            }
             
             _currentScenePlayableDirector.playableAsset = cinematic;
-            _currentScenePlayableDirector.Play();
+            _currentScenePlayableDirector?.Play();
             yield return new WaitForSeconds((float)_currentScenePlayableDirector.duration);
-            _currentScenePlayableDirector.Stop();
             
+            if (_currentScenePlayableDirector != null)
+            {
+                _currentScenePlayableDirector.Stop();
+            }
+            else
+            {
+                Debug.Log("No PlayableDirector set for CinematicManager");
+            }
             EventManager.OnCinematicEnd();
+            
+            _currentCinematicCoroutine = null;
         }
         
         public void SetCurrentScenePlayableDirector(PlayableDirector playableDirector)
         {
             _currentScenePlayableDirector = playableDirector;
+        }
+        
+        public void ClearCurrentCinematic()
+        {
+            if (_currentCinematicCoroutine != null)
+            {
+                StopCoroutine(_currentCinematicCoroutine);
+                _currentCinematicCoroutine = null;
+            }
         }
     }
 }

@@ -34,54 +34,84 @@ namespace burglar
             {
                 instance = this;
             }
-            
-            Debug.Log("CreditManager Awake");
+            DontDestroyOnLoad(gameObject);
+        }
+
+        private void Start()
+        {
+            // First time enabled we load level
+            InitLevelCredits();
         }
 
         private void OnEnable()
         {
             EventManager.CreditCollected += AddCredit;
-            EventManager.LoadLevelStart += InitLevelCredits;
-            
-            // First time enabled we load level
-            InitLevelCredits();
+            EventManager.LoadLevelEnd += InitLevelCredits;
+            EventManager.LevelSuccess += LevelSuccess;
         }
-        
+
         private void OnDisable()
         {
             EventManager.CreditCollected -= AddCredit;
-            EventManager.LoadLevelStart -= InitLevelCredits;
+            EventManager.LoadLevelEnd -= InitLevelCredits;
         }
-        
+
+        private void LevelSuccess()
+        {
+            // Exclude levels where minimum credits is 0
+            if (minimumCredits == 0)
+            {
+                return;
+            }
+            
+            // Add levelCredit - minimum to the player stash
+            var amountToAdd = levelCredit - minimumCredits;
+            
+            GameManager.Instance.credit += amountToAdd;
+
+            ResetLevelCredits();
+        }
+
         private void InitLevelCredits()
         {
             if (LevelManager.Instance?._currentLevel == null)
             {
                 // We hide the credit UI if the current level is null
                 gameObject.SetActive(false);
-                Debug.LogError("Current level is null");
                 return;
             }
 
+            // Find the current level
             var levelManager = LevelManager.Instance;
-            minimumCredits = levelManager._currentLevel.minimumCredits;
-            maximumCredits = levelManager._currentLevel.maximumCredits;
+            if (levelManager._currentLevel == null)
+            {
+                levelManager.LoadLevelByIndex(levelManager._currentLevelIndex);
+                return;
+            }
             
+            // Extract minimum credits
+            minimumCredits = levelManager._currentLevel.minimumCredits;
+            
+            // Reset credit for next level
             if (levelManager._currentLevel.resetCredits)
             {
                 GameManager.Instance.credit = 0;
             }
+        }
+
+        public void ResetLevelCredits()
+        {
+            levelCredit = 0;
+            _creditSlider.value = 0;
             
-            InitCredit();
+            StartCoroutine(UpdateCreditUI());
         }
         
-        private void InitCredit()
+        /**
+         * Initialize the credit slider
+         */
+        private void InitCreditSlider()
         {
-            if (minimumCredits == 0 && maximumCredits == 0)
-            {
-                return;
-            }
-            
             _creditSlider.maxValue = maximumCredits;
             _creditSlider.minValue = 0;
             _creditSlider.value = 0;
@@ -90,20 +120,27 @@ namespace burglar
             
             var t = (float)minimumCredits / maximumCredits;
             var x = Mathf.Lerp(-111f, 108f, t);
-            
-            // Move the min marker to represent the minimum credit (0 we put x at 0, 100% we put the x at 220, we lerp in between)
-            _minMarker.transform.localPosition = new Vector3(x, 
-                _minMarker.transform.localPosition.y,
-                _minMarker.transform.localPosition.z);
-            
-            // Hide the min marker if the minimum credit is 0
-            _minMarker.SetActive(minimumCredits != 0);
+
+            if (minimumCredits != 0)
+            {
+                _minMarker.SetActive(true);
+                // Move the min marker to represent the minimum credit (0 we put x at 0, 100% we put the x at 220, we lerp in between)
+                _minMarker.transform.localPosition = new Vector3(x, 
+                    _minMarker.transform.localPosition.y,
+                    _minMarker.transform.localPosition.z);
+            }
+            else
+            {
+                // Hide the min marker if the minimum credit is 0
+                _minMarker.SetActive(minimumCredits != 0);
+            }
         }
         
-        private IEnumerator UpdateCreditUI(int amount)
+        private IEnumerator UpdateCreditUI()
         {
-            var previousCredit = levelCredit;
-            var targetCredit = previousCredit + amount;
+            var previousCredit = _creditSlider.value;
+            
+            var targetCredit = levelCredit;
             
             var elapsedTime = 0f;
             var duration = 1f;
@@ -122,20 +159,30 @@ namespace burglar
             }
             
             // Level credits
-            levelCredit = targetCredit;
             _creditSlider.value = levelCredit;
             _creditText.text = levelCredit + " / " + maximumCredits;
-            
-            // Global credits
-            GameManager.Instance.credit += amount;
         }
         
         private void AddCredit(int creditAmount)
         {
             AudioManager.Instance.PlaySFX(AudioManager.Instance.soundCredit);
-            StartCoroutine(UpdateCreditUI(creditAmount));
-            
             levelCredit += creditAmount;
+            
+            EventManager.OnUpdateObjectives();
+            
+            StartCoroutine(UpdateCreditUI());
+        }
+
+        public void SetMaxCredits(int maxCredits)
+        {
+            maximumCredits = maxCredits;
+            if (!Instance.gameObject.activeSelf)
+            {
+                Instance.gameObject.SetActive(true);                
+            }
+            
+            InitCreditSlider();
+            StartCoroutine(UpdateCreditUI());
         }
     }
 }

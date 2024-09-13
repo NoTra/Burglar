@@ -81,7 +81,6 @@ namespace burglar.persistence
         public bool SaveExists(string name)
         {
             string fileLocation = GetFilePath(name);
-            Debug.Log(fileLocation);
             return File.Exists(GetFilePath(name));
         }
     }

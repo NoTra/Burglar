@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: Level3
   m_EditorClassIdentifier: 
   sceneName: level3
-  levelName: Bank
-  levelIndex: 2
+  levelName: The bank
+  levelIndex: 3
   minimumCredits: 800
   maximumCredits: 1200
+  music: {fileID: 0}
+  resetCredits: 0
+  startCinematic: {fileID: 0}

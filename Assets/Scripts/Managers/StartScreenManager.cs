@@ -55,13 +55,13 @@ namespace burglar.managers
             _settingsStartPosition = _settingsCanvas.anchoredPosition;
             _startMenuStartPosition = _startMenuCanvas.anchoredPosition;
             
-            if(SaveLoadSystem.Instance.SaveExists() && _continueButton != null)
-            {
-                _continueButton.SetActive(true);
-                var newGameText = _newGameButton.GetComponentInChildren<TextMeshProUGUI>();
-                // Change size of newGameText
-                newGameText.fontSize = 32;
-            }
+            // if(SaveLoadSystem.Instance.SaveExists() && _continueButton != null)
+            // {
+            //     _continueButton.SetActive(true);
+            //     var newGameText = _newGameButton.GetComponentInChildren<TextMeshProUGUI>();
+            //     // Change size of newGameText
+            //     newGameText.fontSize = 32;
+            // }
             
             _settingsManager = _settingsCanvas.GetComponent<SettingsManager>(); 
             _settingsManager._backButton.onClick.AddListener(() =>
@@ -106,7 +106,7 @@ namespace burglar.managers
         public void SettingsButton()
         {
             // gameObject.SetActive(false);
-            // Position settingsCanvas at the right of the screen 
+            // Position settingsCanvas at the right of the screen
             _settingsCanvas.gameObject.SetActive(true);
             
             _settingsStartPosition = _settingsCanvas.anchoredPosition;

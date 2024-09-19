@@ -8,7 +8,7 @@ namespace burglar.environment
     public class Interactible : MonoBehaviour
     {
         private PlayerInput _playerInput;
-        private bool _canBeInteractedWith = false;
+        protected bool _canBeInteractedWith = false;
 
         private void OnEnable()
         {

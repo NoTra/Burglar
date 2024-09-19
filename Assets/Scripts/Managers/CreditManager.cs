@@ -45,6 +45,7 @@ namespace burglar
 
         private void OnEnable()
         {
+            Debug.Log("ENABLE CREDITMANAGER");
             EventManager.CreditCollected += AddCredit;
             EventManager.LoadLevelEnd += InitLevelCredits;
             EventManager.LevelSuccess += LevelSuccess;
@@ -54,6 +55,7 @@ namespace burglar
         {
             EventManager.CreditCollected -= AddCredit;
             EventManager.LoadLevelEnd -= InitLevelCredits;
+            EventManager.LevelSuccess -= LevelSuccess;
         }
 
         private void LevelSuccess()
@@ -66,7 +68,7 @@ namespace burglar
             
             // Add levelCredit - minimum to the player stash
             var amountToAdd = levelCredit - minimumCredits;
-            
+            Debug.Log("Adding " + amountToAdd + " (levelCredit = " + levelCredit + " & min = " + minimumCredits + ") to player stash (" + GameManager.Instance.credit + ")");
             GameManager.Instance.credit += amountToAdd;
 
             ResetLevelCredits();

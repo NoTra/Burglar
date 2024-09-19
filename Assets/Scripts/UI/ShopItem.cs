@@ -63,6 +63,11 @@ namespace burglar.UI
             
             GameManager.Instance.credit -= _item.price;
             GameManager.Instance.items.Add(_item);
+            
+            // Update UI to reflect the purchase
+            UIManager.Instance.UpdateItems();
+            
+            
             _buyButton.interactable = false;
             _buyButtonText.text = "Owned";
 

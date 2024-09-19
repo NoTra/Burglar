@@ -66,5 +66,11 @@ namespace burglar.environment
                 light.enabled = true;
             }
         }
+        
+        public void Reset()
+        {
+            Debug.Log("Reset light switch");
+            _canBeInteractedWith = false;
+        }
     }
 }

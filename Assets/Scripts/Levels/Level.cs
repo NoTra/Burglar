@@ -118,6 +118,13 @@ namespace burglar.levels
                 lightBehavior.ResetLightState();
             });
             
+            // Browse all LightSwitch and reset them
+            var lightSwitches = FindObjectsOfType<LightSwitch>();
+            foreach (var lightSwitch in lightSwitches)
+            {
+                lightSwitch.Reset();
+            }
+            
             // Reset player
             ResetPlayer();
             

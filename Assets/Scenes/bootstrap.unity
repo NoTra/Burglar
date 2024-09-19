@@ -9006,6 +9006,7 @@ MonoBehaviour:
   HUD: {fileID: 1302874364}
   UIInteractIcon: {fileID: 1299902804}
   UICreditTMP: {fileID: 106368204}
+  UIItemContainer: {fileID: 207897529}
   creditManager: {fileID: 0}
   UITitle: {fileID: 1330981616516796343}
   UICreditText: {fileID: 1805855913}

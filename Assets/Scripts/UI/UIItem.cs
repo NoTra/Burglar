@@ -13,6 +13,18 @@ namespace burglar.UI
         // Start is called before the first frame update
         private void Start()
         {
+            InitItems();
+        }
+
+        public void InitItems()
+        {
+            // Clear all children
+            foreach (Transform child in transform)
+            {
+                _elements.Remove(child.gameObject);
+                Destroy(child.gameObject);
+            }
+            
             // Add items possessed by the player
             var i = 0;
             foreach (var item in GameManager.Instance.items)
@@ -36,25 +48,27 @@ namespace burglar.UI
 
         private void OnEnable()
         {
-            EventManager.SelectItem += (item) => OnSelectItem(item);
+            EventManager.SelectItem += OnSelectItem;
+        }
+        
+        private void OnDisable()
+        {
+            EventManager.SelectItem -= OnSelectItem;
         }
 
         private void OnSelectItem(Item item)
         {
-            // Deselect all items
-            foreach (var element in _elements)
-            {
-                var itemElement = element.GetComponent<UIItemElement>();
-                itemElement.Deselect();
-            }
-
-            // Select the item
+            // Select the item and deselect the rest
             foreach (var element in _elements)
             {
                 var itemElement = element.GetComponent<UIItemElement>();
                 if (itemElement.item == item)
                 {
                     itemElement.Select();
+                }
+                else
+                {
+                    itemElement.Deselect();
                 }
             }
         }

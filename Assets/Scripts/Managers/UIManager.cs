@@ -27,6 +27,7 @@ namespace burglar.managers
         public GameObject HUD;
         [SerializeField] private GameObject UIInteractIcon;
         [SerializeField] private TextMeshProUGUI UICreditTMP;
+        [SerializeField] private GameObject UIItemContainer;
         public CreditManager creditManager;
         public GameObject UITitle;
         public TextMeshProUGUI UICreditText;
@@ -454,6 +455,11 @@ namespace burglar.managers
         public GameObject GetCanvasGO()
         {
             return canvas;
+        }
+
+        public void UpdateItems()
+        {
+            UIItemContainer.GetComponent<UIItem>().InitItems();
         }
     }
 }
